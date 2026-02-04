@@ -1,0 +1,136 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+footer {
+  width: 1024px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+hr {
+  border-top: 2px solid #0071bc;
+  margin: 0 auto;
+  clear: both;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+}
+
+.login_form,
+.center_message {
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.colorbox {
+  display: block;
+  height: 20px;
+  margin: 4px;
+  width: 20px;
+  border: 1px solid #000000;
+}
+
+.blue {
+  background-color: #2b67c6;
+  color: #ffffff;
+}
+
+.green {
+  background-color: #009900;
+  color: #ffffff;
+}
+
+.orange {
+  background-color: #ff9933;
+  color: #ffffff;
+}
+
+.red {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+
+.black {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.grey-dark {
+  background-color: #d9d9d9;
+  color: #000000;
+}
+
+.blue-light {
+  background-color: #a8e9ff;
+  color: #000000;
+}
+
+.blue-dark {
+  background-color: #002696;
+  color: #ffffff;
+}
+
+.yellow {
+  background-color: #f2ff00;
+  color: #000000;
+}
+
+.yellow-light {
+  background-color: #fdffd1;
+  color: #000000;
+}
+
+.light-green {
+  background-color: #bbff99;
+  color: #000000;
+}
+
+.dark-green {
+  background-color: #2a6911;
+  color: #ffffff;
+}
+
+#image_tooltip_0,
+#image_tooltip_1,
+#image_tooltip_2,
+#image_tooltip_3,
+#image_tooltip_4,
+#image_tooltip_5,
+#image_tooltip_6,
+#image_tooltip_7,
+#image_tooltip_8,
+#image_tooltip_9,
+#image_tooltip_10 {
+  display: none;
+}
+
+.mytooltip {
+  background-color: #ffffff;
+  border: 1px solid black;
+  padding: 3px;
+}
+
+.coordination {
+  float: left;
+  width: 50%;
+}
+
+.customerfiles {
+  float: left;
+  padding-left: 50px;
+  width: 50%;
+}
+
+.clear {
+  clear: both;
+}

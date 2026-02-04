@@ -1,0 +1,33 @@
+* {
+	padding:0;
+	margin:0;
+}
+
+footer {
+	width:1024px;
+	margin: 0 auto;
+	text-align:center;
+}
+
+hr {
+	border-top: 2px solid #0071BC;
+	margin:0 auto;
+	clear:both;
+}
+
+.error {
+	color:red;
+	font-weight:bold;
+}
+
+.success {
+	color:green;
+	font-weight:bold;
+}
+
+.login_form,.center_message {
+	width:500px;
+	margin:0 auto;
+	text-align:center;
+}
+

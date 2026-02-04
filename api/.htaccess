@@ -1,0 +1,17 @@
+<IfModule mod_headers.c>
+#Is set one direcory higher and make conflicts
+Header set Access-Control-Allow-Origin: "*"
+Header set Access-Control-Allow-Methods: "*"
+Header set Access-Control-Allow-Headers: "*"
+Header set Access-Control-Allow-Credentials true
+</IfModule>
+
+#php_value post_max_size 2000M
+#php_value upload_max_filesize 2000M
+#php_value max_input_time 120
+
+RewriteEngine on
+
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+

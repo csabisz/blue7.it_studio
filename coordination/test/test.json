@@ -1,0 +1,23 @@
+{
+  "3692": {
+
+    "interior": {
+      "1": {
+        "name": "3692.n01.p1301",
+        "status": "checkable",
+        "creator": "Ala Fortuneac",
+        "comment": "Ioan Pop changed status to work can start at 24-04-2020 13:30:00"
+      }
+    },
+
+    "exterior": {
+      "1": {
+        "name": "3692.x01.p1563",
+        "status": "confirmed",
+        "creator": "Ion Albu",
+        "comment": "Ioan Pop changed status to confirmed at 24-04-2020 13:30:00",
+      }
+    }
+
+  }
+}

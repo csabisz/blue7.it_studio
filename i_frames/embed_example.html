@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Modal - Embed Example</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        button.secondary:hover {
+            background: #545b62;
+        }
+
+        .iframe-wrapper {
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: none;
+        }
+
+        .iframe-wrapper.visible {
+            display: block;
+        }
+
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+
+        .event-log {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .event-log h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .event-list {
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .event-item {
+            padding: 8px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
+        }
+
+        .event-item.ready {
+            border-left-color: #28a745;
+        }
+
+        .event-item.imageGenerated {
+            border-left-color: #17a2b8;
+        }
+
+        .event-item.imageSaved {
+            border-left-color: #ffc107;
+        }
+
+        .event-item.error {
+            border-left-color: #dc3545;
+        }
+
+        .event-item.close {
+            border-left-color: #6c757d;
+        }
+
+        .event-time {
+            color: #999;
+            font-size: 11px;
+        }
+
+        .event-type {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .event-data {
+            color: #666;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .code-block .keyword {
+            color: #c678dd;
+        }
+
+        .code-block .string {
+            color: #98c379;
+        }
+
+        .code-block .comment {
+            color: #5c6370;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Image Modal - Iframe Embed Example</h1>
+        <p class="description">
+            This page demonstrates how to embed the AI Image Generation modal in any website using an iframe.
+            The modal communicates with the parent page via postMessage events.
+        </p>
+
+        <div class="controls">
+            <h3>Configuration</h3>
+            <div class="form-group">
+                <label for="orfIdInput">orf_id (required)</label>
+                <input type="number" id="orfIdInput" value="123" placeholder="Enter orf_id">
+            </div>
+            <div class="form-group">
+                <label for="tokenInput">token (required)</label>
+                <input type="text" id="tokenInput" value="test_token_123" placeholder="Enter authentication token">
+            </div>
+            <button onclick="openModal()">Open Modal</button>
+            <button class="secondary" onclick="closeModal()">Close Modal</button>
+            <button class="secondary" onclick="clearEventLog()">Clear Event Log</button>
+        </div>
+
+        <div class="iframe-wrapper" id="iframeWrapper">
+            <iframe id="aiModalIframe" src="" allow="clipboard-write"></iframe>
+        </div>
+
+        <div class="event-log">
+            <h3>Event Log</h3>
+            <p>Events received from the iframe via postMessage:</p>
+            <div class="event-list" id="eventList">
+                <em>No events yet. Open the modal to see events.</em>
+            </div>
+        </div>
+
+        <div class="event-log">
+            <h3>Integration Code</h3>
+            <p>Here's how to integrate this modal into your website:</p>
+            <div class="code-block">
+<span class="comment">// 1. Create the iframe</span>
+<span class="keyword">const</span> iframe = document.createElement(<span class="string">'iframe'</span>);
+iframe.src = <span class="string">'https://blue7.it/studio/i_frames/ai_image_modal.php?orf_id=123&token=YOUR_TOKEN'</span>;
+iframe.style.width = <span class="string">'100%'</span>;
+iframe.style.height = <span class="string">'800px'</span>;
+iframe.style.border = <span class="string">'none'</span>;
+document.body.appendChild(iframe);
+
+<span class="comment">// 2. Listen for events from the iframe</span>
+window.addEventListener(<span class="string">'message'</span>, <span class="keyword">function</span>(event) {
+    <span class="comment">// Verify the message is from our modal</span>
+    <span class="keyword">if</span> (event.data.type !== <span class="string">'ai-modal-event'</span>) <span class="keyword">return</span>;
+
+    <span class="keyword">const</span> { event: eventName, data } = event.data;
+
+    <span class="keyword">switch</span> (eventName) {
+        <span class="keyword">case</span> <span class="string">'ready'</span>:
+            console.log(<span class="string">'Modal is ready'</span>, data);
+            <span class="keyword">break</span>;
+
+        <span class="keyword">case</span> <span class="string">'imageGenerated'</span>:
+            console.log(<span class="string">'New image generated!'</span>, data);
+            <span class="comment">// data contains: id, image_url, thumbnail_url, model, quality</span>
+            <span class="keyword">break</span>;
+
+        <span class="keyword">case</span> <span class="string">'imageSaved'</span>:
+            console.log(<span class="string">'Image saved to task'</span>, data);
+            <span class="comment">// data contains: orf_ai_id, saved_orf_id</span>
+            <span class="keyword">break</span>;
+
+        <span class="keyword">case</span> <span class="string">'error'</span>:
+            console.error(<span class="string">'Error occurred'</span>, data);
+            <span class="comment">// data contains: message, code</span>
+            <span class="keyword">break</span>;
+
+        <span class="keyword">case</span> <span class="string">'close'</span>:
+            console.log(<span class="string">'User closed modal'</span>);
+            <span class="comment">// Remove iframe or hide container</span>
+            iframe.remove();
+            <span class="keyword">break</span>;
+    }
+});
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const iframeWrapper = document.getElementById('iframeWrapper');
+        const iframe = document.getElementById('aiModalIframe');
+        const eventList = document.getElementById('eventList');
+        let hasEvents = false;
+
+        function openModal() {
+            const orfId = document.getElementById('orfIdInput').value;
+            const token = document.getElementById('tokenInput').value;
+
+            if (!orfId || !token) {
+                alert('Please enter both orf_id and token');
+                return;
+            }
+
+            const url = `ai_image_modal.php?orf_id=${encodeURIComponent(orfId)}&token=${encodeURIComponent(token)}`;
+            iframe.src = url;
+            iframeWrapper.classList.add('visible');
+        }
+
+        function closeModal() {
+            iframe.src = '';
+            iframeWrapper.classList.remove('visible');
+        }
+
+        function clearEventLog() {
+            eventList.innerHTML = '<em>No events yet. Open the modal to see events.</em>';
+            hasEvents = false;
+        }
+
+        function addEventToLog(eventName, data) {
+            if (!hasEvents) {
+                eventList.innerHTML = '';
+                hasEvents = true;
+            }
+
+            const eventItem = document.createElement('div');
+            eventItem.className = 'event-item ' + eventName;
+
+            const time = new Date().toLocaleTimeString();
+            eventItem.innerHTML = `
+                <div class="event-time">${time}</div>
+                <div class="event-type">${eventName}</div>
+                <div class="event-data">${JSON.stringify(data, null, 2)}</div>
+            `;
+
+            eventList.insertBefore(eventItem, eventList.firstChild);
+        }
+
+        // Listen for postMessage events from the iframe
+        window.addEventListener('message', function(event) {
+            // Check if this is our event type
+            if (event.data && event.data.type === 'ai-modal-event') {
+                const { event: eventName, data } = event.data;
+
+                // Log to console
+                console.log('Received event:', eventName, data);
+
+                // Add to event log
+                addEventToLog(eventName, data);
+
+                // Handle close event
+                if (eventName === 'close') {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
