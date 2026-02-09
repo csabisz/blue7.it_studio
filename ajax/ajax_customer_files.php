@@ -1279,6 +1279,18 @@ for($i=0;$i<count($customer_files);$i++)
 						?>" method="post" class="form-inline">
 							<a href="../image.php?filecategory=customerfiles&imageid=<?php echo $customer_files[$i]['of_id']; ?>" class="btn btn-primary btn-sm d-inline" target="_blank"><i class="fas fa-arrow-circle-down"></i></a>
 							<?php
+							// AI button for valid image types
+							if(in_array($customer_files[$i]['of_type_dom'], array('jpeg','jpg','png','webp'))):
+								$ai_image_url = $base_url . 'client_files/' . $customer_files[$i]['of_path_dom'] . $customer_files[$i]['of_internal_name_dom'];
+							?>
+							<button type="button"
+									class="btn btn-info btn-sm d-inline ai-url-trigger"
+									data-image-url="<?php echo htmlspecialchars($ai_image_url); ?>"
+									title="AI Image Generation">
+								<i class="fas fa-magic"></i>
+							</button>
+							<?php endif; ?>
+							<?php
 							if(isset($_COOKIE['client_id']))
 							{
 							?>
@@ -1431,4 +1443,113 @@ setTimeout(function() {
 	}
 }, 3000);
 
+</script>
+
+<!-- AI Image Modal Iframe Overlay -->
+<div id="aiModalOverlay" class="ai-modal-overlay" style="display: none;">
+	<iframe id="aiModalIframe" src="" allow="clipboard-write"></iframe>
+</div>
+
+<style>
+	.ai-modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.ai-modal-overlay iframe {
+		width: 100%;
+		max-width: 1440px;
+		height: 90vh;
+		max-height: 800px;
+		border: none;
+		border-radius: 8px;
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+	}
+</style>
+
+<script type="text/javascript">
+(function() {
+	'use strict';
+
+	// AI Modal handling for customer files
+	const aiModalOverlay = document.getElementById('aiModalOverlay');
+	const aiModalIframe = document.getElementById('aiModalIframe');
+
+	// Event delegation for AI buttons
+	document.addEventListener('click', function(e) {
+		const aiButton = e.target.closest('.ai-url-trigger');
+		if (!aiButton) return;
+
+		e.preventDefault();
+		const imageUrl = aiButton.dataset.imageUrl;
+
+		if (!imageUrl) {
+			console.error('No image URL provided');
+			return;
+		}
+
+		// Build iframe URL with o_id for Save to Task dropdowns
+		const iframeUrl = '/studio/i_frames/ai_image_modal_url.php?image_url=' +
+			encodeURIComponent(imageUrl) + '&o_id=<?php echo intval($o_id); ?>&token=customer_files';
+
+		// Show overlay and load iframe
+		aiModalIframe.src = iframeUrl;
+		aiModalOverlay.style.display = 'flex';
+	});
+
+	// Close on overlay background click
+	aiModalOverlay.addEventListener('click', function(e) {
+		if (e.target === aiModalOverlay) {
+			aiModalOverlay.style.display = 'none';
+			aiModalIframe.src = '';
+		}
+	});
+
+	// Listen for postMessage events from iframe
+	window.addEventListener('message', function(event) {
+		if (!event.data || event.data.type !== 'ai-modal-event') return;
+
+		const { event: eventName, data } = event.data;
+
+		switch (eventName) {
+			case 'close':
+				aiModalOverlay.style.display = 'none';
+				aiModalIframe.src = '';
+				break;
+
+			case 'imageSaved':
+				// Close modal and optionally refresh the page
+				aiModalOverlay.style.display = 'none';
+				aiModalIframe.src = '';
+				// Optionally reload customer files section
+				if (typeof get_customer_files === 'function') {
+					setTimeout(get_customer_files, 500);
+				}
+				break;
+
+			case 'error':
+				console.error('AI Modal Error:', data.message);
+				break;
+
+			default:
+				console.log('AI Modal Event:', eventName, data);
+		}
+	});
+
+	// ESC key to close modal
+	document.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape' && aiModalOverlay.style.display !== 'none') {
+			aiModalOverlay.style.display = 'none';
+			aiModalIframe.src = '';
+		}
+	});
+})();
 </script>

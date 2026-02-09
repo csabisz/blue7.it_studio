@@ -1,0 +1,448 @@
+/**
+ * AI Modal Shared Styles
+ * Shared CSS for ai_image_modal.php and ai_image_modal_url.php
+ */
+
+/* Reset and base styles for iframe */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Modal container - fills entire iframe */
+.iframe-modal-container {
+    width: 100%;
+    height: 100vh;
+}
+
+.iframe-modal-content {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.iframe-modal-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 1rem;
+}
+
+/* Generating Overlay */
+.modal-generating-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    display: none;
+    cursor: not-allowed;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-generating-overlay.active {
+    display: flex;
+}
+
+/* Comparison Modal Styles */
+.comparison-modal .modal-dialog {
+    max-width: 95vw;
+    margin: 1rem auto;
+}
+
+.comparison-modal .modal-content {
+    height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+}
+
+.comparison-modal .modal-body {
+    flex: 1;
+    padding: 0;
+    overflow: hidden;
+}
+
+.comparison-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comparison-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.comparison-before {
+    z-index: 1;
+}
+
+.comparison-after {
+    z-index: 2;
+}
+
+/* Opacity Slider Control */
+.opacity-control {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px 16px;
+    border-radius: 8px;
+    z-index: 30;
+    min-width: 200px;
+}
+
+.opacity-control label {
+    color: #fff;
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.opacity-control label span {
+    opacity: 0.7;
+}
+
+.opacity-slider {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.8));
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.opacity-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Comparison Metadata */
+.comparison-metadata {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    z-index: 20;
+    max-width: 280px;
+    font-size: 12px;
+}
+
+.comparison-metadata h6 {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.comparison-metadata p {
+    margin: 4px 0;
+}
+
+/* Navigation Arrows */
+.comparison-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 25;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.comparison-nav-arrow:hover {
+    background: rgba(0,0,0,0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.comparison-nav-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.comparison-nav-arrow:disabled:hover {
+    transform: translateY(-50%);
+}
+
+.comparison-nav-arrow.left {
+    left: 20px;
+}
+
+.comparison-nav-arrow.right {
+    right: 20px;
+}
+
+/* Toast notification animation */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Reference Images Dropzone */
+.reference-dropzone {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.reference-dropzone:hover {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.reference-dropzone.dragover {
+    border-color: #28a745;
+    background: #e8f5e9;
+    border-style: solid;
+}
+
+.reference-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.reference-preview-item {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+}
+
+.reference-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.reference-preview-remove {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+.reference-preview-remove:hover {
+    background: #dc3545;
+}
+
+/* Admin Reference Previews */
+.admin-reference-previews {
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.admin-reference-item img {
+    border: 2px solid #17a2b8;
+}
+
+/* Source Image Container with Edit Button */
+.source-image-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.source-image-container img {
+    display: block;
+    width: 100%;
+}
+
+.source-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.source-image-container:hover .source-image-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 1;
+}
+
+.source-image-overlay .btn {
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+}
+
+.source-image-container:hover .source-image-overlay .btn {
+    transform: translateY(0);
+}
+
+/* Edited Image Indicator */
+.edited-indicator {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #ffc107;
+    color: #212529;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+}
+
+.edited-indicator i {
+    font-size: 10px;
+}
+
+.revert-link {
+    color: #212529;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.revert-link:hover {
+    color: #000;
+}
+
+/* Notification Container */
+#notificationContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 400px;
+}
+
+#notificationContainer .alert {
+    margin-bottom: 10px;
+    animation: slideInRight 0.3s ease;
+}

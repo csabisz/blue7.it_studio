@@ -10085,15 +10085,11 @@ include('../menu.php');
                                                         <?php endif; ?>
 
                                                         <?php if (hasPromptForProduct($result_files[$i]['prod_id'])): ?>
-                                                            <!-- NEW AI BUTTON -->
-                                                            <button class="btn btn-info btn-sm mt-auto mb-4"
-                                                                    data-toggle="modal"
-                                                                    data-target="#aiImageModal<?php echo $result_files[$i]['orf_id']; ?>">
+                                                            <!-- AI Image Generation Button -->
+                                                            <button class="btn btn-info btn-sm mt-auto mb-4 ai-modal-trigger"
+                                                                    data-orf-id="<?php echo $result_files[$i]['orf_id']; ?>">
                                                                 AI
                                                             </button>
-
-                                                            <?php include 'ai_image_modal.php'; ?>
-
                                                         <?php endif; ?>
 
                                                     <?php endif;
@@ -11316,6 +11312,116 @@ include('../menu.php');
             ?>
         </article>
     </section>
+
+    <!-- AI Image Modal Iframe Overlay -->
+    <div id="aiImageModalOverlay" class="ai-modal-overlay" style="display: none;">
+        <iframe id="aiImageModalIframe" src="" allow="clipboard-write"></iframe>
+    </div>
+
+    <style>
+        .ai-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-modal-overlay iframe {
+            width: 100%;
+            max-width: 1440px;
+            height: 90vh;
+            max-height: 800px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const overlay = document.getElementById('aiImageModalOverlay');
+            const iframe = document.getElementById('aiImageModalIframe');
+
+            // Handle AI modal trigger clicks using event delegation
+            document.addEventListener('click', function(e) {
+                const trigger = e.target.closest('.ai-modal-trigger');
+                if (!trigger) return;
+
+                const orfId = trigger.dataset.orfId;
+                if (!orfId) return;
+
+                // Generate a simple token
+                const token = 'task_' + Date.now();
+
+                // Set iframe source and show overlay
+                iframe.src = '/studio/i_frames/ai_image_modal.php?orf_id=' + encodeURIComponent(orfId) + '&token=' + encodeURIComponent(token);
+                overlay.style.display = 'flex';
+
+                // Prevent body scroll when modal is open
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close modal when clicking overlay background
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    closeAiModal();
+                }
+            });
+
+            // Close modal on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && overlay.style.display !== 'none') {
+                    closeAiModal();
+                }
+            });
+
+            // Listen for postMessage events from iframe
+            window.addEventListener('message', function(e) {
+                if (!e.data || e.data.type !== 'ai-modal-event') return;
+
+                const { event: eventName, data } = e.data;
+
+                switch (eventName) {
+                    case 'close':
+                        closeAiModal();
+                        break;
+
+                    case 'imageGenerated':
+                        console.log('AI Image generated:', data);
+                        break;
+
+                    case 'imageSaved':
+                        console.log('AI Image saved to task:', data);
+                        closeAiModal();
+                        window.location.reload(true);
+                        break;
+
+                    case 'error':
+                        console.error('AI Modal error:', data);
+                        break;
+
+                    case 'ready':
+                        console.log('AI Modal ready for orf_id:', data.orf_id);
+                        break;
+                }
+            });
+
+            function closeAiModal() {
+                overlay.style.display = 'none';
+                iframe.src = '';
+                document.body.style.overflow = '';
+            }
+        })();
+    </script>
+
 <?php
 
 include('../footer.php');

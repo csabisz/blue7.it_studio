@@ -24,25 +24,40 @@ try {
         throw new Exception('Invalid request method');
     }
 
-    // Validate required parameter
-    if (!isset($_GET['orf_id']) || empty($_GET['orf_id'])) {
-        throw new Exception('Missing required parameter: orf_id');
-    }
+    // Check for either orf_id or image_url parameter
+    $orf_id = isset($_GET['orf_id']) && !empty($_GET['orf_id']) ? intval($_GET['orf_id']) : null;
+    $image_url = isset($_GET['image_url']) && !empty($_GET['image_url']) ? $_GET['image_url'] : null;
 
-    $orf_id = intval($_GET['orf_id']);
+    if (!$orf_id && !$image_url) {
+        throw new Exception('Missing required parameter: orf_id or image_url');
+    }
 
     // Connect to database
     $mysqli = getDbConnection();
 
-    // Fetch all generated images for this orf_id
-    $query = "SELECT `orf_ai_id`, `model`, `room_type`, `style_preset`, `quality`,
-                     `additional_instructions`, `generated_image_url`, `thumbnail_url`, `saved_orf_id`, `created_at`
-              FROM `o_results_ai`
-              WHERE `orf_id` = ? AND `generated_image_url` IS NOT NULL
-              ORDER BY `created_at` DESC";
+    // Fetch all generated images for this orf_id or source_image_url
+    if ($orf_id) {
+        // Fetch by orf_id (original behavior)
+        $query = "SELECT `orf_ai_id`, `model`, `room_type`, `style_preset`, `quality`,
+                         `additional_instructions`, `generated_image_url`, `thumbnail_url`, `saved_orf_id`, `created_at`
+                  FROM `o_results_ai`
+                  WHERE `orf_id` = ? AND `generated_image_url` IS NOT NULL
+                  ORDER BY `created_at` DESC";
 
-    $stmt = mysqli_prepare($mysqli, $query);
-    mysqli_stmt_bind_param($stmt, "i", $orf_id);
+        $stmt = mysqli_prepare($mysqli, $query);
+        mysqli_stmt_bind_param($stmt, "i", $orf_id);
+    } else {
+        // Fetch by source_image_url (for URL-based generations)
+        $query = "SELECT `orf_ai_id`, `model`, `room_type`, `style_preset`, `quality`,
+                         `additional_instructions`, `generated_image_url`, `thumbnail_url`, `saved_orf_id`, `created_at`
+                  FROM `o_results_ai`
+                  WHERE `source_image_url` = ? AND `generated_image_url` IS NOT NULL
+                  ORDER BY `created_at` DESC";
+
+        $stmt = mysqli_prepare($mysqli, $query);
+        mysqli_stmt_bind_param($stmt, "s", $image_url);
+    }
+
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 

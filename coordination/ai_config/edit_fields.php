@@ -358,6 +358,21 @@ require_once __DIR__ . '/includes/config_functions.php';
                         <small class="text-muted">Comma-separated room types this option applies to</small>
                     </div>
 
+                    <div class="form-group">
+                        <label>Reference Image (Optional)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="newOptionImage" name="reference_image" accept="image/jpeg,image/png,image/webp">
+                            <label class="custom-file-label" for="newOptionImage">Choose file...</label>
+                        </div>
+                        <small class="text-muted">JPEG, PNG, or WebP. Max 5MB. Used as style reference for AI generation.</small>
+                        <div id="newOptionImagePreview" class="mt-2" style="display: none;">
+                            <img src="" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 4px;">
+                            <button type="button" class="btn btn-sm btn-outline-danger ml-2" onclick="clearNewOptionImage()">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+
                     <div id="addOptionMessages"></div>
                 </form>
             </div>
@@ -406,6 +421,33 @@ require_once __DIR__ . '/includes/config_functions.php';
                     <div class="form-group">
                         <label>Room Restrictions (Optional)</label>
                         <input type="text" class="form-control" id="editOptionRooms" name="room_restrictions">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Reference Image (Optional)</label>
+                        <div id="editOptionCurrentImage" class="mb-2" style="display: none;">
+                            <div class="d-flex align-items-center">
+                                <img src="" alt="Current reference image" style="max-width: 150px; max-height: 100px; border-radius: 4px; border: 1px solid #dee2e6;">
+                                <div class="ml-3">
+                                    <span class="badge badge-success">Current Image</span>
+                                    <button type="button" class="btn btn-sm btn-outline-danger ml-2" onclick="removeCurrentOptionImage()">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="editOptionImage" name="reference_image" accept="image/jpeg,image/png,image/webp">
+                            <label class="custom-file-label" for="editOptionImage">Choose new file...</label>
+                        </div>
+                        <small class="text-muted">JPEG, PNG, or WebP. Max 5MB. Upload to replace current image.</small>
+                        <div id="editOptionImagePreview" class="mt-2" style="display: none;">
+                            <img src="" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 4px;">
+                            <button type="button" class="btn btn-sm btn-outline-danger ml-2" onclick="clearEditOptionImage()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                        <input type="hidden" id="editOptionRemoveImage" name="remove_reference_image" value="0">
                     </div>
 
                     <div id="editOptionMessages"></div>
@@ -591,12 +633,21 @@ function renderOptions(options) {
         row.className = 'option-row';
         row.dataset.optionId = option.id;
 
+        // Check if option has reference image
+        const hasImage = option.reference_image ? true : false;
+        const imageUrl = hasImage ? '/studio/coordination/ai_config/uploads/reference_images/' + option.reference_image : '';
+        const imageBadge = hasImage ? '<span class="badge badge-info ml-1" title="Has reference image"><i class="fas fa-image"></i></span>' : '';
+        const imageThumbnail = hasImage ? `<img src="${escapeHtml(imageUrl)}" alt="Reference" style="width: 30px; height: 30px; object-fit: cover; border-radius: 3px; margin-right: 8px; border: 1px solid #dee2e6;">` : '';
+
         row.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
-                <div>
+                <div class="d-flex align-items-center">
                     <i class="fas fa-grip-vertical text-muted mr-2"></i>
-                    <strong>${escapeHtml(option.option_label)}</strong>
-                    <span class="badge badge-light ml-2">${escapeHtml(option.option_value)}</span>
+                    ${imageThumbnail}
+                    <div>
+                        <strong>${escapeHtml(option.option_label)}</strong>${imageBadge}
+                        <span class="badge badge-light ml-2">${escapeHtml(option.option_value)}</span>
+                    </div>
                 </div>
                 <div>
                     <button class="btn btn-sm btn-info btn-xs" onclick="showEditOptionModal(${option.id})">
@@ -801,12 +852,47 @@ function showAddOptionModal() {
 
     document.getElementById('addOptionForm').reset();
     document.getElementById('addOptionMessages').innerHTML = '';
+    document.getElementById('newOptionImagePreview').style.display = 'none';
+    document.querySelector('#addOptionModal .custom-file-label').textContent = 'Choose file...';
     $('#addOptionModal').modal('show');
 }
 
+// Handle file input change for new option image preview
+document.getElementById('newOptionImage').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('newOptionImagePreview');
+    const label = document.querySelector('#addOptionModal .custom-file-label');
+
+    if (file) {
+        label.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        label.textContent = 'Choose file...';
+        preview.style.display = 'none';
+    }
+});
+
+function clearNewOptionImage() {
+    document.getElementById('newOptionImage').value = '';
+    document.getElementById('newOptionImagePreview').style.display = 'none';
+    document.querySelector('#addOptionModal .custom-file-label').textContent = 'Choose file...';
+}
+
 function addOption() {
-    const formData = new FormData(document.getElementById('addOptionForm'));
+    const form = document.getElementById('addOptionForm');
+    const formData = new FormData(form);
     formData.append('field_config_id', selectedFieldId);
+
+    // Add the file input explicitly if a file is selected
+    const fileInput = document.getElementById('newOptionImage');
+    if (fileInput.files.length > 0) {
+        formData.set('reference_image', fileInput.files[0]);
+    }
 
     const btn = event.target;
     btn.disabled = true;
@@ -848,11 +934,80 @@ function showEditOptionModal(optionId) {
     document.getElementById('editOptionRooms').value = option.room_restrictions || '';
     document.getElementById('editOptionMessages').innerHTML = '';
 
+    // Handle reference image display
+    const currentImageDiv = document.getElementById('editOptionCurrentImage');
+    const imagePreview = document.getElementById('editOptionImagePreview');
+    const fileInput = document.getElementById('editOptionImage');
+    const removeInput = document.getElementById('editOptionRemoveImage');
+
+    // Reset states
+    fileInput.value = '';
+    removeInput.value = '0';
+    imagePreview.style.display = 'none';
+    document.querySelector('#editOptionModal .custom-file-label').textContent = 'Choose new file...';
+
+    if (option.reference_image) {
+        const imageUrl = '/studio/coordination/ai_config/uploads/reference_images/' + option.reference_image;
+        currentImageDiv.querySelector('img').src = imageUrl;
+        currentImageDiv.style.display = 'block';
+    } else {
+        currentImageDiv.style.display = 'none';
+    }
+
     $('#editOptionModal').modal('show');
 }
 
+// Handle file input change for edit option image preview
+document.getElementById('editOptionImage').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('editOptionImagePreview');
+    const currentImageDiv = document.getElementById('editOptionCurrentImage');
+    const label = document.querySelector('#editOptionModal .custom-file-label');
+
+    if (file) {
+        label.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.style.display = 'block';
+            // Hide current image when new one is selected
+            currentImageDiv.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        label.textContent = 'Choose new file...';
+        preview.style.display = 'none';
+    }
+});
+
+function clearEditOptionImage() {
+    document.getElementById('editOptionImage').value = '';
+    document.getElementById('editOptionImagePreview').style.display = 'none';
+    document.querySelector('#editOptionModal .custom-file-label').textContent = 'Choose new file...';
+
+    // Show current image again if it exists
+    const field = allFields.find(f => f.id === selectedFieldId);
+    const optionId = parseInt(document.getElementById('editOptionId').value);
+    const option = field.options.find(o => o.id === optionId);
+    if (option && option.reference_image) {
+        document.getElementById('editOptionCurrentImage').style.display = 'block';
+    }
+}
+
+function removeCurrentOptionImage() {
+    document.getElementById('editOptionCurrentImage').style.display = 'none';
+    document.getElementById('editOptionRemoveImage').value = '1';
+}
+
 function updateOption() {
-    const formData = new FormData(document.getElementById('editOptionForm'));
+    const form = document.getElementById('editOptionForm');
+    const formData = new FormData(form);
+
+    // Add the file input explicitly if a file is selected
+    const fileInput = document.getElementById('editOptionImage');
+    if (fileInput.files.length > 0) {
+        formData.set('reference_image', fileInput.files[0]);
+    }
 
     const btn = event.target;
     btn.disabled = true;

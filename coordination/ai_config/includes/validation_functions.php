@@ -246,6 +246,59 @@ function validateFieldConfigData($data)
 }
 
 /**
+ * Validate reference image file upload
+ *
+ * @param array $file $_FILES array element for the uploaded file
+ * @return array Result with 'valid' boolean and 'error' message if invalid
+ */
+function validateReferenceImage($file)
+{
+    // Maximum file size: 5MB
+    $max_size = 5 * 1024 * 1024;
+
+    // Allowed MIME types
+    $allowed_types = [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+    ];
+
+    // Allowed extensions
+    $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp'];
+
+    // Check file size
+    if ($file['size'] > $max_size) {
+        return [
+            'valid' => false,
+            'error' => 'File size exceeds maximum limit of 5MB'
+        ];
+    }
+
+    // Check MIME type
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime_type = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    if (!in_array($mime_type, $allowed_types)) {
+        return [
+            'valid' => false,
+            'error' => 'Invalid file type. Allowed types: JPEG, PNG, WebP'
+        ];
+    }
+
+    // Check extension
+    $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($extension, $allowed_extensions)) {
+        return [
+            'valid' => false,
+            'error' => 'Invalid file extension. Allowed: jpg, jpeg, png, webp'
+        ];
+    }
+
+    return ['valid' => true];
+}
+
+/**
  * Validate required fields for field option creation/update
  *
  * @param array $data Field option data

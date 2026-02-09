@@ -79,6 +79,20 @@ try {
         'room_restrictions' => isset($_POST['room_restrictions']) ? sanitizeInput($_POST['room_restrictions']) : $old_option['room_restrictions']
     ];
 
+    // Check if removing reference image
+    $remove_reference_image = isset($_POST['remove_reference_image']) && $_POST['remove_reference_image'] === '1';
+
+    // Validate reference image if uploading new one
+    if (isset($_FILES['reference_image']) && $_FILES['reference_image']['error'] === UPLOAD_ERR_OK) {
+        $validation_result = validateReferenceImage($_FILES['reference_image']);
+        if (!$validation_result['valid']) {
+            mysqli_close($mysqli);
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => $validation_result['error']]);
+            exit;
+        }
+    }
+
     // Validate input
     $validation_errors = validateFieldOptionData($data);
 
@@ -97,21 +111,60 @@ try {
     $field = getFieldConfigById($old_option['field_config_id']);
     $type = $field ? getPromptTypeById($field['prompt_type_id']) : null;
 
+    // Handle reference image changes
+    $upload_dir = __DIR__ . '/../uploads/reference_images/';
+    $new_reference_image = $old_option['reference_image'];
+    $reference_image_url = null;
+
+    // Remove old image if requested or if uploading new one
+    if ($remove_reference_image || (isset($_FILES['reference_image']) && $_FILES['reference_image']['error'] === UPLOAD_ERR_OK)) {
+        if (!empty($old_option['reference_image'])) {
+            $old_file = $upload_dir . $old_option['reference_image'];
+            if (file_exists($old_file)) {
+                unlink($old_file);
+            }
+        }
+        $new_reference_image = null;
+    }
+
+    // Upload new image if present
+    if (isset($_FILES['reference_image']) && $_FILES['reference_image']['error'] === UPLOAD_ERR_OK) {
+        // Create directory if it doesn't exist
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+
+        // Generate unique filename
+        $file_ext = strtolower(pathinfo($_FILES['reference_image']['name'], PATHINFO_EXTENSION));
+        $random_string = bin2hex(random_bytes(8));
+        $timestamp = time();
+        $new_filename = "{$option_id}_{$timestamp}_{$random_string}.{$file_ext}";
+        $destination = $upload_dir . $new_filename;
+
+        // Move uploaded file
+        if (move_uploaded_file($_FILES['reference_image']['tmp_name'], $destination)) {
+            $new_reference_image = $new_filename;
+            $reference_image_url = '/studio/coordination/ai_config/uploads/reference_images/' . $new_filename;
+        }
+    }
+
     // Update option
     $stmt = mysqli_prepare($mysqli, "
         UPDATE ai_field_options
         SET option_value = ?,
             option_label = ?,
             prompt_text = ?,
-            room_restrictions = ?
+            room_restrictions = ?,
+            reference_image = ?
         WHERE id = ?
     ");
 
-    mysqli_stmt_bind_param($stmt, "ssssi",
+    mysqli_stmt_bind_param($stmt, "sssssi",
         $data['option_value'],
         $data['option_label'],
         $data['prompt_text'],
         $data['room_restrictions'],
+        $new_reference_image,
         $option_id
     );
 
@@ -139,10 +192,16 @@ try {
         clearConfigCacheById($type['id']);
     }
 
-    echo json_encode([
+    $response = [
         'success' => true,
         'message' => 'Option updated successfully'
-    ]);
+    ];
+
+    if ($reference_image_url) {
+        $response['data'] = ['reference_image_url' => $reference_image_url];
+    }
+
+    echo json_encode($response);
 
 } catch (Exception $e) {
     http_response_code(500);

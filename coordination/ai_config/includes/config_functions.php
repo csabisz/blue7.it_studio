@@ -493,6 +493,11 @@ function getProductTypeConfigById($prompt_type_id)
                     $opt['rooms'] = $option['room_restrictions'];
                 }
 
+                // Add reference image URL if present
+                if (!empty($option['reference_image'])) {
+                    $opt['reference_image'] = '/studio/coordination/ai_config/uploads/reference_images/' . $option['reference_image'];
+                }
+
                 $config_field['options'][] = $opt;
             }
         }
@@ -820,7 +825,7 @@ function hasPromptForProduct(string $prod_id): bool
  * Get active base prompt for a product ID
  * Replaces the old range-based lookup
  *
- * @param string $prod_id Product ID (e.g., 'p_1523')
+ * @param string $prod_id Product ID (e.g., 'p1523')
  * @return string|null Prompt template or null if not found
  * @throws Exception on database error
  */

@@ -184,6 +184,11 @@ try {
     // Get additional fields
     $id_extension = isset($_POST['id_extension']) ? trim($_POST['id_extension']) : 'ai_generated';
     $presentation_name = isset($_POST['presentation_name']) ? trim($_POST['presentation_name']) : 'AI Generated';
+    $status = isset($_POST['status']) ? trim($_POST['status']) : '8'; // Default to "checked + confirmed"
+
+    // Get URL-based save parameters (optional - used when no orf_id context)
+    $sub_id_param = isset($_POST['sub_id']) ? trim($_POST['sub_id']) : '';
+    $prod_id_param = isset($_POST['prod_id']) ? trim($_POST['prod_id']) : '';
 
     // Connect to database
     $mysqli = getDbConnection();
@@ -206,25 +211,101 @@ try {
         throw new Exception('This image has already been saved to the task');
     }
 
-    // Get original file record to retrieve order details
-    $query = "SELECT * FROM `o_results` WHERE `orf_id` = ?";
-    $stmt = mysqli_prepare($mysqli, $query);
-    mysqli_stmt_bind_param($stmt, "i", $aiRecord['orf_id']);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $originalFile = mysqli_fetch_assoc($result);
-    mysqli_stmt_close($stmt);
+    // Determine if this is URL-based save (no orf_id) or orf_id-based save
+    $is_url_based = empty($aiRecord['orf_id']) || !is_null($aiRecord['source_image_url']);
 
-    if (!$originalFile) {
-        throw new Exception('Original file record not found');
+    $o_id = null;
+    $om_id = 0;
+    $osub_id = null;
+    $prod_id = null;
+    // Get current logged-in user from client_id cookie
+    $uca_id = isset($_COOKIE['client_id']) ? intval($_COOKIE['client_id']) : 0;
+
+    if ($is_url_based) {
+        // URL-based save - require o_id, sub_id and prod_id from request
+        $o_id_param = isset($_POST['o_id']) ? trim($_POST['o_id']) : '';
+
+        if (empty($o_id_param)) {
+            throw new Exception('Order ID (o_id) is required for URL-based saves');
+        }
+        if (empty($sub_id_param)) {
+            throw new Exception('Sub ID is required for URL-based saves');
+        }
+        if (empty($prod_id_param)) {
+            throw new Exception('Product ID is required for URL-based saves');
+        }
+
+        // Validate o_id is numeric
+        if (!is_numeric($o_id_param)) {
+            throw new Exception('Order ID must be numeric');
+        }
+        $o_id = intval($o_id_param);
+
+        // Parse sub_id - expected format: n01, n02, x01, x02, etc.
+        if (!preg_match('/^([nx]\d{2})$/i', $sub_id_param, $matches)) {
+            throw new Exception('Invalid sub_id format. Expected: n01, n02, x01, x02, etc.');
+        }
+        $o_sub_id_text = strtolower($matches[1]);
+
+        // Validate against orders_subnames table
+        $query = "SELECT o_sub_id FROM orders_subnames WHERE o_id = ? AND o_sub_id = ?";
+        $stmt = mysqli_prepare($mysqli, $query);
+        mysqli_stmt_bind_param($stmt, "is", $o_id, $o_sub_id_text);
+        mysqli_stmt_execute($stmt);
+        $subResult = mysqli_stmt_get_result($stmt);
+        $subRecord = mysqli_fetch_assoc($subResult);
+        mysqli_stmt_close($stmt);
+
+        if (!$subRecord) {
+            throw new Exception('Sub ID not found: ' . $o_id . '.' . $o_sub_id_text . ' - Please verify the Order ID and Sub ID are correct.');
+        }
+
+        $osub_id = $subRecord['o_sub_id'];
+
+        // Use prod_id as provided
+        $prod_id = $prod_id_param;
+
+        // Try to get om_id from the order
+        $query = "SELECT om_id FROM orders WHERE order_ID = ?";
+        $stmt = mysqli_prepare($mysqli, $query);
+        mysqli_stmt_bind_param($stmt, "i", $o_id);
+        mysqli_stmt_execute($stmt);
+        $orderResult = mysqli_stmt_get_result($stmt);
+        $orderRecord = mysqli_fetch_assoc($orderResult);
+        mysqli_stmt_close($stmt);
+
+        if ($orderRecord) {
+            $om_id = $orderRecord['om_id'] ?? 0;
+        }
+
     }
+    else {
+        // Traditional orf_id-based save - get order details from original file
+        $query = "SELECT * FROM `o_results` WHERE `orf_id` = ?";
+        $stmt = mysqli_prepare($mysqli, $query);
+        mysqli_stmt_bind_param($stmt, "i", $aiRecord['orf_id']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $originalFile = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
 
-    // Extract order details
-    $o_id = $originalFile['o_id'];
-    $om_id = $originalFile['om_id'];
-    $osub_id = $originalFile['osub_id'];
-    $prod_id = $originalFile['prod_id'];
-    $uca_id = isset($_COOKIE['uca_id']) ? intval($_COOKIE['uca_id']) : $originalFile['uca_id'];
+        if (!$originalFile) {
+            throw new Exception('Original file record not found');
+        }
+
+        // Extract order details from original file
+        $o_id = $originalFile['o_id'];
+        $om_id = $originalFile['om_id'];
+        $osub_id = $originalFile['osub_id'];
+        $prod_id = $originalFile['prod_id'];
+        // Use current logged-in user, fallback to original file's creator
+        $uca_id = isset($_COOKIE['client_id']) ? intval($_COOKIE['client_id']) : $originalFile['uca_id'];
+
+        // Allow override of prod_id from request
+        if (!empty($prod_id_param)) {
+            $prod_id = $prod_id_param;
+        }
+    }
 
     // Generate unique internal filename
     $internalName = sha1(uniqid(mt_rand(), true));
@@ -290,7 +371,7 @@ try {
         'orf_thumbnail_path' => $thumbnailRelativePath,
         'orf_compress_path' => $compressRelativePath,
         'orf_upload_date' => gmdate("Y-m-d H:i:s"),
-        'orf_status' => 8
+        'orf_status' => $status
     );
 
     // Insert into o_results table using existing function

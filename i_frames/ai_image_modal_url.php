@@ -1,12 +1,15 @@
 <?php
 /**
- * AI Image Modal - Standalone Iframe Version
+ * AI Image Modal - URL-Based Standalone Iframe Version
  *
- * This is a standalone iframe entry point for the AI image generation modal.
+ * This is a standalone iframe entry point for the AI image generation modal
+ * that accepts an arbitrary image URL instead of an orf_id.
  * Can be embedded in any external website via iframe.
  *
  * URL Parameters:
- *   - orf_id (required): The o_results file ID
+ *   - image_url (required): The URL of the image to transform
+ *   - prompt_type_id (optional): Preselect a specific prompt type
+ *   - o_id (optional): Order ID - when provided, enables dropdown selection for sub_id and prod_id
  *   - token (required): Authentication token (placeholder validation for now)
  *
  * PostMessage Events (sent to parent):
@@ -19,8 +22,13 @@
 
 session_start();
 
+// Include config functions to get prompt types
+require_once __DIR__ . '/../coordination/ai_config/includes/config_functions.php';
+
 // Get parameters
-$orf_id = isset($_GET['orf_id']) ? intval($_GET['orf_id']) : 0;
+$image_url = isset($_GET['image_url']) ? $_GET['image_url'] : '';
+$prompt_type_id = isset($_GET['prompt_type_id']) && !empty($_GET['prompt_type_id']) ? intval($_GET['prompt_type_id']) : 6; // Default to prompt type 6
+$o_id = isset($_GET['o_id']) && !empty($_GET['o_id']) ? intval($_GET['o_id']) : null;
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 
 /**
@@ -36,53 +44,50 @@ function validateToken($token) {
     return !empty($token);
 }
 
-// Validate request
-if (!$orf_id || !validateToken($token)) {
-    http_response_code(403);
-    die('Invalid request: Missing or invalid orf_id or token');
-}
-
-// Database connection
-function getDbConnection() {
-    $host = 'localhost';
-    $username = 'adminhdd_domenia1';
-    $password = 'p@MjdhfBSmbXWv68';
-    $database = 'adminhdd_domenia1';
-
-    $mysqli = mysqli_connect($host, $username, $password, $database);
-
-    if (!$mysqli) {
-        throw new Exception('Database connection failed: ' . mysqli_connect_error());
-    }
-
-    mysqli_set_charset($mysqli, 'utf8mb4');
-    return $mysqli;
-}
-
-// Load image data
-try {
+/**
+ * Get sub IDs for an order from orders_subnames table
+ */
+function getSubIdsForOrder($o_id) {
     $mysqli = getDbConnection();
-
-    $stmt = mysqli_prepare($mysqli, "SELECT orf_id, orf_compress_path, prod_id FROM o_results WHERE orf_id = ?");
-    mysqli_stmt_bind_param($stmt, 'i', $orf_id);
+    $query = "SELECT o_sub_id FROM orders_subnames WHERE o_id = ? ORDER BY o_sub_id ASC";
+    $stmt = mysqli_prepare($mysqli, $query);
+    mysqli_stmt_bind_param($stmt, "i", $o_id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $image_data = mysqli_fetch_assoc($result);
+
+    $subIds = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $subIds[] = $row['o_sub_id'];
+    }
+
     mysqli_stmt_close($stmt);
     mysqli_close($mysqli);
-
-    if (!$image_data) {
-        http_response_code(404);
-        die('Image not found for orf_id: ' . $orf_id);
-    }
-} catch (Exception $e) {
-    http_response_code(500);
-    die('Database error: ' . $e->getMessage());
+    return $subIds;
 }
 
-// Build image URL
-$compress_path = $image_data['orf_compress_path'];
-$image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$compress_path}" : '';
+// Validate request
+if (!$image_url || !validateToken($token)) {
+    http_response_code(403);
+    die('Invalid request: Missing or invalid image_url or token');
+}
+
+// Get all active prompt types for the dropdown
+try {
+    $promptTypes = getAllPromptTypes(true);
+} catch (Exception $e) {
+    http_response_code(500);
+    die('Failed to load prompt types: ' . $e->getMessage());
+}
+
+// If o_id is provided, fetch sub IDs (products are fetched dynamically based on sub_id selection)
+$orderSubIds = [];
+if ($o_id) {
+    try {
+        $orderSubIds = getSubIdsForOrder($o_id);
+    } catch (Exception $e) {
+        // Silently fail - will show text inputs instead
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -130,11 +135,11 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             <div class="row">
                 <!-- Image Preview Column -->
                 <div class="col-md-4">
-                    <h6 class="text-dark mb-3">Current Image</h6>
+                    <h6 class="text-dark mb-3">Source Image</h6>
                     <?php if ($image_url): ?>
                         <div class="source-image-container" id="sourceImageContainer">
                             <img src="<?php echo htmlspecialchars($image_url); ?>"
-                                 alt="Current Image"
+                                 alt="Source Image"
                                  id="sourceImagePreview"
                                  class="img-fluid rounded border shadow-sm"
                                  style="max-height: 400px; width: 100%; object-fit: contain;">
@@ -151,7 +156,7 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                         </div>
                     <?php else: ?>
                         <div class="alert alert-warning">
-                            <small>No compressed image available</small>
+                            <small>No image URL provided</small>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -159,6 +164,20 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                 <!-- Prompt Fine-tuning Column -->
                 <div class="col-md-4">
                     <h6 class="text-dark mb-3">Fine-tune Generation Prompt</h6>
+
+                    <!-- Prompt Type Selector -->
+                    <div class="form-group">
+                        <label for="promptTypeSelect" class="text-dark">Prompt Type</label>
+                        <select class="form-control form-control-sm" id="promptTypeSelect">
+                            <option value="">-- Select type --</option>
+                            <?php foreach ($promptTypes as $type): ?>
+                                <option value="<?php echo intval($type['id']); ?>"
+                                        <?php echo ($prompt_type_id === intval($type['id'])) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($type['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
                     <!-- Model Selection -->
                     <div class="form-group">
@@ -175,13 +194,13 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                     <!-- Dynamic form fields container -->
                     <div id="aiDynamicFields">
                         <div class="text-center text-muted py-3">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span class="ml-2">Loading product configuration...</span>
+                            <em>Select a prompt type above to load configuration options.</em>
                         </div>
                     </div>
 
-                    <!-- Hidden field to store product type -->
+                    <!-- Hidden fields to store product type and prompt type id -->
                     <input type="hidden" id="aiProductType" value="">
+                    <input type="hidden" id="aiPromptTypeId" value="<?php echo intval($prompt_type_id); ?>">
                 </div>
 
                 <!-- Additional Notes -->
@@ -210,13 +229,13 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                 </div>
             </div>
 
-            <!-- Previously Generated Images -->
+            <!-- Generated Images Section -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <h6 class="text-dark mb-3">Previously Generated Images</h6>
+                    <h6 class="text-dark mb-3">Generated Images</h6>
                     <div id="aiGeneratedPreviews" class="d-flex flex-wrap gap-2" style="gap: 0.5rem; max-height: 300px; overflow-y: auto;">
                         <div class="text-muted small">
-                            <em>No previously generated images yet.</em>
+                            <em>No generated images yet. Select a prompt type and generate an image to see results here.</em>
                         </div>
                     </div>
                 </div>
@@ -229,7 +248,7 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             <button type="button" class="btn btn-success btn-sm" id="viewFullPrompt">
                 <i class="fas fa-eye"></i> View Full Prompt
             </button>
-            <button type="button" class="btn btn-info btn-sm" id="generateAIImage">
+            <button type="button" class="btn btn-info btn-sm" id="generateAIImage" disabled>
                 Generate Image
             </button>
         </div>
@@ -307,13 +326,79 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             </div>
             <form id="saveToTaskForm">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="saveExtensionId">Extension ID</label>
-                        <input type="text" class="form-control" id="saveExtensionId" name="id_extension" placeholder="Enter extension ID">
+                    <div class="alert alert-info small">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Since this image was generated from a URL (not a task file), please specify where to save the result.
                     </div>
-                    <div class="form-group mb-0">
-                        <label for="savePresentationName">Presentation Name</label>
-                        <input type="text" class="form-control" id="savePresentationName" name="presentation_name" placeholder="Enter presentation name">
+                    <!-- Row 1: Order ID and Sub ID -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="saveOrderId">Order ID <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="saveOrderId" name="o_id"
+                                   placeholder="e.g., 1234"
+                                   value="<?php echo $o_id ? intval($o_id) : ''; ?>"
+                                   <?php echo $o_id ? 'readonly' : ''; ?>
+                                   required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="saveSubId">Sub ID <span class="text-danger">*</span></label>
+                            <?php if ($o_id && !empty($orderSubIds)): ?>
+                            <select class="form-control" id="saveSubId" name="sub_id" required>
+                                <option value="">-- Select Sub ID --</option>
+                                <?php foreach ($orderSubIds as $subId): ?>
+                                <option value="<?php echo htmlspecialchars($subId); ?>"><?php echo htmlspecialchars($subId); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <?php else: ?>
+                            <input type="text" class="form-control" id="saveSubId" name="sub_id" placeholder="e.g., n01, x01" required>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <!-- Row 2: Product ID and Status -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="saveProdId">Product ID <span class="text-danger">*</span></label>
+                            <?php if ($o_id && !empty($orderSubIds)): ?>
+                            <!-- Products depend on sub_id selection, show disabled dropdown initially -->
+                            <select class="form-control" id="saveProdId" name="prod_id" required disabled>
+                                <option value="">-- Select Sub ID first --</option>
+                            </select>
+                            <?php else: ?>
+                            <input type="text" class="form-control" id="saveProdId" name="prod_id" placeholder="e.g., p1523" required>
+                            <?php endif; ?>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="saveStatus">Status <span class="text-danger">*</span></label>
+                            <select class="form-control" id="saveStatus" name="status" required>
+                                <option value="0">order-request</option>
+                                <option value="1">accepted</option>
+                                <option value="2">assigned</option>
+                                <option value="2.1">waiting for client infos</option>
+                                <option value="3">work could start</option>
+                                <option value="4">work can start</option>
+                                <option value="5">correction needed</option>
+                                <option value="6">amendment/client change</option>
+                                <option value="6.1">at work</option>
+                                <option value="7">checkable</option>
+                                <option value="8" selected>checked + confirmed</option>
+                                <option value="10">dismissed before</option>
+                                <option value="11">dismissed after</option>
+                                <option value="12">deleted</option>
+                                <option value="13">can not do that</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- Row 3: Extension ID and Presentation Name -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6 mb-0">
+                            <label for="saveExtensionId">Extension ID</label>
+                            <input type="text" class="form-control" id="saveExtensionId" name="id_extension" placeholder="Optional">
+                        </div>
+                        <div class="form-group col-md-6 mb-0">
+                            <label for="savePresentationName">Presentation Name</label>
+                            <input type="text" class="form-control" id="savePresentationName" name="presentation_name" placeholder="Optional">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer py-2">
@@ -341,32 +426,32 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
     (function() {
         'use strict';
 
-        // Get orf_id from URL parameters
+        // Get parameters from URL and PHP
         var urlParams = new URLSearchParams(window.location.search);
-        var orfId = urlParams.get('orf_id');
+        var imageUrl = urlParams.get('image_url');
+        var initialPromptTypeId = '<?php echo $prompt_type_id; ?>';
 
         // Base URL for API calls (same origin)
         var apiBaseUrl = '/studio/coordination';
 
         // Loading overlay
         var loadingOverlay = document.getElementById('loadingOverlay');
-        var configLoaded = false;
-        var imagesLoaded = false;
 
-        function checkReady() {
-            if (configLoaded && imagesLoaded) {
-                loadingOverlay.classList.add('hidden');
-                AIModalShared.sendToParent('ready', { orf_id: orfId });
-            }
-        }
+        // Hide loading overlay after short delay
+        setTimeout(function() {
+            loadingOverlay.classList.add('hidden');
+            AIModalShared.sendToParent('ready', { image_url: imageUrl });
+        }, 500);
 
         // =========================================================================
         // DOM REFERENCES
         // =========================================================================
 
+        var promptTypeSelect = document.getElementById('promptTypeSelect');
         var notesTextarea = document.getElementById('aiNotes');
         var dynamicFieldsContainer = document.getElementById('aiDynamicFields');
         var productTypeInput = document.getElementById('aiProductType');
+        var promptTypeIdInput = document.getElementById('aiPromptTypeId');
         var previewsContainer = document.getElementById('aiGeneratedPreviews');
         var generateButton = document.getElementById('generateAIImage');
         var generatingOverlay = document.getElementById('generatingOverlay');
@@ -444,36 +529,64 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
         AIModalShared.setOriginalImageUrl(originalImageUrl);
 
         // =========================================================================
-        // DYNAMIC FIELD RENDERING
+        // PROMPT TYPE SELECTION
         // =========================================================================
 
-        function loadProductConfig() {
-            fetch(apiBaseUrl + '/ai_get_product_config.php?orf_id=' + orfId)
+        promptTypeSelect.addEventListener('change', function() {
+            var selectedTypeId = this.value;
+
+            if (!selectedTypeId) {
+                dynamicFieldsContainer.innerHTML = '<div class="text-center text-muted py-3"><em>Select a prompt type above to load configuration options.</em></div>';
+                productConfig = null;
+                basePrompt = null;
+                formFields = {};
+                productTypeInput.value = '';
+                promptTypeIdInput.value = '';
+                generateButton.disabled = true;
+                AIModalShared.clearAdminReferenceImages();
+                return;
+            }
+
+            dynamicFieldsContainer.innerHTML = '\
+                <div class="text-center text-muted py-3">\
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>\
+                    <span class="ml-2">Loading configuration...</span>\
+                </div>';
+
+            loadConfigByPromptType(selectedTypeId);
+        });
+
+        function loadConfigByPromptType(promptTypeId) {
+            fetch(apiBaseUrl + '/ai_get_config_by_type.php?prompt_type_id=' + promptTypeId)
                 .then(function(response) { return response.json(); })
                 .then(function(data) {
                     if (data.success) {
                         productConfig = data.data.config;
                         basePrompt = data.data.base_prompt;
                         productTypeInput.value = data.data.product_type;
+                        promptTypeIdInput.value = promptTypeId;
                         renderDynamicFields();
+                        generateButton.disabled = false;
                     } else {
-                        console.error('Failed to load product config:', data.error);
-                        AIModalShared.showNotification('Failed to load product configuration.', 'warning');
+                        console.error('Failed to load config:', data.error);
+                        AIModalShared.showNotification('Failed to load configuration: ' + data.error, 'warning');
                         dynamicFieldsContainer.innerHTML = '<div class="alert alert-warning">Failed to load configuration</div>';
-                        AIModalShared.sendToParent('error', { message: 'Failed to load product configuration', code: 'CONFIG_LOAD_FAILED' });
+                        generateButton.disabled = true;
+                        AIModalShared.sendToParent('error', { message: 'Failed to load prompt configuration', code: 'CONFIG_LOAD_FAILED' });
                     }
-                    configLoaded = true;
-                    checkReady();
                 })
                 .catch(function(error) {
-                    console.error('Error loading product config:', error);
-                    AIModalShared.showNotification('Error loading product configuration', 'danger');
+                    console.error('Error loading config:', error);
+                    AIModalShared.showNotification('Error loading configuration', 'danger');
                     dynamicFieldsContainer.innerHTML = '<div class="alert alert-danger">Error loading configuration</div>';
-                    AIModalShared.sendToParent('error', { message: 'Error loading product configuration', code: 'CONFIG_LOAD_ERROR' });
-                    configLoaded = true;
-                    checkReady();
+                    generateButton.disabled = true;
+                    AIModalShared.sendToParent('error', { message: 'Error loading prompt configuration', code: 'CONFIG_LOAD_ERROR' });
                 });
         }
+
+        // =========================================================================
+        // DYNAMIC FIELD RENDERING
+        // =========================================================================
 
         function renderDynamicFields() {
             if (!productConfig || !productConfig.fields) {
@@ -481,6 +594,7 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             }
 
             dynamicFieldsContainer.innerHTML = '';
+            formFields = {};
             AIModalShared.clearAdminReferenceImages();
 
             productConfig.fields.forEach(function(fieldConfig) {
@@ -633,7 +747,7 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                     <span class="text-muted ml-2">Loading previous images...</span>\
                 </div>';
 
-            fetch(apiBaseUrl + '/ai_image_fetch_previous.php?orf_id=' + orfId)
+            fetch(apiBaseUrl + '/ai_image_fetch_previous.php?image_url=' + encodeURIComponent(imageUrl))
                 .then(function(response) { return response.json(); })
                 .then(function(data) {
                     if (data.success && data.data.images.length > 0) {
@@ -646,17 +760,13 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                         });
                     } else {
                         AIModalShared.setGeneratedImages([]);
-                        previewsContainer.innerHTML = '<div class="text-muted small"><em>No previously generated images yet.</em></div>';
+                        previewsContainer.innerHTML = '<div class="text-muted small"><em>No previously generated images for this source.</em></div>';
                     }
-                    imagesLoaded = true;
-                    checkReady();
                 })
                 .catch(function(error) {
                     console.error('Error loading previous images:', error);
                     AIModalShared.setGeneratedImages([]);
                     previewsContainer.innerHTML = '<div class="text-muted small"><em>Error loading previous images.</em></div>';
-                    imagesLoaded = true;
-                    checkReady();
                 });
         }
 
@@ -670,12 +780,13 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             }
 
             if (!productConfig || !basePrompt) {
-                AIModalShared.showNotification('Product configuration not loaded. Please refresh the page.', 'warning');
+                AIModalShared.showNotification('Please select a prompt type first.', 'warning');
                 return;
             }
 
             var modelSelect = document.getElementById('aiModel');
             var productType = productTypeInput.value;
+            var promptTypeId = promptTypeIdInput.value;
 
             var fieldValues = {};
             var hasError = false;
@@ -715,7 +826,8 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             var finalPrompt = AIModalShared.buildFinalPrompt(basePrompt, promptVariables);
 
             var formData = new FormData();
-            formData.append('orf_id', orfId);
+            formData.append('image_url', imageUrl);
+            formData.append('prompt_type_id', promptTypeId);
             formData.append('model', modelSelect.value);
             formData.append('product_type', productType);
             formData.append('additional_instructions', notesTextarea.value.trim());
@@ -804,9 +916,9 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                         AIModalShared.showNotification('Image generated successfully!', 'success', 3000);
 
                         AIModalShared.sendToParent('imageGenerated', {
-                            orf_id: orfId,
+                            image_url: imageUrl,
                             id: data.data.ai_record_id,
-                            image_url: data.data.image_url,
+                            generated_image_url: data.data.image_url,
                             thumbnail_url: data.data.thumbnail_url,
                             model: data.data.model,
                             quality: data.data.size
@@ -833,7 +945,7 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
 
         viewPromptButton.addEventListener('click', function() {
             if (!productConfig || !basePrompt) {
-                AIModalShared.showNotification('Product configuration not loaded. Please refresh the page.', 'warning');
+                AIModalShared.showNotification('Please select a prompt type first.', 'warning');
                 return;
             }
 
@@ -861,9 +973,210 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
         var saveToTaskButton = document.getElementById('saveToTask');
         var saveToTaskForm = document.getElementById('saveToTaskForm');
         var saveToTaskSubmit = document.getElementById('saveToTaskSubmit');
+        var saveOrderId = document.getElementById('saveOrderId');
+        var saveStatus = document.getElementById('saveStatus');
         var saveExtensionId = document.getElementById('saveExtensionId');
         var savePresentationName = document.getElementById('savePresentationName');
 
+        // Track if o_id was passed via URL
+        var initialOrderId = '<?php echo $o_id ? intval($o_id) : ''; ?>';
+        var hasOrderIdFromUrl = initialOrderId !== '';
+
+        // Dynamic loading timeout for debouncing
+        var orderIdLoadTimeout = null;
+
+        /**
+         * Fetch order data (sub IDs and products) for a given order ID
+         */
+        function fetchOrderData(orderId, callback) {
+            fetch(apiBaseUrl + '/ai_get_order_data.php?o_id=' + encodeURIComponent(orderId))
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        callback(null, data.data);
+                    } else {
+                        callback(data.error || 'Failed to fetch order data', null);
+                    }
+                })
+                .catch(function(error) {
+                    callback(error.message || 'Network error', null);
+                });
+        }
+
+        /**
+         * Replace a text input with a select dropdown
+         */
+        function replaceInputWithSelect(inputId, options, placeholder) {
+            var input = document.getElementById(inputId);
+            if (!input) return;
+
+            var select = document.createElement('select');
+            select.className = 'form-control';
+            select.id = inputId;
+            select.name = input.name;
+            select.required = input.required;
+
+            var placeholderOpt = document.createElement('option');
+            placeholderOpt.value = '';
+            placeholderOpt.textContent = placeholder;
+            select.appendChild(placeholderOpt);
+
+            options.forEach(function(opt) {
+                var option = document.createElement('option');
+                option.value = opt;
+                option.textContent = opt;
+                select.appendChild(option);
+            });
+
+            input.parentNode.replaceChild(select, input);
+        }
+
+        /**
+         * Replace a select with a text input
+         */
+        function replaceSelectWithInput(selectId, placeholder) {
+            var select = document.getElementById(selectId);
+            if (!select || select.tagName !== 'SELECT') return;
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control';
+            input.id = selectId;
+            input.name = select.name;
+            input.placeholder = placeholder;
+            input.required = select.required;
+
+            select.parentNode.replaceChild(input, select);
+        }
+
+        /**
+         * Enable/disable form fields
+         */
+        function setFormFieldsLoading(loading) {
+            var subIdField = document.getElementById('saveSubId');
+            var prodIdField = document.getElementById('saveProdId');
+
+            if (subIdField) subIdField.disabled = loading;
+            if (prodIdField) prodIdField.disabled = loading;
+        }
+
+        /**
+         * Handle order ID change - fetch new data and update dropdowns
+         */
+        function handleOrderIdChange(orderId) {
+            if (orderIdLoadTimeout) {
+                clearTimeout(orderIdLoadTimeout);
+            }
+
+            if (!orderId || !/^\d+$/.test(orderId)) {
+                return;
+            }
+
+            orderIdLoadTimeout = setTimeout(function() {
+                setFormFieldsLoading(true);
+
+                fetchOrderData(orderId, function(error, data) {
+                    setFormFieldsLoading(false);
+
+                    if (error) {
+                        AIModalShared.showNotification('Failed to load order data: ' + error, 'warning');
+                        replaceSelectWithInput('saveSubId', 'e.g., n01, x01');
+                        replaceSelectWithInput('saveProdId', 'e.g., p1523');
+                        return;
+                    }
+
+                    if (data.sub_ids && data.sub_ids.length > 0) {
+                        replaceInputWithSelect('saveSubId', data.sub_ids, '-- Select Sub ID --');
+                        attachSubIdChangeListener();
+                    } else {
+                        replaceSelectWithInput('saveSubId', 'e.g., n01, x01');
+                    }
+
+                    replaceInputWithSelect('saveProdId', [], '-- Select Sub ID first --');
+                    document.getElementById('saveProdId').disabled = true;
+                });
+            }, 500);
+        }
+
+        /**
+         * Fetch products for a specific order ID and sub ID combination
+         */
+        function fetchProductsForSubId(orderId, subId, callback) {
+            fetch(apiBaseUrl + '/ai_get_order_data.php?o_id=' + encodeURIComponent(orderId) + '&sub_id=' + encodeURIComponent(subId))
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        callback(null, data.data.products || []);
+                    } else {
+                        callback(data.error || 'Failed to fetch products', null);
+                    }
+                })
+                .catch(function(error) {
+                    callback(error.message || 'Network error', null);
+                });
+        }
+
+        /**
+         * Handle sub ID change - fetch products for this order+sub combination
+         */
+        function handleSubIdChange(subId) {
+            var orderId = saveOrderId.value.trim();
+            var prodIdField = document.getElementById('saveProdId');
+
+            if (!orderId || !subId) {
+                replaceInputWithSelect('saveProdId', [], '-- Select Sub ID first --');
+                document.getElementById('saveProdId').disabled = true;
+                return;
+            }
+
+            prodIdField.disabled = true;
+            if (prodIdField.tagName === 'SELECT') {
+                prodIdField.innerHTML = '<option value="">Loading products...</option>';
+            }
+
+            fetchProductsForSubId(orderId, subId, function(error, products) {
+                if (error) {
+                    AIModalShared.showNotification('Failed to load products: ' + error, 'warning');
+                    replaceSelectWithInput('saveProdId', 'e.g., p1523');
+                    return;
+                }
+
+                if (products && products.length > 0) {
+                    replaceInputWithSelect('saveProdId', products, '-- Select Product ID --');
+                } else {
+                    replaceSelectWithInput('saveProdId', 'e.g., p1523');
+                }
+                document.getElementById('saveProdId').disabled = false;
+            });
+        }
+
+        /**
+         * Attach change listener to sub ID field
+         */
+        function attachSubIdChangeListener() {
+            var subIdField = document.getElementById('saveSubId');
+            if (subIdField) {
+                subIdField.addEventListener('change', function() {
+                    handleSubIdChange(this.value.trim());
+                });
+            }
+        }
+
+        // Add event listener for order ID changes
+        if (!hasOrderIdFromUrl) {
+            saveOrderId.addEventListener('input', function() {
+                handleOrderIdChange(this.value.trim());
+            });
+
+            saveOrderId.addEventListener('blur', function() {
+                handleOrderIdChange(this.value.trim());
+            });
+        }
+
+        // Attach sub ID change listener for initial dropdown
+        attachSubIdChangeListener();
+
+        // Open the save modal
         saveToTaskButton.addEventListener('click', function() {
             var currentAiRecordId = AIModalShared.getCurrentAiRecordId();
             if (!currentAiRecordId) {
@@ -871,30 +1184,91 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                 return;
             }
 
+            if (hasOrderIdFromUrl) {
+                var subIdSelect = document.getElementById('saveSubId');
+                if (subIdSelect && subIdSelect.tagName === 'SELECT') subIdSelect.selectedIndex = 0;
+
+                var prodIdSelect = document.getElementById('saveProdId');
+                if (prodIdSelect && prodIdSelect.tagName === 'SELECT') {
+                    prodIdSelect.innerHTML = '<option value="">-- Select Sub ID first --</option>';
+                    prodIdSelect.disabled = true;
+                }
+            } else {
+                saveOrderId.value = '';
+                var subIdField = document.getElementById('saveSubId');
+                var prodIdField = document.getElementById('saveProdId');
+                if (subIdField.tagName === 'SELECT') {
+                    replaceSelectWithInput('saveSubId', 'e.g., n01, x01');
+                } else {
+                    subIdField.value = '';
+                }
+                if (prodIdField.tagName === 'SELECT') {
+                    replaceSelectWithInput('saveProdId', 'e.g., p1523');
+                } else {
+                    prodIdField.value = '';
+                }
+            }
+
+            saveStatus.value = '8';
             saveExtensionId.value = '';
             savePresentationName.value = '';
 
             $('#saveToTaskModal').modal('show');
 
             $('#saveToTaskModal').one('shown.bs.modal', function() {
-                saveExtensionId.focus();
+                if (hasOrderIdFromUrl) {
+                    document.getElementById('saveSubId').focus();
+                } else {
+                    saveOrderId.focus();
+                }
             });
         });
 
+        // Handle form submission
         saveToTaskForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             var currentAiRecordId = AIModalShared.getCurrentAiRecordId();
+            var currentSubIdField = document.getElementById('saveSubId');
+            var currentProdIdField = document.getElementById('saveProdId');
+
+            var orderId = saveOrderId.value.trim();
+            var subId = currentSubIdField.value.trim();
+            var prodId = currentProdIdField.value.trim();
+            var status = saveStatus.value;
             var idExtension = saveExtensionId.value.trim();
             var presentationName = savePresentationName.value.trim();
+
+            if (!orderId) {
+                AIModalShared.showNotification('Order ID is required', 'warning');
+                saveOrderId.focus();
+                return;
+            }
+
+            if (!subId) {
+                AIModalShared.showNotification('Sub ID is required', 'warning');
+                currentSubIdField.focus();
+                return;
+            }
+
+            if (!prodId) {
+                AIModalShared.showNotification('Product ID is required', 'warning');
+                currentProdIdField.focus();
+                return;
+            }
 
             saveToTaskSubmit.disabled = true;
             AIModalShared.setButtonLoading(saveToTaskSubmit, 'Saving...');
 
             var formData = new FormData();
             formData.append('orf_ai_id', currentAiRecordId);
+            formData.append('o_id', orderId);
+            formData.append('sub_id', subId);
+            formData.append('prod_id', prodId);
+            formData.append('status', status);
             formData.append('id_extension', idExtension);
             formData.append('presentation_name', presentationName);
+            formData.append('source_image_url', imageUrl);
 
             fetch(apiBaseUrl + '/ai_image_save_to_task.php', {
                 method: 'POST',
@@ -908,8 +1282,15 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
 
                         AIModalShared.showNotification('Image saved to task successfully!', 'success', 2000);
 
+                        // Update the image data to show it's saved
+                        var allImages = AIModalShared.getGeneratedImages();
+                        var savedImage = allImages.find(function(img) { return img.id === currentAiRecordId; });
+                        if (savedImage) {
+                            savedImage.saved_orf_id = data.data.saved_orf_id;
+                        }
+
                         AIModalShared.sendToParent('imageSaved', {
-                            orf_id: orfId,
+                            image_url: imageUrl,
                             orf_ai_id: currentAiRecordId,
                             saved_orf_id: data.data.saved_orf_id
                         });
@@ -934,7 +1315,7 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
         // =========================================================================
 
         function handleClose() {
-            AIModalShared.sendToParent('close', { orf_id: orfId });
+            AIModalShared.sendToParent('close', { image_url: imageUrl });
         }
 
         closeModalBtn.addEventListener('click', handleClose);
@@ -944,8 +1325,13 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
         // INITIALIZATION
         // =========================================================================
 
-        loadProductConfig();
+        // Load previous images for this source URL
         loadPreviousImages();
+
+        // If prompt_type_id was provided, load its config
+        if (initialPromptTypeId) {
+            loadConfigByPromptType(initialPromptTypeId);
+        }
 
     })();
 </script>

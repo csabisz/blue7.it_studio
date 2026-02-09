@@ -69,6 +69,15 @@ try {
     $field = getFieldConfigById($option['field_config_id']);
     $type = $field ? getPromptTypeById($field['prompt_type_id']) : null;
 
+    // Delete reference image file if exists
+    if (!empty($option['reference_image'])) {
+        $upload_dir = __DIR__ . '/../uploads/reference_images/';
+        $image_file = $upload_dir . $option['reference_image'];
+        if (file_exists($image_file)) {
+            unlink($image_file);
+        }
+    }
+
     // Hard delete
     $stmt = mysqli_prepare($mysqli, "DELETE FROM ai_field_options WHERE id = ?");
     mysqli_stmt_bind_param($stmt, "i", $option_id);

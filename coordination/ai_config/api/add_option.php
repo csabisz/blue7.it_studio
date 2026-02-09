@@ -53,6 +53,18 @@ $data = [
     'room_restrictions' => isset($_POST['room_restrictions']) ? sanitizeInput($_POST['room_restrictions']) : null
 ];
 
+// Handle reference image upload if present
+$reference_image = null;
+if (isset($_FILES['reference_image']) && $_FILES['reference_image']['error'] === UPLOAD_ERR_OK) {
+    // Validate the image file
+    $validation_result = validateReferenceImage($_FILES['reference_image']);
+    if (!$validation_result['valid']) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => $validation_result['error']]);
+        exit;
+    }
+}
+
 // Validate input
 $validation_errors = validateFieldOptionData($data);
 
@@ -118,6 +130,36 @@ try {
 
     $option_id = mysqli_insert_id($mysqli);
     mysqli_stmt_close($stmt);
+
+    // Handle reference image upload if present
+    $reference_image_url = null;
+    if (isset($_FILES['reference_image']) && $_FILES['reference_image']['error'] === UPLOAD_ERR_OK) {
+        $upload_dir = __DIR__ . '/../uploads/reference_images/';
+
+        // Create directory if it doesn't exist
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+
+        // Generate unique filename
+        $file_ext = strtolower(pathinfo($_FILES['reference_image']['name'], PATHINFO_EXTENSION));
+        $random_string = bin2hex(random_bytes(8));
+        $timestamp = time();
+        $new_filename = "{$option_id}_{$timestamp}_{$random_string}.{$file_ext}";
+        $destination = $upload_dir . $new_filename;
+
+        // Move uploaded file
+        if (move_uploaded_file($_FILES['reference_image']['tmp_name'], $destination)) {
+            // Update database with filename
+            $stmt = mysqli_prepare($mysqli, "UPDATE ai_field_options SET reference_image = ? WHERE id = ?");
+            mysqli_stmt_bind_param($stmt, "si", $new_filename, $option_id);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+
+            $reference_image_url = '/studio/coordination/ai_config/uploads/reference_images/' . $new_filename;
+        }
+    }
+
     mysqli_close($mysqli);
 
     // Log to history
@@ -135,13 +177,19 @@ try {
         clearConfigCacheById($type['id']);
     }
 
+    $response_data = [
+        'option_id' => $option_id,
+        'display_order' => $display_order
+    ];
+
+    if ($reference_image_url) {
+        $response_data['reference_image_url'] = $reference_image_url;
+    }
+
     echo json_encode([
         'success' => true,
         'message' => 'Option created successfully',
-        'data' => [
-            'option_id' => $option_id,
-            'display_order' => $display_order
-        ]
+        'data' => $response_data
     ]);
 
 } catch (Exception $e) {
