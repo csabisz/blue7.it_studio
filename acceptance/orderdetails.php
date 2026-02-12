@@ -2044,7 +2044,7 @@ if(isset($_GET['option']))
                     </select>                    
                 </div>
                 <div class="form-group">
-                    <p class="d-inline">Suntour</p>
+                    <p class="d-inline">Earth link ?</p>
                     <input type="text" class="form-control form-control-sm d-inline" name="suntour_link" value="<?php echo $order['suntour_link']; ?>" placeholder="Add suntour link for this order" style="width:400px;" form="order_details">
                 </div>
                 <div class="form-group">
