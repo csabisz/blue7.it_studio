@@ -2045,7 +2045,7 @@ if(isset($_GET['option']))
                 </div>
                 <div class="form-group">
                     <p class="d-inline">Earth link ?</p>
-                    <input type="text" class="form-control form-control-sm d-inline" name="suntour_link" value="<?php echo $order['suntour_link']; ?>" placeholder="Add suntour link for this order" style="width:400px;" form="order_details">
+                    <input type="text" class="form-control form-control-sm d-inline" name="suntour_link" value="<?php echo $order['suntour_link']; ?>" placeholder="Add google earth link for this order" style="width:400px;" form="order_details">
                 </div>
                 <div class="form-group">
                     <p class="d-inline"><a href="https://www.geoportal.de/Anwendungen/Geoportale%20der%20L%C3%A4nder.html" target="_blank">Geoportal</a></p>
