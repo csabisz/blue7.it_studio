@@ -10510,10 +10510,24 @@ include('../menu.php');
 
                                                         (substr($result_files[$i]['prod_id'], -2) === '66') 
                                                        
-                                                ) 
-                                                {
-                                                    echo "/panorama/";
-                                                }
+                                                    ) 
+                                                    {
+                                                        echo "/panorama/";
+                                                    }
+                                                    if (
+                                                        (substr($result_files[$i]['prod_id'], -2) === '07') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '08') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '27') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '28') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '47') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '48') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '67') ||
+                                                        (substr($result_files[$i]['prod_id'], -2) === '68')
+                                                    )
+                                                    {
+                                                        echo "/video/";
+                                                    }
+
                                                     echo $osub_id . "/";
                                                     
                                                     $existing_token=$prod->get_token($_COOKIE['client_id']);
