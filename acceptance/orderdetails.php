@@ -113,7 +113,7 @@ if(($update_data['longitude']!=0)&&($update_data['latitude']!=0))
 
 $update_data['invoice_explanations']=$prod->xss_fix($_POST['invoice_explanations']);
 $update_data['geoportal_link']=$prod->xss_fix($_POST['geoportal_link']);
-$update_data['suntour_link']=$prod->xss_fix($_POST['suntour_link']);
+$update_data['earth_link']=$prod->xss_fix($_POST['earth_link']);
 $update_data['show_on_map']=$prod->xss_fix($_POST['show_on_map']);
 $update_data['vr_link']=$prod->xss_fix($_POST['vr_link']);
 $update_data['street_view_link']=$prod->xss_fix($_POST['street_view_link']);
@@ -2045,7 +2045,7 @@ if(isset($_GET['option']))
                 </div>
                 <div class="form-group">
                     <p class="d-inline">Earth link ?</p>
-                    <input type="text" class="form-control form-control-sm d-inline" name="suntour_link" value="<?php echo $order['suntour_link']; ?>" placeholder="Add google earth link for this order" style="width:400px;" form="order_details">
+                    <input type="text" class="form-control form-control-sm d-inline" name="earth_link" value="<?php echo $order['earth_link']; ?>" placeholder="Add google earth link for this order" style="width:400px;" form="order_details">
                 </div>
                 <div class="form-group">
                     <p class="d-inline"><a href="https://www.geoportal.de/Anwendungen/Geoportale%20der%20L%C3%A4nder.html" target="_blank">Geoportal</a></p>

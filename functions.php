@@ -12074,7 +12074,7 @@ class Production
         $suntour = mysqli_real_escape_string($mysqli, $data->suntour ?? 0);
         $geoportal_link = mysqli_real_escape_string($mysqli, $data->geoportal_link ?? '');
         
-        $suntour_link = mysqli_real_escape_string($mysqli, $data->suntour_link ?? '');
+        $earth_link = mysqli_real_escape_string($mysqli, $data->earth_link ?? '');
         $show_on_map = mysqli_real_escape_string($mysqli, $data->show_on_map ?? 0);
         $vr_link = mysqli_real_escape_string($mysqli, $data->vr_link ?? '');
         $street_view_link = mysqli_real_escape_string($mysqli, $data->street_view_link ?? '');
@@ -12085,7 +12085,7 @@ class Production
         $house_id = mysqli_real_escape_string($mysqli, $data->house_id ?? 0);
         $commission = mysqli_real_escape_string($mysqli, $data->commission ?? 0);
 
-        $stmt = "update `orders` set `order_name`='$order_name',`o_deadline`='$o_deadline_utc',`collection`='$collection', `st_id`='$st_id',`house_id`='$house_id',`commission`='$commission',`cur_id`='$cur_id',`accepted_by`='$accepted_by',`client_language_id`='$client_language_id',`op-remarks`='$op_remarks', `clients-extras`='$customer_remarks', `client_extras_ex_b5`='$client_extras_ex_b5', `op_remarks_ex_b5`='$op_remarks_ex_b5', `o_price`='$o_price',`vr_link`='$vr_link', `show_on_map`='$show_on_map',`street_view_link`='$street_view_link',`o_special_agreement_price`='$o_special_agreement_price',`vat_percent`='$vat_percent',`vat_amount`='$vat_amount',`vat_a_id`='$vat_a_id',`brut_price`='$brut_price',`environment_address`='$environment_address',`longitude`='$longitude',`latitude`='$latitude',`suntour`='$suntour',`public`='$public',`geoportal_link`='$geoportal_link',`suntour_link`='$suntour_link',`invoice_explanations`='$invoice_explanations',`o_status`='$o_status',`u_prod_id`='$producers' where `order_ID`='$orderid'";
+        $stmt = "update `orders` set `order_name`='$order_name',`o_deadline`='$o_deadline_utc',`collection`='$collection', `st_id`='$st_id',`house_id`='$house_id',`commission`='$commission',`cur_id`='$cur_id',`accepted_by`='$accepted_by',`client_language_id`='$client_language_id',`op-remarks`='$op_remarks', `clients-extras`='$customer_remarks', `client_extras_ex_b5`='$client_extras_ex_b5', `op_remarks_ex_b5`='$op_remarks_ex_b5', `o_price`='$o_price',`vr_link`='$vr_link', `show_on_map`='$show_on_map',`street_view_link`='$street_view_link',`o_special_agreement_price`='$o_special_agreement_price',`vat_percent`='$vat_percent',`vat_amount`='$vat_amount',`vat_a_id`='$vat_a_id',`brut_price`='$brut_price',`environment_address`='$environment_address',`longitude`='$longitude',`latitude`='$latitude',`suntour`='$suntour',`public`='$public',`geoportal_link`='$geoportal_link',`earth_link`='$earth_link',`invoice_explanations`='$invoice_explanations',`o_status`='$o_status',`u_prod_id`='$producers' where `order_ID`='$orderid'";
 
         mysqli_query($mysqli, $stmt) or die(mysqli_error($mysqli));
 
