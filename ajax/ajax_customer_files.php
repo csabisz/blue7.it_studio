@@ -41,9 +41,9 @@ $o_id=$prod->xss_fix($_GET['o_id']);
 			<button type="button" id="choose_customer_files_btn" data-toggle="modal" data-target="#choose_customer_files_modal" data-backdrop="static" data-keyboard="false" class="btn btn-sm btn-warning">Choose customer files...</button>
 		</div>
 		<!-- Modal -->
-		<div class="modal fade" id="choose_customer_files_modal" tabindex="-1" role="dialog" aria-labelledby="choose_customer_filesLabel" aria-hidden="true" style="background-color:#C4A484;">
+		<div class="modal fade" id="choose_customer_files_modal" tabindex="-1" role="dialog" aria-labelledby="choose_customer_filesLabel" aria-hidden="true" >
 		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
+			<div class="modal-content" style="background-color:#C4A484;">
 			<div class="modal-header">
 				<h5 class="modal-title" id="choose_customer_filesLabel">Choose customer files</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
