@@ -27,7 +27,15 @@ $client=$prod->get_client($_COOKIE['client_id']);
 
 $licence_sites=explode(";",$client['ls_ids']);
 ?>
-
+<style>
+    .products {
+        -ms-transform: scale(2); /* IE */
+        -moz-transform: scale(2); /* FF */
+        -webkit-transform: scale(2); /* Safari and Chrome */
+        -o-transform: scale(2); /* Opera */
+        transform: scale(2);
+    }
+</style>
 <script type="text/javascript" src="<?php echo $base_url;?>js/tinymce/tinymce.min.js"></script>
 
 <section class="top_section">
