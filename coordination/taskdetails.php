@@ -11238,7 +11238,7 @@ include('../menu.php');
                                 <div class="row">
                                     <div class="col-md-7">
                                         <form id="upload_hints_files_form" name="upload_hints_files_form" method="post" enctype="multipart/form-data"></form>
-                                        <input type="file" name="myfile[]" class="form-control form-control-sm" form="upload_hints_files_form" multiple="">
+                                        <input type="file" name="myfile2[]" class="form-control form-control-sm" form="upload_hints_files_form" multiple="">
                                     </div>
                                     <div class="col-md-3">
                                         <button id="start_upload_hints_btn" type="button" class="btn btn-sm btn-success" aria-expanded="true">Start upload hints</button>

@@ -1552,19 +1552,19 @@ $upload_date = gmdate("Y-m-d H:i:s");
             echo json_encode($custom_error);
             die();
         */
-        $error = $_FILES["myfile"]["error"];
+        $error = $_FILES["myfile2"]["error"];
         //You need to handle  both cases
         //If Any browser does not support serializing of multiple files using FormData()
-        if (!is_array($_FILES["myfile"]["name"])) //single file
+        if (!is_array($_FILES["myfile2"]["name"])) //single file
         {
 
-            $original_file_name = $_FILES["myfile"]["name"];
+            $original_file_name = $_FILES["myfile2"]["name"];
 
             $tempfile = explode(".", $original_file_name);
             $file_extension = strtolower(end($tempfile));
             $internal_file_name = sha1(uniqid(mt_rand(), true)) . '.' . $file_extension;
 
-            move_uploaded_file($_FILES["myfile"]["tmp_name"], $output_dir . "/" . $internal_file_name);
+            move_uploaded_file($_FILES["myfile2"]["tmp_name"], $output_dir . "/" . $internal_file_name);
 
             $prod->upload_correction_needed_file($o_id, $osub_id, $prod_id, $uca_id, $original_file_name, $file_path, $internal_file_name, $upload_date);
 
@@ -1572,15 +1572,15 @@ $upload_date = gmdate("Y-m-d H:i:s");
         } 
         else  //Multiple files, file[]
         {
-            $fileCount = count($_FILES["myfile"]["name"]);
+            $fileCount = count($_FILES["myfile2"]["name"]);
             for ($i = 0; $i < $fileCount; $i++) {
-                $original_file_name = $_FILES["myfile"]["name"][$i];
+                $original_file_name = $_FILES["myfile2"]["name"][$i];
 
                 $tempfile = explode(".", $original_file_name);
                 $file_extension = strtolower(end($tempfile));
                 $internal_file_name = sha1(uniqid(mt_rand(), true)) . '.' . $file_extension;
 
-                move_uploaded_file($_FILES["myfile"]["tmp_name"][$i], $output_dir . "/" . $internal_file_name);
+                move_uploaded_file($_FILES["myfile2"]["tmp_name"][$i], $output_dir . "/" . $internal_file_name);
 
                 $prod->upload_correction_needed_file($o_id, $osub_id, $prod_id,$uca_id, $original_file_name, $file_path, $internal_file_name, $upload_date);
 
