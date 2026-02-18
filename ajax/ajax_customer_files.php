@@ -1015,14 +1015,26 @@ for($i=0;$i<count($customer_files);$i++)
                         <img src="<?php echo $base_url;?>img/adobe-pdf-icon.png" alt="<?php echo $customer_files[$i]['of_name_client'];?>" style="width:60px;">
                         <?php
                         $file_path = $base_url . 'img/adobe-pdf-icon.png';
-                    } elseif($customer_files[$i]['of_type_dom'] == "dxf") {
+                    } 
+					elseif($customer_files[$i]['of_type_dom'] == "docx") 
+					{
 
+                        ?>
+                        <img src="<?php echo $base_url;?>img/microsoft-word-icon.png" alt="<?php echo $customer_files[$i]['of_name_client'];?>" style="width:60px;">
+                        <?php
+                        $file_path = $base_url . 'img/microsoft-word-icon.png';
+
+                    }
+					elseif($customer_files[$i]['of_type_dom'] == "dxf") 
+					{
                         ?>
                         <img src="<?php echo $base_url;?>img/dxf_icon.jpg" alt="<?php echo $customer_files[$i]['of_name_client'];?>" style="width:60px;">
                         <?php
                         $file_path = $base_url . 'img/dxf_icon.jpg';
 
-                    } elseif(in_array($customer_files[$i]['of_type_dom'], $validextensions)) {
+                    }
+					elseif(in_array($customer_files[$i]['of_type_dom'], $validextensions)) 
+					{
                         $file_path = $base_url . 'client_files/' . $customer_files[$i]['of_path_dom'] . $customer_files[$i]['of_internal_name_dom'];
 
                         ?>
