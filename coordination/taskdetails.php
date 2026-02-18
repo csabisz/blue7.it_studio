@@ -11237,7 +11237,8 @@ include('../menu.php');
                                 <!-- <div id="fileuploader"></div> -->
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <input type="file" name="myfile2[]" class="form-control form-control-sm" form="upload_result_files_form" multiple="">
+                                        <form id="upload_hints_files_form" name="upload_hints_files_form" method="post" enctype="multipart/form-data"></form>
+                                        <input type="file" name="myfile[]" class="form-control form-control-sm" form="upload_hints_files_form" multiple="">
                                     </div>
                                     <div class="col-md-3">
                                         <button id="start_upload_hints_btn" type="button" class="btn btn-sm btn-success" aria-expanded="true">Start upload hints</button>
@@ -11246,8 +11247,9 @@ include('../menu.php');
                                 <div class="row">
                                 <p style="text-align: left; font-weight: bold;">Already uploaded:</p>
                                 </div>
-                                <?php /*
+                                
                                 <script type="text/javascript">
+                                    <?php /*
                                     $(document).ready(function () {
                                         $("#fileuploader").uploadFile({
                                             url: "../upload_files_beta.php?filecategory=correction_needed_files&o_id=<?php echo $o_id;?>&osub_id=<?php echo $osub_id; ?>&prod_id=<?php echo $prod_id;?>&uca_id=<?php echo $_COOKIE['client_id']; ?>",
@@ -11266,7 +11268,54 @@ include('../menu.php');
                                         });
 
                                     });
-                            </script> */ ?>
+                                    */ ?>
+                                    $('#start_upload_hints_btn').click(function () {
+                                             $('#loading_spinner').removeClass('d-none');
+
+                                            $('#upload_result_files_message').html("");
+                                            let formData = new FormData($('#upload_hints_files_form')[0]);
+
+                                            $.ajax({
+
+                                                url: "../upload_files_beta.php?filecategory=correction_needed_files&o_id=<?php echo $o_id;?>&osub_id=<?php echo $osub_id; ?>&prod_id=<?php echo $prod_id;?>&uca_id=<?php echo $_COOKIE['client_id']; ?>",
+
+                                                type: 'POST',
+
+                                                data: formData,
+
+                                                cache: false,
+
+                                                processData: false,
+
+                                                contentType: false,
+
+                                                enctype: 'multipart/form-data',
+
+                                                dataType: "html",
+
+                                                success: function (data) {
+
+                                                    console.log(data);
+
+                                                }
+
+                                            }).done(function (data) {
+
+
+                                                html = data;
+
+                                                $('#loading_spinner').addClass('d-none');
+
+                                                $('#upload_result_files_message').html(html);
+                                                $('#upload_result_files_message').fadeIn().delay('3000').fadeOut();
+                                                setTimeout(function () {
+                                                    var redirectToURL = 'taskdetails.php?o_id=<?php echo $o_id;?>&osub_id=<?php echo $osub_id; ?>&prod_id=<?php echo $prod_id;?>#all_uploaded_result_files';
+                                                    window.location.href = redirectToURL;
+                                                    window.location.reload(true);
+                                                }, 2000);
+
+                                            });
+                            </script> 
                             </div>
                         </div>
                     </div>
