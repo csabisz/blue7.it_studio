@@ -11315,6 +11315,7 @@ include('../menu.php');
                                                 }, 2000);
 
                                             });
+                                        });
                             </script> 
                             </div>
                         </div>
