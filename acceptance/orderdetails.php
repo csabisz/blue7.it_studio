@@ -2710,7 +2710,7 @@ if(isset($_GET['option']))
                             <button class="btn btn-sm btn-success text-white px-3 ml-1" data-target="#general_b1" data-toggle="collapse" aria-expanded="false">B1</button>
                         </div>
                     </div>
-                    <div id="general_b1" class="row w-100 collapse">
+                    <div id="general_b1" class="row w-100 collapse" style="background-color: #d3d3d3;">
                         <div class="col-md-12 border-bottom border-dark">
                             <div class="row w-100 mx-0 border-top" >
                                 <div class="col-md-4">
