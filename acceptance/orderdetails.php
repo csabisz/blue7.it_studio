@@ -8888,7 +8888,7 @@ if($exterior>0)
                             if($counter==1)
                             {
                                 ?>
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-left">
                                 <?php
                             }
                             ?>
@@ -8966,7 +8966,7 @@ if($exterior>0)
                             {
                                 ?>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-left">
                                 <?php
                             }
                             $counter++;
@@ -9080,7 +9080,7 @@ if($exterior>0)
                             if($counter==1)
                             {
                                 ?>
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-left">
                                 <?php
                             }
                             ?>
@@ -9159,7 +9159,7 @@ if($exterior>0)
                             {
                                 ?>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-left">
                                 <?php
                             }
                             $counter++;
@@ -9278,7 +9278,7 @@ if($exterior>0)
                             if($counter==1)
                             {
                                 ?>
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-left">
                                 <?php
                             }
                             ?>
@@ -9355,7 +9355,7 @@ if($exterior>0)
                             {
                                 ?>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-left">
                                 <?php
                             }
                             $counter++;
