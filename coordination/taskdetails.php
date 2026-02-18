@@ -11236,6 +11236,7 @@ include('../menu.php');
                             <div class="col-md-6" style="max-width: 100%;">
                                 <div id="fileuploader"></div>
                                 <p style="text-align: left; font-weight: bold;">Already uploaded:</p>
+                                <?php /*
                                 <script type="text/javascript">
                                     $(document).ready(function () {
                                         $("#fileuploader").uploadFile({
@@ -11255,7 +11256,7 @@ include('../menu.php');
                                         });
 
                                     });
-                                </script>
+                            </script> */ ?>
                             </div>
                         </div>
                     </div>
