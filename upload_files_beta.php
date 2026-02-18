@@ -1569,7 +1569,8 @@ $upload_date = gmdate("Y-m-d H:i:s");
             $prod->upload_correction_needed_file($o_id, $osub_id, $prod_id, $uca_id, $original_file_name, $file_path, $internal_file_name, $upload_date);
 
             $ret[] = $internal_file_name;
-        } else  //Multiple files, file[]
+        } 
+        else  //Multiple files, file[]
         {
             $fileCount = count($_FILES["myfile"]["name"]);
             for ($i = 0; $i < $fileCount; $i++) {
@@ -1581,7 +1582,7 @@ $upload_date = gmdate("Y-m-d H:i:s");
 
                 move_uploaded_file($_FILES["myfile"]["tmp_name"][$i], $output_dir . "/" . $internal_file_name);
 
-                $prod->upload_correction_needed_file($o_id, $osub_id, $prod_id, $original_file_name, $file_path, $internal_file_name, $upload_date);
+                $prod->upload_correction_needed_file($o_id, $osub_id, $prod_id,$uca_id, $original_file_name, $file_path, $internal_file_name, $upload_date);
 
                 $ret[] = $internal_file_name;
             }
