@@ -11236,7 +11236,7 @@ include('../menu.php');
                             <div class="col-md-6" style="max-width: 100%;">
                                 <!-- <div id="fileuploader"></div> -->
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-7">
                                         <input type="file" name="myfile2[]" class="form-control form-control-sm" form="upload_result_files_form" multiple="">
                                     </div>
                                     <div class="col-md-3">
