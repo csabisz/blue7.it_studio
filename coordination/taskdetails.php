@@ -11236,8 +11236,12 @@ include('../menu.php');
                             <div class="col-md-6" style="max-width: 100%;">
                                 <!-- <div id="fileuploader"></div> -->
                                 <div class="row">
-                                    <input type="file" name="myfile[]" class="form-control form-control-sm" form="upload_result_files_form" multiple="">
-                                    <button id="start_upload_hints_btn" type="button" class="btn btn-sm btn-success" aria-expanded="true">Start upload hints</button>
+                                    <div class="col-md-3">
+                                        <input type="file" name="myfile2[]" class="form-control form-control-sm" form="upload_result_files_form" multiple="">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button id="start_upload_hints_btn" type="button" class="btn btn-sm btn-success" aria-expanded="true">Start upload hints</button>
+                                    </div>
                                 </div>
                                 <div class="row">
                                 <p style="text-align: left; font-weight: bold;">Already uploaded:</p>
