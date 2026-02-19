@@ -414,7 +414,7 @@ $update_g_b1_data['col_labc_g_b1']=(!empty($_POST['col_labc_g_b1'])?$prod->xss_f
 $update_g_b1_data['fac_labc_g_b1']=(!empty($_POST['fac_labc_g_b1'])?$prod->xss_fix($_POST['fac_labc_g_b1']):"1");
 $update_g_b1_data['total_labcs_g_b1']=(!empty($_POST['total_labcs_g_b1'])?$prod->xss_fix($_POST['total_labcs_g_b1']):"1");
 
-$update_g_b1_data['col_amount_g_b1']=(!empty($_POST['col_amount1_g_b1'])?$prod->xss_fix($_POST['col_amount1_g_b1']):"1");
+$update_g_b1_data['col_amount_g_b1']=(!empty($_POST['col_amount1_g_b1'])?$prod->xss_fix($_POST['col_amount1_g_b1']):"0");
 
 //b1 ex 
 
@@ -442,7 +442,7 @@ $update_ex_b1_data['col_labc_ex_b1']=(!empty($_POST['col_labc_ex_b1'])?$prod->xs
 $update_ex_b1_data['fac_labc_ex_b1']=(!empty($_POST['fac_labc_ex_b1'])?$prod->xss_fix($_POST['fac_labc_ex_b1']):"1");
 $update_ex_b1_data['total_labcs_ex_b1']=(!empty($_POST['total_labcs_ex_b1'])?$prod->xss_fix($_POST['total_labcs_ex_b1']):"1");
 
-$update_ex_b1_data['col_amount_ex_b1']=(!empty($_POST['col_amount1_ex_b1'])?$prod->xss_fix($_POST['col_amount1_ex_b1']):"1");
+$update_ex_b1_data['col_amount_ex_b1']=(!empty($_POST['col_amount1_ex_b1'])?$prod->xss_fix($_POST['col_amount1_ex_b1']):"0");
 
 //b5 ex
 
@@ -465,7 +465,7 @@ $update_ex_b5_data['col_labc_ex_b5']=(!empty($_POST['col_labc_ex_b5'])?$prod->xs
 $update_ex_b5_data['fac_labc_ex_b5']=(!empty($_POST['fac_labc_ex_b5'])?$prod->xss_fix($_POST['fac_labc_ex_b5']):"1");
 $update_ex_b5_data['total_labcs_ex_b5']=(!empty($_POST['total_labcs_ex_b5'])?$prod->xss_fix($_POST['total_labcs_ex_b5']):"1");
 
-$update_ex_b5_data['col_amount_ex_b5']=(!empty($_POST['col_amount1_ex_b5'])?$prod->xss_fix($_POST['col_amount1_ex_b5']):"1");
+$update_ex_b5_data['col_amount_ex_b5']=(!empty($_POST['col_amount1_ex_b5'])?$prod->xss_fix($_POST['col_amount1_ex_b5']):"0");
 
 //$update_ex_b5_data['levels_over_ground']=$prod->xss_fix($_POST['b5_levels_over_ground']);
 
@@ -490,7 +490,7 @@ $update_ex_b6_data['col_labc_ex_b6']=(!empty($_POST['col_labc_ex_b6'])?$prod->xs
 $update_ex_b6_data['fac_labc_ex_b6']=(!empty($_POST['fac_labc_ex_b6'])?$prod->xss_fix($_POST['fac_labc_ex_b6']):"1");
 $update_ex_b6_data['total_labcs_ex_b6']=(!empty($_POST['total_labcs_ex_b6'])?$prod->xss_fix($_POST['total_labcs_ex_b6']):"1");
 
-$update_ex_b6_data['col_amount_ex_b6']=(!empty($_POST['col_amount1_ex_b6'])?$prod->xss_fix($_POST['col_amount1_ex_b6']):"1");
+$update_ex_b6_data['col_amount_ex_b6']=(!empty($_POST['col_amount1_ex_b6'])?$prod->xss_fix($_POST['col_amount1_ex_b6']):"0");
 
 //$update_ex_b6_data['levels_over_ground']=$prod->xss_fix($_POST['b5_levels_over_ground']);
 
@@ -518,7 +518,7 @@ $update_ex_b7_data['col_labc_ex_b7']=(!empty($_POST['col_labc_ex_b7'])?$prod->xs
 $update_ex_b7_data['fac_labc_ex_b7']=(!empty($_POST['fac_labc_ex_b7'])?$prod->xss_fix($_POST['fac_labc_ex_b7']):"1");
 $update_ex_b7_data['total_labcs_ex_b7']=(!empty($_POST['total_labcs_ex_b7'])?$prod->xss_fix($_POST['total_labcs_ex_b7']):"1");
 
-$update_ex_b7_data['col_amount_ex_b7']=(!empty($_POST['col_amount1_ex_b7'])?$prod->xss_fix($_POST['col_amount1_ex_b7']):"1");
+$update_ex_b7_data['col_amount_ex_b7']=(!empty($_POST['col_amount1_ex_b7'])?$prod->xss_fix($_POST['col_amount1_ex_b7']):"0");
 
 //b8 ex
 
@@ -542,7 +542,7 @@ $update_ex_b8_data['col_labc_ex_b8']=(!empty($_POST['col_labc_ex_b8'])?$prod->xs
 $update_ex_b8_data['fac_labc_ex_b8']=(!empty($_POST['fac_labc_ex_b8'])?$prod->xss_fix($_POST['fac_labc_ex_b8']):"1");
 $update_ex_b8_data['total_labcs_ex_b8']=(!empty($_POST['total_labcs_ex_b8'])?$prod->xss_fix($_POST['total_labcs_ex_b8']):"1");
 
-$update_ex_b8_data['col_amount_ex_b8']=(!empty($_POST['col_amount1_ex_b8'])?$prod->xss_fix($_POST['col_amount1_ex_b8']):"1");
+$update_ex_b8_data['col_amount_ex_b8']=(!empty($_POST['col_amount1_ex_b8'])?$prod->xss_fix($_POST['col_amount1_ex_b8']):"0");
 
 if (strpos($update_data['collection'], 'p1501') === false) 
 {	
