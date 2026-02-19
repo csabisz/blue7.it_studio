@@ -10670,7 +10670,7 @@ else
             $o_desc_allproducts=$prod->get_o_infos_allproducts($o_id);
             ?>
         <div id="remarks_ex_row">
-            <div class="row w-100 mx-0">
+            <div class="row w-100 mx-0 my-2">
                 <div class="col-md-12 d-flex justify-content-center">
                     <table class="short_order" style="border: 5px solid green;">
                         <tr style="background: #d4eed1;">
