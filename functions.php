@@ -15810,6 +15810,9 @@ class Production
         $o_id = mysqli_real_escape_string($mysqli, $o_id);
         $side = '';
 
+        if ($osub_id[0] == 'g') {
+            $side = 'g';
+        }
         if ($osub_id[0] == 'n') {
             $side = 'in';
         }
