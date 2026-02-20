@@ -3196,8 +3196,8 @@ if(isset($_GET['option']))
                     
                     if((substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1300)||
                     ($ls_prods[$i]=="p116b")||($ls_prods[$i]=="p116m")||($ls_prods[$i]=="p116t")||
-                    ($ls_prods[$i]=="p118s")||(substr($ls_prods[$i], -2) == '6v')||($ls_prods[$i]!="p11gb")||
-                    ($ls_prods[$i]!="p11gm")||($ls_prods[$i]!="p11gt")||($ls_prods[$i]!="p11gs"))
+                    ($ls_prods[$i]=="p118s")||(substr($ls_prods[$i], -2) == '6v')&&($ls_prods[$i]!="p11gb")&&
+                    ($ls_prods[$i]!="p11gm")&&($ls_prods[$i]!="p11gt")&&($ls_prods[$i]!="p11gs"))
 					{
 						if(!empty($ls_prods[$i]))
 						{
