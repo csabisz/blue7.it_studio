@@ -3194,7 +3194,7 @@ if(isset($_GET['option']))
 						}
                     }
                     
-                    if((substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1300)||
+                    if(/*(substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1300)||*/
                     ($ls_prods[$i]=="p116b")||($ls_prods[$i]=="p116m")||($ls_prods[$i]=="p116t")||
                     ($ls_prods[$i]=="p118s")||(substr($ls_prods[$i], -2) == '6v')&&
                     ((substr($ls_prods[$i], -2) !="gb")||(substr($ls_prods[$i], -2) !="gm")||
@@ -5050,7 +5050,7 @@ else
             }
         }
         
-        if((substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1200)||($ls_prods[$i]=="p116b")||
+        if(/*(substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1200)||*/($ls_prods[$i]=="p116b")||
         ($ls_prods[$i]=="p116m")||($ls_prods[$i]=="p116t")||($ls_prods[$i]=="p118s")&&
         ((substr($ls_prods[$i], -2) !="gb")||(substr($ls_prods[$i], -2) !="gm")||
         (substr($ls_prods[$i], -2) != "gt")||(substr($ls_prods[$i], -2) !="gs")
