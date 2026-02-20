@@ -5048,7 +5048,9 @@ else
             }
         }
         
-        if((substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1200)||($ls_prods[$i]=="p116b")||($ls_prods[$i]=="p116m")||($ls_prods[$i]=="p116t")||($ls_prods[$i]=="p118s"))
+        if((substr($ls_prods[$i],1)>1160)&&(substr($ls_prods[$i],1)<1200)||($ls_prods[$i]=="p116b")||
+        ($ls_prods[$i]=="p116m")||($ls_prods[$i]=="p116t")||($ls_prods[$i]=="p118s")&&
+        !in_array($ls_prods, ["p11gb", "p11gm", "p11gt", "p11gs"]))
         {
             if(!empty($ls_prods[$i]))
             {
