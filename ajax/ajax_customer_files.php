@@ -1025,6 +1025,15 @@ for($i=0;$i<count($customer_files);$i++)
                         $file_path = $base_url . 'img/microsoft-word-icon.png';
 
                     }
+					elseif($customer_files[$i]['of_type_dom'] == "pptx") 
+					{
+
+                        ?>
+                        <img src="<?php echo $base_url;?>img/microsoft-powerpoint-icon.png" alt="<?php echo $customer_files[$i]['of_name_client'];?>" style="width:60px;">
+                        <?php
+                        $file_path = $base_url . 'img/microsoft-powerpoint-icon.png';
+
+                    }
 					elseif($customer_files[$i]['of_type_dom'] == "dxf") 
 					{
                         ?>
