@@ -3252,7 +3252,7 @@ if(isset($_GET['option']))
 						}
 					}
 				}
-				
+				print_r($b1_ex_products);
 				$interior=0;
 				
 				
