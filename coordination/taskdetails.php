@@ -10079,6 +10079,11 @@ include('../menu.php');
                                                                href="https://blue7.it/studio/result_compress_files/<?= $result_files[$i]['orf_compress_path'] ?>"
                                                                class="btn btn-primary btn-sm mt-2">Compressed file</a>
                                                             <?php echo $filesize = $prod->filesize_formatted("../result_compress_files/" . $result_files[$i]['orf_compress_path']); ?>
+                                                        <?php elseif ($result_files[$i]['orf_path_dom']): ?>
+                                                            <a target="_blank"
+                                                               href="<?php echo $base_url;?>result_files/<?= $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom']; ?>"
+                                                               class="btn btn-primary btn-sm mt-2">File</a>
+                                                            <?php echo $filesize = $prod->filesize_formatted("../result_files/" . $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom']); ?>
                                                         <?php else: ?>
                                                             <p class="text-danger text-sm">Please reupload file, compressed copy is
                                                                 missing!</p>
