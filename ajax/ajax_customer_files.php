@@ -832,12 +832,17 @@ $o_id=$prod->xss_fix($_GET['o_id']);
 		</div>
 		</div>
 		<div class="col-md-auto">
-			<input type="checkbox" id="do_not_recreate_pdf_checkbox" name="do_not_recreate_pdf_checkbox" class="products">
+			<input type="checkbox" id="do_not_recreate_pdf_checkbox" name="do_not_recreate_pdf_checkbox" class="products" value="<?php echo (!empty($order['do_not_recreate_pdf']))?$order['do_not_recreate_pdf']:"0";?>">
 			<label for="do_not_recreate_pdf_checkbox" class="ml-2 text-danger font-weight-bold">Do not recreate PDF files</label>
 			<script type="text/javascript">
 			$('#do_not_recreate_pdf_checkbox').click(function(){
-				if($(this).is(':checked')){
+				if($(this).is(':checked'))
+				{
 					$('#do_not_recreate_pdf_checkbox').val('1');
+				}
+				else
+				{
+					$('#do_not_recreate_pdf_checkbox').val('0');
 				}
 			});
 			</script>
