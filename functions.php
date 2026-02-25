@@ -18131,6 +18131,21 @@ class Production
         mysqli_stmt_close($stmt);
         mysqli_close($mysqli);
     }
+
+    function update_do_not_recreate_jpg_on_file_delete($o_id,$do_not_recreate_jpg_on_file_delete)
+    {
+        $mysqli = $this->dbconnect();
+
+        $o_id = mysqli_real_escape_string($mysqli, $o_id);
+        $do_not_recreate_jpg_on_file_delete = mysqli_real_escape_string($mysqli, $do_not_recreate_jpg_on_file_delete);
+
+        $query = "update `orders` set `do_not_recreate_jpg_on_file_delete`='$do_not_recreate_jpg_on_file_delete' where `order_ID`='$o_id'";
+
+        mysqli_query($mysqli, $query) or die(mysqli_error($mysqli));
+
+        mysqli_close($mysqli);
+
+    }
 }
 
 ?>
