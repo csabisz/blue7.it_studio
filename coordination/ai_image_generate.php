@@ -301,7 +301,7 @@ try {
         $image_path = $temp_image_path;
     } else {
         // Get the image file path from o_results table
-        $query = "SELECT `orf_compress_path` FROM `o_results` WHERE `orf_id` = ?";
+        $query = "SELECT `orf_compress_path`,`orf_path_dom`,`orf_internal_name_dom` FROM `o_results` WHERE `orf_id` = ?";
         $stmt = mysqli_prepare($mysqli, $query);
         mysqli_stmt_bind_param($stmt, "i", $orf_id);
         mysqli_stmt_execute($stmt);
@@ -313,14 +313,21 @@ try {
             throw new Exception('Image file not found for orf_id: ' . $orf_id);
         }
 
-        $image_filename = $file_data['orf_compress_path'];
+        $image_filename = $file_data['orf_compress_path'] ? $file_data['orf_compress_path'] : $file_data['orf_path_dom'] . $file_data['orf_internal_name_dom'];
 
         if (!$image_filename) {
             throw new Exception('No valid image path found');
         }
 
         // Construct full image path
-        $image_path = $_SERVER['DOCUMENT_ROOT'] . '/studio/result_compress_files/' . $image_filename;
+        if(!empty($file_data['orf_compress_path'])) {
+        {
+         $image_path = $_SERVER['DOCUMENT_ROOT'] . '/studio/result_compress_files/' . $image_filename;
+        }
+        else
+        {
+            $image_path = $_SERVER['DOCUMENT_ROOT'] . '/studio/result_files/' . $image_filename;
+        }
 
         if (!file_exists($image_path)) {
             throw new Exception('Image file does not exist: ' . $image_filename);
