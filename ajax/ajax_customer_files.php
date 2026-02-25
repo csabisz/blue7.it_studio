@@ -833,58 +833,7 @@ $order=$prod->get_order($o_id);
 			</div>
 		</div>
 		</div>
-		<div class="col-md-auto">
-			<input type="checkbox" id="do_not_recreate_jpg_checkbox" name="do_not_recreate_jpg_checkbox" class="products" value="<?php echo (!empty($order['do_not_recreate_jpg_on_file_delete']))?$order['do_not_recreate_jpg_on_file_delete']:"0";?>" <?php echo (!empty($order['do_not_recreate_jpg_on_file_delete']))?"checked":"";?>>
-			<label for="do_not_recreate_jpg_checkbox" class="ml-2 text-danger font-weight-bold">Do not recreate JPG files from PDF files on customer file delete</label>
-			<script type="text/javascript">
-			$('#do_not_recreate_jpg_checkbox').click(function(){
-				if($(this).is(':checked'))
-				{
-					$('#do_not_recreate_jpg_checkbox').val('1');
-					let do_not_recreate_jpg_on_file_delete=1;
-					let o_id=<?php echo $o_id;?>;
-
-					$.ajax({
-
-						url: "<?php echo $base_url;?>ajax/update_do_not_recreate_jpg_on_file_delete.php",
-						method: "post",
-						data: {do_not_recreate_jpg_on_file_delete:do_not_recreate_jpg_on_file_delete,o_id:o_id},
-						dataType:"html",
-						success:function(data) {
-							console.log(data);
-						},
-						error: function (xhr, ajaxOptions, thrownError) {
-							console.log(xhr.status);
-							console.log(thrownError);
-						}
-					});
-
-				}
-				else
-				{
-					$('#do_not_recreate_jpg_checkbox').val('0');
-
-					let do_not_recreate_jpg_on_file_delete=0;
-					let o_id=<?php echo $o_id;?>;
-					
-					$.ajax({
-
-						url: "<?php echo $base_url;?>ajax/update_do_not_recreate_jpg_on_file_delete.php",
-						method: "post",
-						data: {do_not_recreate_jpg_on_file_delete:do_not_recreate_jpg_on_file_delete,o_id:o_id},
-						dataType:"html",
-						success:function(data) {
-							console.log(data);
-						},
-						error: function (xhr, ajaxOptions, thrownError) {
-							console.log(xhr.status);
-							console.log(thrownError);
-						}
-					});
-				}
-			});
-			</script>
-		</div>
+		
 	</div>
 
 <?php /*
@@ -1385,6 +1334,25 @@ for($i=0;$i<count($customer_files);$i++)
 										}
 									}).done(function(){
 										$('#client_file_row<?php echo $customer_files[$i]['of_id']; ?>').fadeOut(3000);
+
+										let do_not_recreate_jpg_on_file_delete=1;
+										let o_id=<?php echo $o_id;?>;
+
+										$.ajax({
+
+											url: "<?php echo $base_url;?>ajax/update_do_not_recreate_jpg_on_file_delete.php",
+											method: "post",
+											data: {do_not_recreate_jpg_on_file_delete:do_not_recreate_jpg_on_file_delete,o_id:o_id},
+											dataType:"html",
+											success:function(data) {
+												console.log(data);
+											},
+											error: function (xhr, ajaxOptions, thrownError) {
+												console.log(xhr.status);
+												console.log(thrownError);
+											}
+										});
+
 									});
 
 
