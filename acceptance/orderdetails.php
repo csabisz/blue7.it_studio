@@ -3774,31 +3774,31 @@ if($interior>0)
                         <div class="row form-inline w-100 mx-0 border-bottom border-dark">
                             <div class="col-md-12">
                                 <b>Employee-Producer: Col IN B1 = </b>
-                                <input type="text" class="form-control form-control-sm" name="col_labc_in_b1" id="col_labc_in_b1" value="" form="order_details" style="width:5em"> <b>labcs X fac_labc_in_b1 = </b>
-                                <input type="text" class="form-control form-control-sm" name="fac_labc_in_b1" id="fac_labc_in_b1" value="<?php echo (!empty($o_desc_in_b1['fac_labc_in_b1']))?$o_desc_in_b1['fac_labc_in_b1']:"1";?>" form="order_details" style="width:5em"> 
-                                <b>X Amount of subIDs: </b><input type="text" class="form-control form-control-sm" name="col_amount3_in_b1" id="col_amount3_in_b1" form="order_details" value="<?php echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"1";?>" style="width:5em" >
-                                <b> = </b> <input type="text" class="form-control form-control-sm" name="total_labcs_in_b1" id="total_labcs_in_b1" value="" form="order_details" style="width:5em"> <b>labcs</b><br><br>
+                                <input type="text" class="form-control form-control-sm" name="col_labc_in_b1" id="col_labc_in_b1" value="<?php echo (!empty($o_desc_in_b1['col_labc_in_b1']))?$o_desc_in_b1['col_labc_in_b1']:"0.0";?>" form="order_details" style="width:5em"> <b>labcs X fac_labc_in_b1 = </b>
+                                <input type="text" class="form-control form-control-sm" name="fac_labc_in_b1" id="fac_labc_in_b1" value="<?php echo (!empty($o_desc_in_b1['fac_labc_in_b1']))?$o_desc_in_b1['fac_labc_in_b1']:"1.0";?>" form="order_details" style="width:5em"> 
+                                <b>X Amount of subIDs: </b><input type="text" class="form-control form-control-sm" name="col_amount3_in_b1" id="col_amount3_in_b1" form="order_details" value="<?php echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"0.0";?>" style="width:5em" >
+                                <b> = </b> <input type="text" class="form-control form-control-sm" name="total_labcs_in_b1" id="total_labcs_in_b1" value="<?php echo (!empty($o_desc_in_b1['total_labcs_in_b1']))?$o_desc_in_b1['total_labcs_in_b1']:"0.0";?>" form="order_details" style="width:5em"> <b>labcs</b><br><br>
                             </div>
                         </div>
                         
                         <div class="row form-inline w-100 mx-0">
                             <div class="col-md-12">
                                 <b>Producer-Trader: Col IN B1 = </b>
-                                <input type="text" class="form-control form-control-sm" name="col_apus_in_b1" id="col_apus_in_b1" value="" form="order_details" style="width:5em"> <b>APEs X fac_prod_in_b1 = </b>
-                                <input type="text" class="form-control form-control-sm" name="fac_prod_in_b1" id="fac_prod_in_b1" value="<?php echo (!empty($o_desc_in_b1['fac_prod_in_b1']))?$o_desc_in_b1['fac_prod_in_b1']:"1";?>" form="order_details" style="width:5em"> 
-                                <b>X Amount of subIDs: </b><input type="text" class="form-control form-control-sm" name="col_amount2_in_b1" id="col_amount2_in_b1" form="order_details" value="<?php echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"1";?>" style="width:5em" >
-                                <b> = </b> <input type="text" class="form-control form-control-sm" name="o_apus_in_b1" id="o_apus_in_b1" value="<?php echo $o_desc_in_b1['o_apus_in_b1'];?>" form="order_details" style="width:5em"> <b>APEs</b><br><br>
+                                <input type="text" class="form-control form-control-sm" name="col_apus_in_b1" id="col_apus_in_b1" value="<?php echo (!empty($o_desc_in_b1['col_apus_in_b1']))?$o_desc_in_b1['col_apus_in_b1']:"0.0";?>" form="order_details" style="width:5em"> <b>APEs X fac_prod_in_b1 = </b>
+                                <input type="text" class="form-control form-control-sm" name="fac_prod_in_b1" id="fac_prod_in_b1" value="<?php echo (!empty($o_desc_in_b1['fac_prod_in_b1']))?$o_desc_in_b1['fac_prod_in_b1']:"0.0";?>" form="order_details" style="width:5em"> 
+                                <b>X Amount of subIDs: </b><input type="text" class="form-control form-control-sm" name="col_amount2_in_b1" id="col_amount2_in_b1" form="order_details" value="<?php echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"1.0";?>" style="width:5em" >
+                                <b> = </b> <input type="text" class="form-control form-control-sm" name="o_apus_in_b1" id="o_apus_in_b1" value="<?php echo (!empty($o_desc_in_b1['o_apus_in_b1']))?$o_desc_in_b1['o_apus_in_b1']:"0.0";?>" form="order_details" style="width:5em"> <b>APEs</b><br><br>
                             </div>
                         </div>			
                         <div class="row form-inline w-100 mx-0 my-1">
                             <div class="col-md-12 d-flex justify-content-center">
                                 <b>Trader-Purchaser: Col IN B1 = </b>
-                                <input class="form-control form-control-sm" type="text" name="col_price_in_b1" id="col_price_in_b1" value="" form="order_details" style="width:5em"> 
+                                <input class="form-control form-control-sm" type="text" name="col_price_in_b1" id="col_price_in_b1" value="<?php echo (!empty($o_desc_in_b1['col_price_in_b1']))?$o_desc_in_b1['col_price_in_b1']:"0.0";?>" form="order_details" style="width:5em"> 
                                 <b><?php echo $currency; ?> X fac_client_in_b1 = </b> 
-                                <input type="text" class="form-control form-control-sm" name="fac_cl_in_b1" id="fac_cl_in_b1" value="<?php echo (!empty($o_desc_in_b1['fac_cl_in_b1']))?$o_desc_in_b1['fac_cl_in_b1']:"1";?>" form="order_details" style="width:5em"> 
-                                <b> X Amount of subIDs:</b> <input type="text" class="form-control form-control-sm" name="col_amount1_in_b1" id="col_amount1_in_b1" form="order_details" value="<?php echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"1";?>" style="width:5em" > 
+                                <input type="text" class="form-control form-control-sm" name="fac_cl_in_b1" id="fac_cl_in_b1" value="<?php echo (!empty($o_desc_in_b1['fac_cl_in_b1']))?$o_desc_in_b1['fac_cl_in_b1']:"1.0";?>" form="order_details" style="width:5em"> 
+                                <b> X Amount of subIDs:</b> <input type="text" class="form-control form-control-sm" name="col_amount1_in_b1" id="col_amount1_in_b1" form="order_details" value="<?php echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"1.0";?>" style="width:5em" > 
                                 <b>=</b> 
-                                <input type="text" class="form-control form-control-sm" name="o_price_in_b1" id="o_price_in_b1" value="<?php echo (!empty($o_desc_in_b1['o_price_in_b1']))?$o_desc_in_b1['o_price_in_b1']:"0";?>" form="order_details" style="width:5em">
+                                <input type="text" class="form-control form-control-sm" name="o_price_in_b1" id="o_price_in_b1" value="<?php echo (!empty($o_desc_in_b1['o_price_in_b1']))?$o_desc_in_b1['o_price_in_b1']:"0.0";?>" form="order_details" style="width:5em">
                                 <b><?php echo $currency; ?></b>			
                                 <br><br>
                             </div>
