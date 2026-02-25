@@ -832,7 +832,7 @@ $o_id=$prod->xss_fix($_GET['o_id']);
 		</div>
 		</div>
 		<div class="col-md-auto">
-			<input type="checkbox" id="do_not_recreate_jpg_checkbox" name="do_not_recreate_jpg_checkbox" class="products" value="<?php echo (!empty($order['do_not_recreate_jpg_on_file_delete']))?$order['do_not_recreate_jpg_on_file_delete']:"0";?>">
+			<input type="checkbox" id="do_not_recreate_jpg_checkbox" name="do_not_recreate_jpg_checkbox" class="products" value="<?php echo (!empty($order['do_not_recreate_jpg_on_file_delete']))?$order['do_not_recreate_jpg_on_file_delete']:"0";?>" <?php echo (!empty($order['do_not_recreate_jpg_on_file_delete']))?"checked":"";?>>
 			<label for="do_not_recreate_jpg_checkbox" class="ml-2 text-danger font-weight-bold">Do not recreate JPG files from PDF files on customer file delete</label>
 			<script type="text/javascript">
 			$('#do_not_recreate_jpg_checkbox').click(function(){
