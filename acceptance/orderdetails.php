@@ -5275,7 +5275,7 @@ else
     <div class="row w-100 mx-0">
         <script type="text/javascript">
         $(document).ready(function(){
-
+            /*
             $.ajax({
                 url: "../ajax/create_orders_subnames_interior_html.php",
                 method: "post",
@@ -5284,7 +5284,7 @@ else
                 success:function(data) {
                     $('#interior_osn_texts').html(data);										
                 }
-            });
+            });*/
 
         });
 
