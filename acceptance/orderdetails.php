@@ -170,24 +170,24 @@ $update_data['st_id']=$prod->xss_fix($_POST['st_id1']);
 
 $update_in_b1_data['o_id']=$update_data['o_id'];
 
-$update_in_b1_data['col_amount_in_b1']=(!empty($_POST['col_amount1_in_b1'])?$prod->xss_fix($_POST['col_amount1_in_b1']):"1");
+$update_in_b1_data['col_amount_in_b1']=(!empty($_POST['col_amount1_in_b1'])?$prod->xss_fix($_POST['col_amount1_in_b1']):"0");
 
 $update_in_b1_data['p1103_fac']=(!empty($_POST['p1103_fac'])?$prod->xss_fix($_POST['p1103_fac']):"1");
 $update_in_b1_data['p1104_fac']=(!empty($_POST['p1104_fac'])?$prod->xss_fix($_POST['p1104_fac']):"1");
 $update_in_b1_data['p1106_fac']=(!empty($_POST['p1106_fac'])?$prod->xss_fix($_POST['p1106_fac']):"1");
 $update_in_b1_data['p1108_fac']=(!empty($_POST['p1108_fac'])?$prod->xss_fix($_POST['p1108_fac']):"1");
 
-$update_in_b1_data['col_price_in_b1']=(!empty($_POST['col_price_in_b1'])?$prod->xss_fix($_POST['col_price_in_b1']):"1");
+$update_in_b1_data['col_price_in_b1']=(!empty($_POST['col_price_in_b1'])?$prod->xss_fix($_POST['col_price_in_b1']):"0.0");
 $update_in_b1_data['fac_cl_in_b1']=(!empty($_POST['fac_cl_in_b1'])?$prod->xss_fix($_POST['fac_cl_in_b1']):"1.0");
-$update_in_b1_data['o_price_in_b1']=(!empty($_POST['o_price_in_b1'])?$prod->xss_fix($_POST['o_price_in_b1']):"0");
+$update_in_b1_data['o_price_in_b1']=(!empty($_POST['o_price_in_b1'])?$prod->xss_fix($_POST['o_price_in_b1']):"0.0");
 					
-$update_in_b1_data['col_apus_in_b1']=(!empty($_POST['col_apus_in_b1'])?$prod->xss_fix($_POST['col_apus_in_b1']):"1");
-$update_in_b1_data['fac_prod_in_b1']=(!empty($_POST['fac_prod_in_b1'])?$prod->xss_fix($_POST['fac_prod_in_b1']):"1");
-$update_in_b1_data['o_apus_in_b1']=(!empty($_POST['o_apus_in_b1'])?$prod->xss_fix($_POST['o_apus_in_b1']):"1");
+$update_in_b1_data['col_apus_in_b1']=(!empty($_POST['col_apus_in_b1'])?$prod->xss_fix($_POST['col_apus_in_b1']):"0.0");
+$update_in_b1_data['fac_prod_in_b1']=(!empty($_POST['fac_prod_in_b1'])?$prod->xss_fix($_POST['fac_prod_in_b1']):"1.0");
+$update_in_b1_data['o_apus_in_b1']=(!empty($_POST['o_apus_in_b1'])?$prod->xss_fix($_POST['o_apus_in_b1']):"1.0");
 					
-$update_in_b1_data['col_labc_in_b1']=(!empty($_POST['col_labc_in_b1'])?$prod->xss_fix($_POST['col_labc_in_b1']):"1");
-$update_in_b1_data['fac_labc_in_b1']=(!empty($_POST['fac_labc_in_b1'])?$prod->xss_fix($_POST['fac_labc_in_b1']):"1");
-$update_in_b1_data['total_labcs_in_b1']=(!empty($_POST['total_labcs_in_b1'])?$prod->xss_fix($_POST['total_labcs_in_b1']):"1");
+$update_in_b1_data['col_labc_in_b1']=(!empty($_POST['col_labc_in_b1'])?$prod->xss_fix($_POST['col_labc_in_b1']):"0.0");
+$update_in_b1_data['fac_labc_in_b1']=(!empty($_POST['fac_labc_in_b1'])?$prod->xss_fix($_POST['fac_labc_in_b1']):"1.0");
+$update_in_b1_data['total_labcs_in_b1']=(!empty($_POST['total_labcs_in_b1'])?$prod->xss_fix($_POST['total_labcs_in_b1']):"0.0");
 
 //b3 in
 
