@@ -320,7 +320,7 @@ try {
         }
 
         // Construct full image path
-        if(!empty($file_data['orf_compress_path'])) {
+        if(!empty($file_data['orf_compress_path'])) 
         {
          $image_path = $_SERVER['DOCUMENT_ROOT'] . '/studio/result_compress_files/' . $image_filename;
         }
