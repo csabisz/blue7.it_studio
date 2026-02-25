@@ -8,6 +8,8 @@ $domenia=new Domenia;
 
 $base_url="https://blue7.it/studio/";
 $o_id=$prod->xss_fix($_GET['o_id']);
+
+$order=$prod->get_order($o_id);
 ?>
 
 <div class="col-md-12 px-0">
