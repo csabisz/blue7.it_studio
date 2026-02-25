@@ -63,7 +63,7 @@ function getDbConnection() {
 try {
     $mysqli = getDbConnection();
 
-    $stmt = mysqli_prepare($mysqli, "SELECT orf_id, orf_compress_path, prod_id FROM o_results WHERE orf_id = ?");
+    $stmt = mysqli_prepare($mysqli, "SELECT orf_id, orf_compress_path,orf_path_dom,orf_internal_name_dom, prod_id FROM o_results WHERE orf_id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $orf_id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
