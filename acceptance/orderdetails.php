@@ -3299,7 +3299,7 @@ if($interior>0)
                             (empty($o_desc_in_b7['col_amount_in_b7']))&&
                             (empty($o_desc_in_b8['col_amount_in_b8'])))
 							{
-								echo "1";
+								echo "0";
 							}
 							else
 							{
@@ -5256,7 +5256,7 @@ else
         <div class="form-inline"><b class="mr-2">Amount of interior subIDs : </b><input type="text" class="form-control form-control-sm" name="col_amount0" id="col_amount0" form="order_details" value="<?php 						
             // if(!isset($_COOKIE['col_amount0']))
             // {
-                echo "1";
+                echo "0";
             // }						
             // else
             // {
