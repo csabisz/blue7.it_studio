@@ -11615,7 +11615,14 @@ else
             
             $(document).ready(function(){
                 
-                check_and_convert_pdf_to_jpg_customer_files();
+                <?php
+                if(empty($order['do_not_recreate_jpg_on_file_delete']))
+                {
+                    ?>
+                    check_and_convert_pdf_to_jpg_customer_files();
+                    <?php
+                }
+                ?>
                 setTimeout(function(){get_customer_files();},2000);
                 
             });
