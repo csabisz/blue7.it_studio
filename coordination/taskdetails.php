@@ -10073,7 +10073,7 @@ include('../menu.php');
 
                                                 if ((substr($prod_id, -1) !== '8') && (substr($prod_id, -1) !== '7')) {
 
-                                                    if ($result_files[$i]['orf_type_dom'] == 'jpg' or $result_files[$i]['orf_type_dom'] == 'jpeg' or $result_files[$i]['orf_type_dom'] == 'png'): ?>
+                                                    if ($result_files[$i]['orf_type_dom'] == 'jpg' or $result_files[$i]['orf_type_dom'] == 'jpeg' or $result_files[$i]['orf_type_dom'] == 'png' or $result_files[$i]['orf_type_dom'] == 'webp'): ?>
                                                         <?php if ($result_files[$i]['orf_compress_path']): ?>
                                                             <a target="_blank"
                                                                href="https://blue7.it/studio/result_compress_files/<?= $result_files[$i]['orf_compress_path'] ?>"
