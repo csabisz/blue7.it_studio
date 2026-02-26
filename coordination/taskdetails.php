@@ -5757,16 +5757,17 @@ include('../menu.php');
                             }
                             
                             $extension_id_counter = 0;
+                            $extension_ids=[];
                             for($i = 0; $i < count($result_files); $i++) 
                             {
                                 $file_name1 = explode("-", $result_files[$i]['orf_name']);
                                 $file_name2 = explode(".", $result_files[$i]['orf_name']);
 
-                                $input_file_name = explode('.', $file_name1[1]);
-                                unset($input_file_name[count($input_file_name) - 1]);
-                                $input_file_name = implode('.', $input_file_name);
-                                $input_file_name = str_replace(' ', '', $input_file_name);
-                                extension_ids[$extension_id_counter]=$input_file_name;
+                                $extension_name = explode('.', $file_name1[1]);
+                                unset($extension_name[count($extension_name) - 1]);
+                                $extension_name = implode('.', $extension_name);
+                                $extension_name = str_replace(' ', '', $extension_name);
+                                extension_ids[$extension_id_counter]=$extension_name;
 
                                 $extension_id_counter++;
                             }
