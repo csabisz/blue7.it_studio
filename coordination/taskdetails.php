@@ -5755,7 +5755,24 @@ include('../menu.php');
                                 $result_files = $prod->show_results_with_rooms($o_id, $osub_id, $prod_id, $room_id);
                                 //echo "normal y task";
                             }
-                            print_r($result_files);
+                            
+                            $extension_id_counter = 0;
+                            for($i = 0; $i < count($result_files); $i++) 
+                            {
+                                $file_name1 = explode("-", $result_files[$i]['orf_name']);
+                                $file_name2 = explode(".", $result_files[$i]['orf_name']);
+
+                                $input_file_name = explode('.', $file_name1[1]);
+                                unset($input_file_name[count($input_file_name) - 1]);
+                                $input_file_name = implode('.', $input_file_name);
+                                $input_file_name = str_replace(' ', '', $input_file_name);
+                                extension_ids[$extension_id_counter]=$input_file_name;
+
+                                $extension_id_counter++;
+                            }
+                            print_r($extension_ids);
+
+
                             $count_prev_img = 0;
                             for ($i = 0; $i < count($result_files); $i++) {
                                 $count_prev_img = 0;
