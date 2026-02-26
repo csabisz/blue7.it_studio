@@ -5755,7 +5755,7 @@ include('../menu.php');
                                 $result_files = $prod->show_results_with_rooms($o_id, $osub_id, $prod_id, $room_id);
                                 //echo "normal y task";
                             }
-
+                            print_r($result_files);
                             $count_prev_img = 0;
                             for ($i = 0; $i < count($result_files); $i++) {
                                 $count_prev_img = 0;
