@@ -5768,12 +5768,12 @@ include('../menu.php');
                                 $extension_name = implode('.', $extension_name);
                                 $extension_name = str_replace(' ', '', $extension_name);
                                 //extension_ids[$extension_id_counter]=$extension_name;
-                                $result_files[$i]['extension_id'] = $extension_name;
+                                $extension_ids[]['extension_id']=$extension_name;
 
                                 
                             }
 
-                            
+                            $result_files = array_merge($result_files, $extension_ids);
                             print_r($result_files);
 
 
