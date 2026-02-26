@@ -5756,7 +5756,7 @@ include('../menu.php');
                                 //echo "normal y task";
                             }
                             
-                            $extension_id_counter = 0;
+                            
                             $extension_ids=[];
                             for($i = 0; $i < count($result_files); $i++) 
                             {
@@ -5768,11 +5768,13 @@ include('../menu.php');
                                 $extension_name = implode('.', $extension_name);
                                 $extension_name = str_replace(' ', '', $extension_name);
                                 //extension_ids[$extension_id_counter]=$extension_name;
-                                $extension_ids[]=$extension_name;
+                                $extension_ids[]['extension_id']=$extension_name;
 
-                                $extension_id_counter++;
+                                
                             }
-                            print_r($extension_ids);
+
+                            $result_files = array_merge($result_files, $extension_ids);
+                            print_r($result_files);
 
 
                             $count_prev_img = 0;
