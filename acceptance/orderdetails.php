@@ -120,8 +120,38 @@ if(($update_data['longitude']!=0)&&($update_data['latitude']!=0))
 }
 
 $update_data['invoice_explanations']=$prod->xss_fix($_POST['invoice_explanations']);
-$update_data['geoportal_link']=$prod->xss_fix($_POST['geoportal_link']);
-$update_data['earth_link']=$prod->xss_fix($_POST['earth_link']);
+
+if(!empty($_POST['geoportal_link']))
+{
+    if(!str_contains($_POST['geoportal_link'],'https://'))
+    {
+        $update_data['geoportal_link']='https://'.$prod->xss_fix($_POST['geoportal_link']);
+    }
+    else
+    {
+        $update_data['geoportal_link']=$prod->xss_fix($_POST['geoportal_link']);
+    }
+}
+else
+{
+    $update_data['geoportal_link']="";
+}
+
+if(!empty($_POST['earth_link']))
+{
+    if(!str_contains($_POST['earth_link'],'https://'))
+    {
+        $update_data['earth_link']='https://'.$prod->xss_fix($_POST['earth_link']);
+    }
+    else
+    {
+        $update_data['earth_link']=$prod->xss_fix($_POST['earth_link']);
+    }
+}
+else
+{
+    $update_data['earth_link']="";
+}
 $update_data['show_on_map']=$prod->xss_fix($_POST['show_on_map']);
 $update_data['vr_link']=$prod->xss_fix($_POST['vr_link']);
 $update_data['street_view_link']=$prod->xss_fix($_POST['street_view_link']);
