@@ -5767,7 +5767,7 @@ include('../menu.php');
                                 unset($extension_name[count($extension_name) - 1]);
                                 $extension_name = implode('.', $extension_name);
                                 $extension_name = str_replace(' ', '', $extension_name);
-                                extension_ids[$extension_id_counter]=$extension_name;
+                                //extension_ids[$extension_id_counter]=$extension_name;
 
                                 $extension_id_counter++;
                             }
