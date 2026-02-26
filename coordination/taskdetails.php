@@ -5773,8 +5773,10 @@ include('../menu.php');
                                 
                             }
 
-                            
-                            print_r($result_files);
+                            usort($result_files, function ($a, $b) {
+                                return strcmp($a['extension_id'], $b['extension_id']); // ascending
+                            });
+                            //print_r($result_files);
 
 
                             $count_prev_img = 0;
