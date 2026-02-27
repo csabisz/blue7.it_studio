@@ -756,6 +756,7 @@ $(document).ready(function() {
 	$('#col_amount1_in_b3').on('change keyup paste mouseup', function() {
 		$('#col_amount2_in_b3').val($('#col_amount1_in_b3').val());
 		$('#col_amount3_in_b3').val($('#col_amount1_in_b3').val());
+		$('#col_amount0').val($('#col_amount1_in_b3').val()).trigger('change');
 		calculatePricesAPUslabcs_in_b3();
 		calcPurchaserPrice_in_b3();
 		calcProducerPrice_in_b3();
@@ -766,6 +767,7 @@ $(document).ready(function() {
 	$('#col_amount2_in_b3').on('change keyup paste mouseup', function() {
 		$('#col_amount1_in_b3').val($('#col_amount2_in_b3').val());
 		$('#col_amount3_in_b3').val($('#col_amount2_in_b3').val());
+		$('#col_amount0').val($('#col_amount2_in_b3').val()).trigger('change');
 		calculatePricesAPUslabcs_in_b3();
 		calcPurchaserPrice_in_b3();
 		calcProducerPrice_in_b3();
@@ -776,6 +778,7 @@ $(document).ready(function() {
 	$('#col_amount3_in_b3').on('change keyup paste mouseup', function() {
 		$('#col_amount1_in_b3').val($('#col_amount3_in_b3').val());
 		$('#col_amount2_in_b3').val($('#col_amount3_in_b3').val());
+		$('#col_amount0').val($('#col_amount3_in_b3').val()).trigger('change');
 		calculatePricesAPUslabcs_in_b3();
 		calcPurchaserPrice_in_b3();
 		calcProducerPrice_in_b3();
