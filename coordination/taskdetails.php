@@ -10360,7 +10360,23 @@ include('../menu.php');
                                                     </div>
                                                 </div>
                                                 <?php
-                                                if (($result_files[$i]['prod_id'] == "p1322") || ($result_files[$i]['prod_id'] == "1302")) {
+                                                if(//($result_files[$i]['prod_id'] == "p1322") || 
+                                                   //($result_files[$i]['prod_id'] == "1302")) 
+
+                                                    (substr($result_files[$i]['prod_id'], -2) === '02') ||
+                                                    (substr($result_files[$i]['prod_id'], -2) === '03') ||
+                                                    (substr($result_files[$i]['prod_id'], -2) === '04') ||
+                                                    
+                                                    (substr($result_files[$i]['prod_id'], -2) === '22') ||
+                                                    (substr($result_files[$i]['prod_id'], -2) === '23') ||
+                                                    (substr($result_files[$i]['prod_id'], -2) === '24') ||
+
+                                                    
+                                                    (substr($result_files[$i]['prod_id'], -2) === '42') ||
+                                                    (substr($result_files[$i]['prod_id'], -2) === '43') ||
+                                                    (substr($result_files[$i]['prod_id'], -2) === '44') 
+                                                )
+                                                {
                                                     ?>
                                                     <div class="row">
                                                         <div class="col-md-6">
