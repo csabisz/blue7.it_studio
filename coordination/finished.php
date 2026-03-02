@@ -268,7 +268,7 @@ for($i=0;$i<count($orders);$i++)
                 else
                 {
                     echo $orders[$i]['om_id'];
-                }?>/tour" class="btn btn-success btn-sm px-2 mr-auto mr-md-0 d-md-inline" target="_blank">Presentation</a>
+                }?>" class="btn btn-success btn-sm px-2 mr-auto mr-md-0 d-md-inline" target="_blank">Presentation</a>
                 <a href="https://bauvorschau.com/production/<?php
                     if($orders[$i]['om_id']==0)
                     {

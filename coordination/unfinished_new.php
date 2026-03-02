@@ -616,7 +616,7 @@ for($i=0;$i<count($orders);$i++)
                     else
                     {
                         echo $orders[$i]['om_id'];
-                    }?>/tour" class="btn btn-success btn-sm mr-1 d-md-inline" target="_blank">
+                    }?>" class="btn btn-success btn-sm mr-1 d-md-inline" target="_blank">
                         Presentation
                     </a>
                     <a href="https://bauvorschau.com/production/<?php
