@@ -150,7 +150,7 @@ if((isset($_POST['save_btn']))||(isset($_POST['accept_btn'])))
 
 		$data['total_special_agreement_price']=$prod->xss_fix($_POST['total_special_agreement_price']);
 
-		$data['invoice_explanations']=$prod->xss_fix($_POST['invoice_explanations']);
+		$data['invoice_explanations']="";
 		$data['o_price']=$old_order['o_price'];
 		$o_correction_amendment=$prod->xss_fix($_POST['o_correction_amendment']) ?? '';
 
