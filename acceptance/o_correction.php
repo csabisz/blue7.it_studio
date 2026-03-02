@@ -11652,7 +11652,7 @@ for($l=0;$l<count($b8_ex_products);$l++)
         <div class="col-md-8 pt-3 d-flex justify-content-center py-1">
 
             <textarea class="form-control form-control-sm w-100" name="invoice_explanations" id="invoice_explanations" placeholder="Invoice explanations" form="order_details"><?php
-			if(isset($_GET['o_id']))
+			if(!empty($_GET['o_id']))
 			{
             	echo $order['invoice_explanations'];
 			}
