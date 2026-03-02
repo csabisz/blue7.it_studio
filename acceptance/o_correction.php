@@ -150,7 +150,7 @@ if((isset($_POST['save_btn']))||(isset($_POST['accept_btn'])))
 
 		$data['total_special_agreement_price']=$prod->xss_fix($_POST['total_special_agreement_price']);
 
-		$data['invoice_explanations']="";
+		$data['invoice_explanations']="$prod->xss_fix($_POST['invoice_explanations'])";
 		$data['o_price']=$old_order['o_price'];
 		$o_correction_amendment=$prod->xss_fix($_POST['o_correction_amendment']) ?? '';
 
@@ -678,189 +678,189 @@ if((isset($_POST['save_btn']))||(isset($_POST['accept_btn'])))
 		}
 
 
-	if(!empty($old_o_desc_in_b8))
-	{
-		if(count($old_o_desc_in_b8)>0)
-
+		if(!empty($old_o_desc_in_b8))
 		{
-
-			$new_in_b8_data['o_id']=$new_order['order_ID'];
-
-			$new_in_b8_data['layout_id']=$old_o_desc_in_b8['layout_id'] ?? '';
-
-			$new_in_b8_data['window_id']=$old_o_desc_in_b8['window_id'] ?? '';
-
-			$new_in_b8_data['col_amount_in_b8']=$old_o_desc_in_b8['col_amount_in_b8'] ?? 0.0;
-
-
-
-			$new_in_b8_data['p1800_fac']=$old_o_desc_in_b8['p1800_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1801_fac']=$old_o_desc_in_b8['p1801_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1804_fac']=$old_o_desc_in_b8['p1804_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1806_fac']=$old_o_desc_in_b8['p1806_fac'] ?? 1.0;
-
-
-
-			$new_in_b8_data['p1821_fac']=$old_o_desc_in_b8['p1821_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1824_fac']=$old_o_desc_in_b8['p1824_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1826_fac']=$old_o_desc_in_b8['p1826_fac'] ?? 1.0;
-
-
-
-			$new_in_b8_data['p1841_fac']=$old_o_desc_in_b8['p1841_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1844_fac']=$old_o_desc_in_b8['p1844_fac'] ?? 1.0;
-
-			$new_in_b8_data['p1846_fac']=$old_o_desc_in_b8['p1846_fac'] ?? 1.0;
-
-
-
-			$prod->add_o_desc_in_b8(json_encode($new_in_b8_data));
-
-		}
-	}
-
-
-		$mistakes=$_POST['mistake'];
-
-		$amendments=$_POST['amendment'];
-		
-
-	if(!empty($mistakes))
-	{
-		for($i=0;$i<count($mistakes);$i++)
-
-		{
-
-			$mistake=explode(".",$mistakes[$i]);
-
-
-
-			$mistake_data['o_id']=$new_order['order_ID'];
-
-			$mistake_data['om_id']=$mistake[2];
-
-			$mistake_data['osub_id']=$mistake[3];
-
-			$mistake_data['prod_id']=$mistake[4];
-
-
-
-			$old_product_data['o_id']=$mistake_data['om_id'];
-
-			$old_product_data['osub_id']=$mistake_data['osub_id'];
-
-			$old_product_data['prod_id']=$mistake_data['prod_id'];
-
-
-
-			$old_product=$prod->get_order_product(json_encode($old_product_data));
-
-			$mistake_data['uca_id']=$old_product['uca_id'];
-
-			$mistake_data['p_status']=5;
-
-			$mistake_data['om_correction']=1;
-
-
-
-			$existing_product=$prod->get_order_product(json_encode($mistake_data));
-
-
-
-			if(count($existing_product)==0)
+			if(count($old_o_desc_in_b8)>0)
 
 			{
 
-				$prod->add_order_products2(json_encode($mistake_data));
+				$new_in_b8_data['o_id']=$new_order['order_ID'];
+
+				$new_in_b8_data['layout_id']=$old_o_desc_in_b8['layout_id'] ?? '';
+
+				$new_in_b8_data['window_id']=$old_o_desc_in_b8['window_id'] ?? '';
+
+				$new_in_b8_data['col_amount_in_b8']=$old_o_desc_in_b8['col_amount_in_b8'] ?? 0.0;
+
+
+
+				$new_in_b8_data['p1800_fac']=$old_o_desc_in_b8['p1800_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1801_fac']=$old_o_desc_in_b8['p1801_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1804_fac']=$old_o_desc_in_b8['p1804_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1806_fac']=$old_o_desc_in_b8['p1806_fac'] ?? 1.0;
+
+
+
+				$new_in_b8_data['p1821_fac']=$old_o_desc_in_b8['p1821_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1824_fac']=$old_o_desc_in_b8['p1824_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1826_fac']=$old_o_desc_in_b8['p1826_fac'] ?? 1.0;
+
+
+
+				$new_in_b8_data['p1841_fac']=$old_o_desc_in_b8['p1841_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1844_fac']=$old_o_desc_in_b8['p1844_fac'] ?? 1.0;
+
+				$new_in_b8_data['p1846_fac']=$old_o_desc_in_b8['p1846_fac'] ?? 1.0;
+
+
+
+				$prod->add_o_desc_in_b8(json_encode($new_in_b8_data));
 
 			}
-
-			else
-
-			{
-
-				$mistake_data['om_amendment']=$existing_product['om_amendment'];
-
-				$prod->update_order_product(json_encode($mistake_data));
-
-			}
-
 		}
-	}
 
 
-	if(!empty($amendments))
-	{
-		for($i=0;$i<count($amendments);$i++)
+			$mistakes=$_POST['mistake'];
 
-		{
-
-			$amendment=explode(".",$amendments[$i]);
-
-
-
-			$amendment_data['o_id']=$new_order['order_ID'];
-
-			$amendment_data['om_id']=$amendment[2];
-
-			$amendment_data['osub_id']=$amendment[3];
-
-			$amendment_data['prod_id']=$amendment[4];
-
-
-
-			$old_product_data['o_id']=$amendment_data['om_id'];
-
-			$old_product_data['osub_id']=$amendment_data['osub_id'];
-
-			$old_product_data['prod_id']=$amendment_data['prod_id'];
-
-
-
-			$old_product=$prod->get_order_product(json_encode($old_product_data));
-
-			$amendment_data['uca_id']=$old_product['uca_id'];
-
-			$amendment_data['p_status']=6;
-
-			$amendment_data['om_amendment']=1;
-
-
-
-			$existing_product=$prod->get_order_product(json_encode($amendment_data));
+			$amendments=$_POST['amendment'];
 			
 
-			if(empty($existing_product))
+		if(!empty($mistakes))
+		{
+			for($i=0;$i<count($mistakes);$i++)
 
 			{
 
-				$prod->add_order_products2(json_encode($amendment_data));
+				$mistake=explode(".",$mistakes[$i]);
+
+
+
+				$mistake_data['o_id']=$new_order['order_ID'];
+
+				$mistake_data['om_id']=$mistake[2];
+
+				$mistake_data['osub_id']=$mistake[3];
+
+				$mistake_data['prod_id']=$mistake[4];
+
+
+
+				$old_product_data['o_id']=$mistake_data['om_id'];
+
+				$old_product_data['osub_id']=$mistake_data['osub_id'];
+
+				$old_product_data['prod_id']=$mistake_data['prod_id'];
+
+
+
+				$old_product=$prod->get_order_product(json_encode($old_product_data));
+
+				$mistake_data['uca_id']=$old_product['uca_id'];
+
+				$mistake_data['p_status']=5;
+
+				$mistake_data['om_correction']=1;
+
+
+
+				$existing_product=$prod->get_order_product(json_encode($mistake_data));
+
+
+
+				if(count($existing_product)==0)
+
+				{
+
+					$prod->add_order_products2(json_encode($mistake_data));
+
+				}
+
+				else
+
+				{
+
+					$mistake_data['om_amendment']=$existing_product['om_amendment'];
+
+					$prod->update_order_product(json_encode($mistake_data));
+
+				}
 
 			}
-
-			else
-
-			{
-
-				$amendment_data['om_correction']=$existing_product['om_correction'];
-
-				$prod->update_order_product(json_encode($amendment_data));
-
-			}
-
 		}
-	}
-		?>
 
-		<div class="alert alert-warning">Processing... Please wait...</div>
 
-		<?php
+		if(!empty($amendments))
+		{
+			for($i=0;$i<count($amendments);$i++)
+
+			{
+
+				$amendment=explode(".",$amendments[$i]);
+
+
+
+				$amendment_data['o_id']=$new_order['order_ID'];
+
+				$amendment_data['om_id']=$amendment[2];
+
+				$amendment_data['osub_id']=$amendment[3];
+
+				$amendment_data['prod_id']=$amendment[4];
+
+
+
+				$old_product_data['o_id']=$amendment_data['om_id'];
+
+				$old_product_data['osub_id']=$amendment_data['osub_id'];
+
+				$old_product_data['prod_id']=$amendment_data['prod_id'];
+
+
+
+				$old_product=$prod->get_order_product(json_encode($old_product_data));
+
+				$amendment_data['uca_id']=$old_product['uca_id'];
+
+				$amendment_data['p_status']=6;
+
+				$amendment_data['om_amendment']=1;
+
+
+
+				$existing_product=$prod->get_order_product(json_encode($amendment_data));
+				
+
+				if(empty($existing_product))
+
+				{
+
+					$prod->add_order_products2(json_encode($amendment_data));
+
+				}
+
+				else
+
+				{
+
+					$amendment_data['om_correction']=$existing_product['om_correction'];
+
+					$prod->update_order_product(json_encode($amendment_data));
+
+				}
+
+			}
+		}
+			?>
+
+			<div class="alert alert-warning">Processing... Please wait...</div>
+
+			<?php
 
 	}
 
@@ -11652,9 +11652,10 @@ for($l=0;$l<count($b8_ex_products);$l++)
         <div class="col-md-8 pt-3 d-flex justify-content-center py-1">
 
             <textarea class="form-control form-control-sm w-100" name="invoice_explanations" id="invoice_explanations" placeholder="Invoice explanations" form="order_details"><?php
-
-            echo $order['invoice_explanations'];
-
+			if(isset($_GET['o_id']))
+			{
+            	echo $order['invoice_explanations'];
+			}
             ?></textarea>
 
         </div>
