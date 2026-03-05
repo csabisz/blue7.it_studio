@@ -63,7 +63,7 @@ function getDbConnection() {
 try {
     $mysqli = getDbConnection();
 
-    $stmt = mysqli_prepare($mysqli, "SELECT orf_id, orf_compress_path,orf_path_dom,orf_internal_name_dom, prod_id FROM o_results WHERE orf_id = ?");
+    $stmt = mysqli_prepare($mysqli, "SELECT orf_id, orf_compress_path, prod_id FROM o_results WHERE orf_id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $orf_id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -82,8 +82,7 @@ try {
 
 // Build image URL
 $compress_path = $image_data['orf_compress_path'];
-$normal_path = $image_data['orf_path_dom'] . $image_data['orf_internal_name_dom'];
-$image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$compress_path}" : "https://blue7.it/studio/result_files/{$normal_path}";
+$image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$compress_path}" : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -529,15 +528,6 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
                         field.appendChild(option);
                     });
 
-                    if (fieldConfig.id === 'style_preset') {
-                        field.addEventListener('change', function() {
-                            var selectedOption = this.options[this.selectedIndex];
-                            if (selectedOption.dataset.prompt) {
-                                notesTextarea.value = selectedOption.dataset.prompt;
-                            }
-                        });
-                    }
-
                     // Handle reference images from options
                     field.addEventListener('change', function() {
                         var selectedOption = this.options[this.selectedIndex];
@@ -702,11 +692,6 @@ $image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$c
             });
 
             if (hasError) {
-                return;
-            }
-
-            if (!notesTextarea.value.trim()) {
-                AIModalShared.showNotification('Please add additional instructions', 'warning');
                 return;
             }
 

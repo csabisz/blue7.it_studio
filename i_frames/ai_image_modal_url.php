@@ -642,15 +642,6 @@ if ($o_id) {
                         field.appendChild(option);
                     });
 
-                    if (fieldConfig.id === 'style_preset') {
-                        field.addEventListener('change', function() {
-                            var selectedOption = this.options[this.selectedIndex];
-                            if (selectedOption.dataset.prompt) {
-                                notesTextarea.value = selectedOption.dataset.prompt;
-                            }
-                        });
-                    }
-
                     // Handle reference images from options
                     field.addEventListener('change', function() {
                         var selectedOption = this.options[this.selectedIndex];
@@ -812,11 +803,6 @@ if ($o_id) {
             });
 
             if (hasError) {
-                return;
-            }
-
-            if (!notesTextarea.value.trim()) {
-                AIModalShared.showNotification('Please add additional instructions', 'warning');
                 return;
             }
 
