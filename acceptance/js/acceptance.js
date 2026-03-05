@@ -1196,7 +1196,7 @@ $(document).ready(function() {
 			$('#product_'+$(this).val()+'_price').addClass('prices_in_b1');
 			$('#product_'+$(this).val()+'_apu').addClass('apus_in_b1');
 			$('#product_'+$(this).val()+'_labc').addClass('labcs_in_b1');
-			
+			$('#col_amount0').val($('#col_amount1_in_b1').val()).trigger('change');
 		}
 		else
 		{
@@ -1226,7 +1226,7 @@ $(document).ready(function() {
 			$('#product_'+$(this).val()+'_price').addClass('prices_in_b3');
 			$('#product_'+$(this).val()+'_apu').addClass('apus_in_b3');
 			$('#product_'+$(this).val()+'_labc').addClass('labcs_in_b3');
-			
+			$('#col_amount0').val($('#col_amount1_in_b3').val()).trigger('change');
 			/*if(($(this).val()=="p1502")||($(this).val()=="p1503")||($(this).val()=="p1504")||($(this).val()=="p1505")||($(this).val()=="p1506")||($(this).val()=="p1507"))
 			{
 				$('#p1501').prop('checked',true);
