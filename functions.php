@@ -12468,12 +12468,13 @@ class Production
         $register_script = mysqli_real_escape_string($mysqli, $data->register_script ?? "");
         $password = sha1($data->password);
         $date_registered = mysqli_real_escape_string($mysqli, $data->date_registered);
-
+        $partner_since = "0000-00-00";
+        
         if((!empty($email))&&(!empty($password)))
         {
             if (strpos($email, 'rightbliss.beauty') === false) 
             { 
-                $stmt = "insert into `u_clients`(`referrer_id`,`clientname`,`mc_id`,`specials`,`client_credibility`,`ls_ids`,`a_id`,`registration`,`l_title`,`l_first_name`,`l_middle_name`,`l_last_name`,`l_gender`,`leaders_status`,`c_title`,`c_first_name`,`c_middle_name`,`c_last_name`,`c_gender`,`phone`,`email`,`vat_tax_no`,`iban`,`street`,`no_or_housename`,`postcode`,`city`,`homepage`,`timezone`,`register_script`,`password`,`date_registered`) values('$referrer_id','$clientname','$mc_id','$specials','$client_credibility','$ls_ids','$country','$registration','$l_title','$l_first_name','$l_middle_name','$l_last_name','$l_gender','$leaders_status','$c_title','$c_first_name','$c_middle_name','$c_last_name','$c_gender','$phone','$email','$VAT_tax_no','$iban','$street','$no_or_housename','$postcode','$city','$homepage','$timezone','$register_script','$password','$date_registered')";
+                $stmt = "insert into `u_clients`(`referrer_id`,`clientname`,`mc_id`,`specials`,`client_credibility`,`ls_ids`,`a_id`,`registration`,`l_title`,`l_first_name`,`l_middle_name`,`l_last_name`,`l_gender`,`leaders_status`,`c_title`,`c_first_name`,`c_middle_name`,`c_last_name`,`c_gender`,`phone`,`email`,`vat_tax_no`,`iban`,`street`,`no_or_housename`,`postcode`,`city`,`homepage`,`timezone`,`register_script`,`password`,`date_registered`,`partner_since`) values('$referrer_id','$clientname','$mc_id','$specials','$client_credibility','$ls_ids','$country','$registration','$l_title','$l_first_name','$l_middle_name','$l_last_name','$l_gender','$leaders_status','$c_title','$c_first_name','$c_middle_name','$c_last_name','$c_gender','$phone','$email','$VAT_tax_no','$iban','$street','$no_or_housename','$postcode','$city','$homepage','$timezone','$register_script','$password','$date_registered','$partner_since')";
                 
                 $result = mysqli_query($mysqli, $stmt) or die(mysqli_error($mysqli));
             }
