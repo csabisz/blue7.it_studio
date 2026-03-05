@@ -237,7 +237,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                         <label for="partner_since">Partner since</label>
                     </div>
                     <div class="col-md-5">
-                        <input id="partner_since" name="partner_since" class="form-control form-control-sm" value="<?php echo $client['partner_since'];?>">
+                        <input id="partner_since" name="partner_since" class="form-control form-control-sm" value="<?php echo $client['partner_since'] ?? '0000-00-00';?>">
                         <script type="text/javascript">
                         $('#partner_since').datepicker({
                             changeMonth: true,
