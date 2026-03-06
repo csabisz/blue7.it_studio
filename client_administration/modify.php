@@ -573,7 +573,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                         </select>
                     </div>
                 </div>
-                <div class="row w-100 mx-0">
+                <div class="row w-100 mx-0 colorline">
                     <div class="col-md-2">
                         <input class="form-control form-control-sm" type="checkbox" id="see_all_orders" name="see_all_orders" value="1" <?php echo ($client['see_all_orders']==1)?"checked":"";?>>
                     </div>
@@ -583,7 +583,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     
                 </div>
                 
-                <div class="row w-100 mx-0">
+                <div class="row w-100 mx-0 colorline">
                     <div class="col-md-2">
                         <input class="form-control form-control-sm" type="checkbox" id="house_owner" name="house_owner" value="1" <?php echo ($client['house_owner']==1)?"checked":"";?>>
                     </div>
@@ -593,7 +593,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     
                 </div>
                 
-                <div class="row w-100 mx-0">
+                <div class="row w-100 mx-0 colorline">
                     <div class="col-md-2">          
                     <input class="form-control form-control-sm" type="checkbox" id="public_presentation" name="public_presentation" value="1" <?php echo ($client['public_presentation']==1)?"checked":"";?>>
                     </div>   
@@ -602,7 +602,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     </div>
                                     
                 </div>
-                <div class="row w-100 mx-0">
+                <div class="row w-100 mx-0 colorline">
                     <div class="col-md-2">          
                     <input class="form-control form-control-sm" type="checkbox" id="checkation_access" name="checkation_access" value="1" <?php echo ($client['checkation_access']==1)?"checked":"";?>>
                     </div> 
