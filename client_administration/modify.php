@@ -68,7 +68,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
         $update_client_data['see_all_orders']=$prod->xss_fix($_POST['see_all_orders'] ?? '0');
         $update_client_data['house_owner']=$prod->xss_fix($_POST['house_owner'] ?? '0');
         $update_client_data['public_presentation']=$prod->xss_fix($_POST['public_presentation'] ?? '0');
-        $update_client_data['checkation_access']=$prod->xss_fix($_POST['checkation_access']) ?? '0';
+        $update_client_data['checkation_access']=$prod->xss_fix($_POST['checkation_access']?? '0');
 		$update_client_data['c_status']=$prod->xss_fix($_POST['c_status'] ?? '');
 		
 		if((!empty($update_client_data['clientname']))&&(!empty($update_client_data['email'])))
