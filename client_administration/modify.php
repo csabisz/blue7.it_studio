@@ -617,7 +617,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 {
                 ?>
                 <div class="row w-100 mx-0 mt-2">
-                    <div class="col-md-5 pl-2">
+                    <div class="col-md-5 pl-4">
                     <a href="client_order_rights.php?clientid=<?php echo $clientid;?>" class="btn btn-sm btn-warning">Modify order rights 4 his organization</a>
                     </div>
                 </div>
@@ -625,7 +625,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 }
                 ?>                
                 <div class="row w-100 mx-0">
-                    <div class="col-md-12 pl-2">
+                    <div class="col-md-12 pl-4">
                         Price remarks
                     </div>
                 </div>
