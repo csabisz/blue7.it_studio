@@ -561,34 +561,6 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                         <input type="file" class="form-control form-control-sm" id="profile_picture_path" name="profile_picture_path">
                     </div>
                 </div>
-                <div class="row w-100 mx-0">
-                    <div class="col-md-5">
-                        <label for="see_all_orders">Administrator 4 his organization?</label>
-                    </div>
-                    <div class="col-md-5">
-                        <input class="form-control form-control-sm" type="checkbox" id="see_all_orders" name="see_all_orders" value="1" <?php echo ($client['see_all_orders']==1)?"checked":"";?>>
-                    </div>
-                </div>
-                <?php
-                if($client['see_all_orders']==1)
-                {
-                ?>
-                <div class="row w-100 mx-0 mt-2">
-                    <div class="col-md-5">
-                    <a href="client_order_rights.php?clientid=<?php echo $clientid;?>" class="btn btn-sm btn-warning">Modify order rights 4 his organization</a>
-                    </div>
-                </div>
-                <?php
-                }
-                ?>
-                <div class="row w-100 mx-0">
-                    <div class="col-md-5">
-                        <label for="house_owner">Planset owner ?</label>
-                    </div>
-                    <div class="col-md-5">
-                        <input class="form-control form-control-sm" type="checkbox" id="house_owner" name="house_owner" value="1" <?php echo ($client['house_owner']==1)?"checked":"";?>>
-                    </div>
-                </div>
                 <div class="row w-100 mx-0 <?php echo ($client['c_status']=="active")?"light-green":"light-grey";?>">
                     <div class="col-md-5">
                         <label for="c_status">Client Status</label>
@@ -602,11 +574,37 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     </div>
                 </div>
                 <div class="row w-100 mx-0">
+                    <div class="col-md-5">
+                        <label for="see_all_orders">Administrator 4 his organization?</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input class="form-control form-control-sm" type="checkbox" id="see_all_orders" name="see_all_orders" value="1" <?php echo ($client['see_all_orders']==1)?"checked":"";?>>
+                    </div>
+                </div>
+                
+                <div class="row w-100 mx-0">
+                    <div class="col-md-5">
+                        <label for="house_owner">Planset owner ?</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input class="form-control form-control-sm" type="checkbox" id="house_owner" name="house_owner" value="1" <?php echo ($client['house_owner']==1)?"checked":"";?>>
+                    </div>
+                </div>
+                
+                <div class="row w-100 mx-0">
                     <div class="col-md-auto">          
                     Presentation public by default?
                     </div>
                     <div class="col-md-2">          
                     <input class="form-control form-control-sm" type="checkbox" id="public_presentation" name="public_presentation" value="1" <?php echo ($client['public_presentation']==1)?"checked":"";?>>
+                    </div>                   
+                </div>
+                <div class="row w-100 mx-0">
+                    <div class="col-md-auto">          
+                    Access to checkation ?
+                    </div>
+                    <div class="col-md-2">          
+                    <input class="form-control form-control-sm" type="checkbox" id="checkation_access" name="checkation_access" value="1" <?php echo ($client['checkation_access']==1)?"checked":"";?>>
                     </div>                   
                 </div>
                 <?php
@@ -685,8 +683,18 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     }
                 });
                 </script>
-                
-                
+                <?php
+                if($client['see_all_orders']==1)
+                {
+                ?>
+                <div class="row w-100 mx-0 mt-2">
+                    <div class="col-md-5">
+                    <a href="client_order_rights.php?clientid=<?php echo $clientid;?>" class="btn btn-sm btn-warning">Modify order rights 4 his organization</a>
+                    </div>
+                </div>
+                <?php
+                }
+                ?>                
                 <div class="row w-100 mx-0">
                     <div class="col-md-12">
                         Price remarks
