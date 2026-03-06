@@ -607,6 +607,29 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     <input class="form-control form-control-sm" type="checkbox" id="checkation_access" name="checkation_access" value="1" <?php echo ($client['checkation_access']==1)?"checked":"";?>>
                     </div>                   
                 </div>
+                
+                <?php
+                if($client['see_all_orders']==1)
+                {
+                ?>
+                <div class="row w-100 mx-0 mt-2">
+                    <div class="col-md-5">
+                    <a href="client_order_rights.php?clientid=<?php echo $clientid;?>" class="btn btn-sm btn-warning">Modify order rights 4 his organization</a>
+                    </div>
+                </div>
+                <?php
+                }
+                ?>                
+                <div class="row w-100 mx-0">
+                    <div class="col-md-12">
+                        Price remarks
+                    </div>
+                </div>
+                <div class="row w-100 mx-0">
+                    <div class="col-md-12">
+                        <textarea class="form-control form-control-sm" id="client_price_remarks" name="client_price_remarks" style="height: 215px;"><?php echo $client['client_price_remarks']?></textarea>
+                    </div>
+                </div>
                 <?php
                 $client_rights=$prod->get_client_rights($client['client_ID']);
                 ?>
@@ -683,28 +706,6 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     }
                 });
                 </script>
-                <?php
-                if($client['see_all_orders']==1)
-                {
-                ?>
-                <div class="row w-100 mx-0 mt-2">
-                    <div class="col-md-5">
-                    <a href="client_order_rights.php?clientid=<?php echo $clientid;?>" class="btn btn-sm btn-warning">Modify order rights 4 his organization</a>
-                    </div>
-                </div>
-                <?php
-                }
-                ?>                
-                <div class="row w-100 mx-0">
-                    <div class="col-md-12">
-                        Price remarks
-                    </div>
-                </div>
-                <div class="row w-100 mx-0">
-                    <div class="col-md-12">
-                        <textarea class="form-control form-control-sm" id="client_price_remarks" name="client_price_remarks" style="height: 215px;"><?php echo $client['client_price_remarks']?></textarea>
-                    </div>
-                </div>
             </div>	
 		</div>			
 		<div class="row w-100 mx-0">
