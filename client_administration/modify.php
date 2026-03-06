@@ -627,7 +627,12 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 </div>
                 <div class="row w-100 mx-0">
                     <div class="col-md-12">
-                        <textarea class="form-control form-control-sm" id="client_price_remarks" name="client_price_remarks" style="height: 215px;"><?php echo $client['client_price_remarks']?></textarea>
+                        <textarea class="form-control form-control-sm" id="client_price_remarks" name="client_price_remarks" style="height: 115px;"><?php echo $client['client_price_remarks']?></textarea>
+                    </div>
+                </div>
+                <div class="row w-100 mx-0">
+                    <div class="col-md-12">
+                        <hr class="border-bottom border-dark">
                     </div>
                 </div>
                 <?php
