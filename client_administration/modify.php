@@ -575,37 +575,41 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 </div>
                 <div class="row w-100 mx-0">
                     <div class="col-md-5">
-                        <label for="see_all_orders">Administrator 4 his organization?</label>
-                    </div>
-                    <div class="col-md-5">
                         <input class="form-control form-control-sm" type="checkbox" id="see_all_orders" name="see_all_orders" value="1" <?php echo ($client['see_all_orders']==1)?"checked":"";?>>
                     </div>
+                    <div class="col-md-5">
+                        <label for="see_all_orders">Administrator 4 his organization?</label>
+                    </div>
+                    
                 </div>
                 
                 <div class="row w-100 mx-0">
-                    <div class="col-md-5">
-                        <label for="house_owner">Planset owner ?</label>
-                    </div>
                     <div class="col-md-5">
                         <input class="form-control form-control-sm" type="checkbox" id="house_owner" name="house_owner" value="1" <?php echo ($client['house_owner']==1)?"checked":"";?>>
                     </div>
+                    <div class="col-md-5">
+                        <label for="house_owner">Planset owner ?</label>
+                    </div>
+                    
                 </div>
                 
                 <div class="row w-100 mx-0">
+                    <div class="col-md-5">          
+                    <input class="form-control form-control-sm" type="checkbox" id="public_presentation" name="public_presentation" value="1" <?php echo ($client['public_presentation']==1)?"checked":"";?>>
+                    </div>   
                     <div class="col-md-auto">          
                     Presentation public by default?
                     </div>
-                    <div class="col-md-2">          
-                    <input class="form-control form-control-sm" type="checkbox" id="public_presentation" name="public_presentation" value="1" <?php echo ($client['public_presentation']==1)?"checked":"";?>>
-                    </div>                   
+                                    
                 </div>
                 <div class="row w-100 mx-0">
+                    <div class="col-md-5">          
+                    <input class="form-control form-control-sm" type="checkbox" id="checkation_access" name="checkation_access" value="1" <?php echo ($client['checkation_access']==1)?"checked":"";?>>
+                    </div> 
                     <div class="col-md-auto">          
                     Access to checkation ?
                     </div>
-                    <div class="col-md-2">          
-                    <input class="form-control form-control-sm" type="checkbox" id="checkation_access" name="checkation_access" value="1" <?php echo ($client['checkation_access']==1)?"checked":"";?>>
-                    </div>                   
+                                      
                 </div>
                 
                 <?php
