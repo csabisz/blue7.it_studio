@@ -561,6 +561,12 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                         <input type="file" class="form-control form-control-sm" id="profile_picture_path" name="profile_picture_path">
                     </div>
                 </div>
+                <div class="row w-100 mx-0">
+                    <div class="col-md-12">
+                        <hr class="border-bottom border-dark">
+                    </div>
+                </div>
+                
                 <div class="row w-100 mx-0 <?php echo ($client['c_status']=="active")?"light-green":"light-grey";?>">
                     <div class="col-md-5">
                         <label for="c_status">Client Status</label>
