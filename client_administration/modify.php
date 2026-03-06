@@ -580,12 +580,13 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     </div>
                 </div>
                 <div class="row w-100 mx-0 colorline">
-                    <div class="col-md-2">
+                    <div class="col-md-12">
                         <input class="form-control form-control-sm" type="checkbox" id="see_all_orders" name="see_all_orders" value="1" <?php echo ($client['see_all_orders']==1)?"checked":"";?>>
-                    </div>
-                    <div class="col-md-auto p-0 m-0">
                         <label for="see_all_orders">Administrator 4 his organization?</label>
                     </div>
+                    <!-- <div class="col-md-auto p-0 m-0">
+                        
+                    </div> -->
                     
                 </div>
                 
