@@ -577,7 +577,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     <div class="col-md-2">
                         <input class="form-control form-control-sm" type="checkbox" id="see_all_orders" name="see_all_orders" value="1" <?php echo ($client['see_all_orders']==1)?"checked":"";?>>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="col-md-auto p-0 m-0">
                         <label for="see_all_orders">Administrator 4 his organization?</label>
                     </div>
                     
@@ -587,7 +587,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     <div class="col-md-2">
                         <input class="form-control form-control-sm" type="checkbox" id="house_owner" name="house_owner" value="1" <?php echo ($client['house_owner']==1)?"checked":"";?>>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5 p-0 m-0">
                         <label for="house_owner">Planset owner ?</label>
                     </div>
                     
@@ -597,7 +597,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     <div class="col-md-2">          
                     <input class="form-control form-control-sm" type="checkbox" id="public_presentation" name="public_presentation" value="1" <?php echo ($client['public_presentation']==1)?"checked":"";?>>
                     </div>   
-                    <div class="col-md-auto">          
+                    <div class="col-md-auto p-0 m-0">          
                     Presentation public by default?
                     </div>
                                     
@@ -606,7 +606,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     <div class="col-md-2">          
                     <input class="form-control form-control-sm" type="checkbox" id="checkation_access" name="checkation_access" value="1" <?php echo ($client['checkation_access']==1)?"checked":"";?>>
                     </div> 
-                    <div class="col-md-auto">          
+                    <div class="col-md-auto p-0 m-0">          
                     Access to checkation ?
                     </div>
                                       
@@ -617,7 +617,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 {
                 ?>
                 <div class="row w-100 mx-0 mt-2">
-                    <div class="col-md-5">
+                    <div class="col-md-5 pl-2">
                     <a href="client_order_rights.php?clientid=<?php echo $clientid;?>" class="btn btn-sm btn-warning">Modify order rights 4 his organization</a>
                     </div>
                 </div>
@@ -625,7 +625,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 }
                 ?>                
                 <div class="row w-100 mx-0">
-                    <div class="col-md-12">
+                    <div class="col-md-12 pl-2">
                         Price remarks
                     </div>
                 </div>
