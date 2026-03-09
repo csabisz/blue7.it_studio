@@ -619,6 +619,89 @@ for($i=0;$i<count($orders);$i++)
                     }?>" class="btn btn-success btn-sm mr-1 d-md-inline" target="_blank">
                         Presentation
                     </a>
+                    <button id="public_private_btn<?php echo $orders[$i]['order_ID'];?>" data-public="<?php echo $orders[$i]['public'];?>" class="btn btn-sm d-inline mr-1 <?php echo ($orders[$i]['public']==1)?"btn-success":"btn-danger";?>">
+
+                        <?php echo ($orders[$i]['public']==1)?"Public":"Private";?>
+
+                    </button>
+
+                    <script type="text/javascript">
+
+                        $("#public_private_btn<?php echo $orders[$i]['order_ID'];?>").click(function(){
+
+                            if(confirm('Are you sure that this is what the client wants ?')) 
+
+                            {
+
+                                if($(this).data("public")==1)
+
+                                {
+
+                                    $(this).data("public","0");
+
+                                    $(this).removeClass("btn-success");
+
+                                    $(this).addClass("btn-danger");
+
+                                    $(this).text("Private");
+
+                                    $.ajax({
+
+                                        url: "../ajax/change_public_private_order.php",
+
+                                        method: "post",
+
+                                        data: {o_id:<?php echo $orders[$i]['order_ID'];?>,public:0},
+
+                                        dataType:"html",
+
+                                        success:function(data) {
+
+                                            console.log(data);	
+
+                                        }
+
+                                    });
+
+                                }
+
+                                else
+
+                                {
+
+                                    $(this).data("public","1");
+
+                                    $(this).removeClass("btn-danger");
+
+                                    $(this).addClass("btn-success");
+
+                                    $(this).text("Public");
+
+                                    $.ajax({
+
+                                        url: "../ajax/change_public_private_order.php",
+
+                                        method: "post",
+
+                                        data: {o_id:<?php echo $orders[$i]['order_ID'];?>,public:1},
+
+                                        dataType:"html",
+
+                                        success:function(data) {
+
+                                            console.log(data);	
+
+                                        }
+
+                                    });
+
+                                }
+
+                            }
+
+                        });
+
+                    </script>
                     <a href="https://bauvorschau.com/production/<?php
                     if($orders[$i]['om_id']==0)
                     {
@@ -636,226 +719,8 @@ for($i=0;$i<count($orders);$i++)
                     }
                     ?>" class="btn orange btn-sm d-md-inline"
                     target="_blank">Checkation</a>
-                            <button id="public_private_btn<?php echo $orders[$i]['order_ID'];?>" data-public="<?php echo $orders[$i]['public'];?>" class="btn btn-sm d-inline mr-1 <?php echo ($orders[$i]['public']==1)?"btn-success":"btn-danger";?>">
-
-                                <?php echo ($orders[$i]['public']==1)?"Public":"Private";?>
-
-                            </button>
-
-                                    <script type="text/javascript">
-
-                                    $("#public_private_btn<?php echo $orders[$i]['order_ID'];?>").click(function(){
-
-                                        if(confirm('Are you sure that this is what the client wants ?')) 
-
-                                        {
-
-                                            if($(this).data("public")==1)
-
-                                            {
-
-                                                $(this).data("public","0");
-
-                                                $(this).removeClass("btn-success");
-
-                                                $(this).addClass("btn-danger");
-
-                                                $(this).text("Private");
-
-                                                $.ajax({
-
-                                                    url: "../ajax/change_public_private_order.php",
-
-                                                    method: "post",
-
-                                                    data: {o_id:<?php echo $orders[$i]['order_ID'];?>,public:0},
-
-                                                    dataType:"html",
-
-                                                    success:function(data) {
-
-                                                        console.log(data);	
-
-                                                    }
-
-                                                });
-
-                                            }
-
-                                            else
-
-                                            {
-
-                                                $(this).data("public","1");
-
-                                                $(this).removeClass("btn-danger");
-
-                                                $(this).addClass("btn-success");
-
-                                                $(this).text("Public");
-
-                                                $.ajax({
-
-                                                    url: "../ajax/change_public_private_order.php",
-
-                                                    method: "post",
-
-                                                    data: {o_id:<?php echo $orders[$i]['order_ID'];?>,public:1},
-
-                                                    dataType:"html",
-
-                                                    success:function(data) {
-
-                                                        console.log(data);	
-
-                                                    }
-
-                                                });
-
-                                            }
-
-                                        }
-
-                                    });
-
-                                    </script>
-                    <?php /*
-                    <button id="suntour_btn<?php echo $orders[$i]['order_ID'];?>" data-suntour="<?php echo $orders[$i]['suntour'];?>" class="btn btn-sm d-inline mr-1 <?php echo ($orders[$i]['suntour']==1)?"btn-success":"btn-danger";?>"><?php 
-                    echo ($orders[$i]['suntour']==1)?"Suntour":"No Suntour";?>
-                    </button>
-                    <script type="text/javascript">
-
-                    $("#suntour_btn<?php echo $orders[$i]['order_ID'];?>").click(function(){
-
-                        if(confirm('Are you sure that this is what the client wants ?')) 
-
-                        {
-
-                            if($(this).data("suntour")==1)
-
-                            {
-
-                                $(this).data("suntour","0");
-
-                                $(this).removeClass("btn-success");
-
-                                $(this).addClass("btn-danger");
-
-                                $(this).text("No Suntour");
-
-                                $.ajax({
-
-                                    url: "../ajax/change_suntour_order.php",
-
-                                    method: "post",
-
-                                    data: {o_id:<?php echo $orders[$i]['order_ID'];?>,suntour:0},
-
-                                    dataType:"html",
-
-                                    success:function(data) {
-
-                                        console.log(data);	
-
-                                    }
-
-                                });
-
-                            }
-
-                            else
-
-                            {
-
-                                $(this).data("suntour","1");
-
-                                $(this).removeClass("btn-danger");
-
-                                $(this).addClass("btn-success");
-
-                                $(this).text("Suntour");
-
-                                $.ajax({
-
-                                    url: "../ajax/change_suntour_order.php",
-
-                                    method: "post",
-
-                                    data: {o_id:<?php echo $orders[$i]['order_ID'];?>,suntour:1},
-
-                                    dataType:"html",
-
-                                    success:function(data) {
-
-                                        console.log(data);	
-
-                                    }
-
-                                });
-
-                            }
-
-                        }
-
-                    });
-
-                    </script>
-                    <?php
-                    */
-                    /*<button id="verify_btn<?php echo $orders[$i]['order_ID'];?>" class="btn btn-sm <?php echo ($orders[$i]['o_status']=="6.1")?"purple":"brown";?>">Verify</button>
-                    <script type="text/javascript">
-                        $('#verify_btn<?php echo $orders[$i]['order_ID'];?>').click(function()
-                        {
-                            $.ajax({
-
-                            url: "../ajax/get_order_status.php",
-                            method: "get",
-                            data: {o_id:<?php echo $orders[$i]['order_ID'];?>},
-                            dataType:"html",
-
-                            success:function(data) {      
-                                if(data=="6.1")
-                                {
-                                    alert("Warning ! Someone might already verify this order !\n Status will not be changed");
-                                }                          							
-                                else
-                                {
-                                    $.ajax({
-
-                                        url: "../ajax/update_order_status.php",
-                                        method: "post",
-                                        data: {o_id:<?php echo $orders[$i]['order_ID'];?>,o_status:"6.1"},
-                                        dataType:"html",
-
-                                        success:function(data) {                                							
-                                            $('#verify_btn<?php echo $orders[$i]['order_ID'];?>').removeClass("brown");
-                                            $('#verify_btn<?php echo $orders[$i]['order_ID'];?>').addClass("purple");
-                                            setTimeout(function(){window.location = "orderdetails4.php?o_id=<?php echo $orders[$i]['order_ID'];?>"},1000);
-
-                                        },
-
-                                        error: function (xhr, ajaxOptions, thrownError) {
-                                            console.log(xhr.status);
-                                            console.log(thrownError);
-
-                                        }
-
-                                        });
-                                }
-                            },
-
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                console.log(xhr.status);
-                                console.log(thrownError);
-                            }
-
-                            });
-
                             
-
-                            
-                        });
-                    </script>*/ ?>
+                    
                     <select id="multiple_status<?php echo $orders[$i]['order_ID'];?>" class="form-control form-control-sm <?php 
                     if(($orders[$i]['on_stock']==0)&&($orders[$i]['materials_order']==0))
                     {
