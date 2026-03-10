@@ -73,6 +73,8 @@ if(!empty($client))
             $prod->insert_token(json_encode($data));
         }
         
+        $data['token']=$prod->get_token($data['client_id'])['token'];
+
         $creator_end_time=$prod->get_creator_end_time($data['client_id']);
 
         if(!empty($creator_end_time))

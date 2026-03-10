@@ -528,11 +528,11 @@ session_start();
                             SameSite: "Lax",
                             });
 
-                            // Cookies.set("translations", results.translations, {
-                            // expires: current_date,
-                            // path: "/",
-                            // SameSite: "Lax",
-                            // });
+                             Cookies.set("token", results.token, {
+                             expires: current_date,
+                             path: "/",
+                             SameSite: "Lax",
+                             });
 
                             Cookies.set("company", results.company, {
                             expires: current_date,
