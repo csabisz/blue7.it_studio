@@ -15,7 +15,7 @@ if($option=="change_client_status")
         $prod->update_client_status($client_id,"inactive");
         $client_rights=$prod->get_client_rights($client_id);
 
-        if(count($client_rights)>0)
+        if(!empty($client_rights))
         {
             $data['client_id']=$client_id;
             $data['u_status']="inactive";
