@@ -257,8 +257,30 @@ include('../menu.php');
                         }
                     }
 
+                    
+                    ?>
+                    </tbody>
+                </table>
+                <br>
+                <table class="table table-striped mt-5" id="inactive_main_clients_table"
+                       style="font-size: 13px; overflow-y: auto;height: 520px; display: block; border-collapse: separate; border-spacing: 0;">
+                    <thead class="text-center">
+                    <tr>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Main ClientID</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Main Client Name</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Leader's Name</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Leader's Status</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Contact at client</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Country</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Phone</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">E-mail</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
                     //inactive clients
-                    ?><?php
+                    
                     for ($i = 0; $i < count($main_clients); $i++) 
                     {
                         if ($main_clients[$i]['inactive'] != 0)
@@ -382,7 +404,12 @@ include('../menu.php');
                 <script type="text/javascript">
                     $(document).ready(function() {
                         $('#main_clients_table').DataTable({
-                            "order": [[ 1, "asc" ]]                            
+                            "order": [[ 1, "asc" ]],
+                            "paging": false
+                        });
+                        $('#inactive_main_clients_table').DataTable({
+                            "order": [[ 1, "asc" ]],
+                            "paging": false
                         });
                     });
                 </script>
