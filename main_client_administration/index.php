@@ -114,7 +114,7 @@ include('../menu.php');
 
 
 
-                <table class="table table-striped mt-5"
+                <table class="table table-striped mt-5" id="main_clients_table"
                        style="font-size: 13px; overflow-y: auto;height: 520px; display: block; border-collapse: separate; border-spacing: 0;">
                     <thead class="text-center">
                     <tr>
@@ -379,6 +379,13 @@ include('../menu.php');
                     ?>
                     </tbody>
                 </table>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#main_clients_table').DataTable({
+                            "order": [[ 1, "asc" ]]                            
+                        });
+                    });
+                </script>
                 <?php
             } else {
                 session_unset();
