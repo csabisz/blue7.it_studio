@@ -116,7 +116,7 @@ include('../menu.php');
 
 
 
-                <table class="table table-striped mt-5"
+                <table class="table table-striped mt-5" id="clients_table"
                        style="font-size: 13px; overflow-y: auto;height: 520px; display: block; border-collapse: separate; border-spacing: 0;">
                     <thead class="text-center">
                     <tr>
@@ -138,7 +138,8 @@ include('../menu.php');
 
                     //clients
 
-                    for ($i = 0; $i < count($clients); $i++) {
+                    for ($i = 0; $i < count($clients); $i++) 
+                    {
                         if ($clients[$i]['c_status'] == "active") {
                             ?>
                             <tr id="client<?php echo $clients[$i]['client_ID']; ?>"
@@ -292,7 +293,8 @@ include('../menu.php');
 
                     //creators
 
-                    for ($i = 0; $i < count($creators); $i++) {
+                    for ($i = 0; $i < count($creators); $i++) 
+                    {
                         if ($creators[$i]['c_status'] == "active") {
                             ?>
                             <tr id="client<?php echo $creators[$i]['client_ID']; ?>" class="text-center clients <?php
@@ -429,10 +431,34 @@ include('../menu.php');
                             <?php
                         }
                     }
-
+                    ?>
+                    ?>
+                    </tbody>
+                </table>
+                <br>
+                <table class="table table-striped mt-5" id="inactive_clients_table"
+                       style="font-size: 13px; overflow-y: auto;height: 520px; display: block; border-collapse: separate; border-spacing: 0;">
+                    <thead class="text-center">
+                    <tr>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">ClientID</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Enterprise</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Main Client</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Registered on</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Country</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Contact</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Position</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Status</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">Phone</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white">E-mail</th>
+                        <th style="position: sticky; top: -10px;" scope="col" class="bg-white"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
                     //inactive clients
 
-                    for ($i = 0; $i < count($clients); $i++) {
+                    for ($i = 0; $i < count($clients); $i++) 
+                    {
                         if ($clients[$i]['c_status'] != "active") {
                             ?>
                             <tr id="client<?php echo $clients[$i]['client_ID']; ?>" class="text-center clients <?php
@@ -578,7 +604,8 @@ include('../menu.php');
 
                     //inactive creators
 
-                    for ($i = 0; $i < count($creators); $i++) {
+                    for ($i = 0; $i < count($creators); $i++) 
+                    {
                         if ($creators[$i]['c_status'] != "active") {
                             ?>
                             <tr id="client<?php echo $creators[$i]['client_ID']; ?>" class="text-center clients<?php
@@ -694,6 +721,18 @@ include('../menu.php');
                     ?>
                     </tbody>
                 </table>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#clients_table').DataTable({
+                            "order": [[ 1, "asc" ]],
+                            "paging": false
+                        });
+                        $('#inactive_clients_table').DataTable({
+                            "order": [[ 1, "asc" ]],
+                            "paging": false
+                        });
+                    });
+                </script>
                 <?php
             } else {
                 session_unset();
