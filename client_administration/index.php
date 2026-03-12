@@ -724,11 +724,11 @@ include('../menu.php');
                 <script type="text/javascript">
                     $(document).ready(function() {
                         $('#clients_table').DataTable({
-                            "order": [[ 1, "asc" ]],
+                            "order": [[ 2, "asc" ]],
                             "paging": false
                         });
                         $('#inactive_clients_table').DataTable({
-                            "order": [[ 1, "asc" ]],
+                            "order": [[ 2, "asc" ]],
                             "paging": false
                         });
                     });
