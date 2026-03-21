@@ -3,9 +3,9 @@ class Notifications
 {
 	public function add_signature($licenceid,$selected_lang)
 	{
-		//include('functions.php');
+		
 		$prod=new Production;
-		//include_once('../../domenia.blue7.it/domenia.php');
+		
 		$domenia=new Domenia;
 		
 		$licence=$prod->get_licence($licenceid);
@@ -693,7 +693,7 @@ class Notifications
 	public function send_product_done_message($o_id)
 	{
 		$prod=new Production;
-		include_once('../../../../blue7.it/public_html/domenia/domenia.php');
+		include_once('../../../../cseven.eu/public_html/domenia/domenia.php');
 		$domenia=new Domenia;
 		
 		$order=$prod->get_order($o_id);
@@ -917,7 +917,7 @@ class Notifications
 	public function send_product_done_message_amendment($om_id,$o_id)
 	{
 		$prod=new Production;
-		include_once('../../../../blue7.it/public_html/domenia/domenia.php');
+		include_once('../../../../cseven.eu/public_html/domenia/domenia.php');
 		$domenia=new Domenia;
 		
 		$order=$prod->get_order($o_id);

@@ -46,7 +46,7 @@ if(!empty($client))
         $options=array(
             'expires' => time() + (16 * 60 * 60), //16 hours 
             'path' => "/",
-            'domain' => "blue7.it",
+            'domain' => "cseven.eu",
             'secure' => false,
             'httponly' => false,
             'samesite' => "Lax"

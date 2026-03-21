@@ -42,18 +42,6 @@ if(!empty($client))
         $data['activity_view']=$client_rights['activity_view'];
         $data['apu_lists']=$client_rights['APU_lists'];
         $data['examples_db']=$client_rights['examples_db'];
-        //$data['translations']=$client_rights['translations'];
-
-        // $options=array(
-        //     'expires' => time() + (16 * 60 * 60), //16 hours 
-        //     'path' => "/",
-        //     'domain' => "blue7.it",
-        //     'secure' => false,
-        //     'httponly' => false,
-        //     'samesite' => "Lax"
-        // );
-        // setcookie("client_id", $client['client_ID'], $options);
-
         
 
         if($client['lt_id']>0)

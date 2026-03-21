@@ -1,5 +1,5 @@
 <?php
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 ?>
 <!DOCTYPE html>
 <html lang="en">

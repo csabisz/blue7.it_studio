@@ -2627,7 +2627,7 @@ if(
                     if ($result_files[$i]['orf_type_dom'] == 'jpg' or $result_files[$i]['orf_type_dom'] == 'jpeg' or $result_files[$i]['orf_type_dom'] == 'png'): ?>
                         <?php if ($result_files[$i]['orf_compress_path']): ?>
                             <a target="_blank"
-                                href="https://blue7.it/studio/result_compress_files/<?= $result_files[$i]['orf_compress_path'] ?>"
+                                href="https://cseven.eu/studio/result_compress_files/<?= $result_files[$i]['orf_compress_path'] ?>"
                                 class="btn btn-primary btn-sm mt-2">Compressed file</a>
                                 <?php 
                                 if(strpos($_SERVER['REQUEST_URI'],"coordination") !== false)

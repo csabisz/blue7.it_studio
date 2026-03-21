@@ -6,7 +6,7 @@ include('domenia_db3.php');
 $domenia3=new Domenia3;
 $mc=new Production;
 
-$local_document_root="/home/adminhdd/domains/blue7.it/public_html/studio";
+$local_document_root="/home/adminhdd/domains/cseven.eu/public_html/studio";
 
 if(isset($_GET['filecategory']))
 {

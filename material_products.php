@@ -1,8 +1,6 @@
 <?php
 
-//$products = json_decode(file_get_contents('https://blue7.it/studio/api/orders.php?o_id=' . $o_id));
-
-$Url="https://blue7.it/studio/api/orders.php?o_id=" . $o_id;
+$Url="https://cseven.eu/studio/api/orders.php?o_id=" . $o_id;
 
 function url_get_contents($Url) 
 {

@@ -3,7 +3,7 @@
 session_start();
 include('functions.php');
 include('../../../domenia7.com/public_html/domenia_db2.php');
-include('../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../cseven.eu/public_html/domenia/domenia.php');
 include('domenia3n_db.php');
 
 $domenia = new Domenia;
@@ -13,7 +13,6 @@ $prod = new Production;
 $_COOKIE['start'] = gmdate("Y-m-d H:i:s");
 
 $picture_website = "https://domenia.blue7.it/";
-//$base_url="https://new.blue7.it/studio/";
 
 include('header2.php');
 include('menu.php');

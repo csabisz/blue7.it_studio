@@ -10526,7 +10526,7 @@ class Production
         $mysqli = $this->dbconnect();
 
         $deleted = 0;
-        $local_document_root = "/home/adminhdd/domains/blue7.it/public_html/studio";
+        $local_document_root = "/home/adminhdd/domains/cseven.eu/public_html/studio";
 
         $row = $this->get_customer_file($ofid);
 
