@@ -166,7 +166,7 @@ $invoice.="<div style=\"position: relative; min-height: 1px; padding-right: 15px
 
 $licence_taker_main_client=$prod->get_main_client($licence['main_client']);
 
-$invoice.="<img src=\"https://domenia.blue7.it/".$licence_taker_main_client['mc_logo']."\" alt=\"main_client_logo_missing\">";
+$invoice.="<img src=\"https://domenia.cseven.eu/".$licence_taker_main_client['mc_logo']."\" alt=\"main_client_logo_missing\">";
 
 $invoice.="<h3>".$licence_taker['Company']."</h3>";				
 

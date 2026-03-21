@@ -198,7 +198,7 @@ if($pa_id=="pa0200")
                 ?>
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="https://domenia.blue7.it/<?php echo $all_db_gutters[$g]['gut_pic'];?>" class="img-fluid shape_pictures" data-gut_id="<?php echo $all_db_gutters[$g]['gut_id'];?>" alt="">
+                        <img src="https://domenia.cseven.eu/<?php echo $all_db_gutters[$g]['gut_pic'];?>" class="img-fluid shape_pictures" data-gut_id="<?php echo $all_db_gutters[$g]['gut_id'];?>" alt="">
                     </div>
                     <div class="col-md-6">
                         <?php
@@ -259,7 +259,7 @@ if($pa_id=="pa0201")
                 ?>
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="https://domenia.blue7.it/<?php echo $all_db_gutters[$g]['gut_pic'];?>" class="img-fluid shape_pictures" data-gut_id="<?php echo $all_db_gutters[$g]['gut_id'];?>" alt="">
+                        <img src="https://domenia.cseven.eu/<?php echo $all_db_gutters[$g]['gut_pic'];?>" class="img-fluid shape_pictures" data-gut_id="<?php echo $all_db_gutters[$g]['gut_id'];?>" alt="">
                     </div>
                     <div class="col-md-6">
                         <?php
@@ -317,7 +317,7 @@ if($pa_id=="pa0180")
             <div class="row p-3">
                 <div class="col-md-6">
                     <img id="" class="img-fluid shape_pictures" src="<?php 
-                    echo "https://domenia.blue7.it/".$door_shape_pictures[$p]['dsp_pic'];?>" data-dsp_id="<?php 
+                    echo "https://domenia.cseven.eu/".$door_shape_pictures[$p]['dsp_pic'];?>" data-dsp_id="<?php 
                     echo $door_shape_pictures[$p]['dsp_id'];?>" alt="No picture" style="width:auto;height:150px;">                    
                 </div>
             </div>
@@ -352,7 +352,7 @@ if($pa_id=="pa0181")
             <div class="row p-3">
                 <div class="col-md-6">
                     <img id="" class="img-fluid shape_pictures" src="<?php 
-                    echo "https://domenia.blue7.it/".$door_shape_pictures[$p]['dsp_pic'];?>" data-dsp_id="<?php 
+                    echo "https://domenia.cseven.eu/".$door_shape_pictures[$p]['dsp_pic'];?>" data-dsp_id="<?php 
                     echo $door_shape_pictures[$p]['dsp_id'];?>" alt="No picture" style="width:auto;height:150px;">                    
                 </div>
             </div>

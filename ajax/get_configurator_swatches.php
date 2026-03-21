@@ -106,7 +106,7 @@ foreach ($swatches as $swatch) {
   <div class="col-sm-4">
     <div class="card h-100 w-100 shadow-sm">
       <img class="mt-3 rounded"
-           src="https://domenia.blue7.it/<?php echo $swatch_pic ?>"
+           src="https://domenia.cseven.eu/<?php echo $swatch_pic ?>"
            alt="">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center text-wrap">

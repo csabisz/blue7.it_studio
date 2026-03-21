@@ -84,7 +84,7 @@ $cm_id_data = $prod->get_ho_menu_data($cm_id);
         <div class="col-sm-4 mb-2">
             <div class="card">
                 <div class="card-body">
-                    <img width="20%" src="https://domenia.blue7.it/<?php echo $sw_pic ?>"
+                    <img width="20%" src="https://domenia.cseven.eu/<?php echo $sw_pic ?>"
                          class="sw_pic" alt="No picture">
                     <input class="ml-3" type="checkbox" name="<?php echo $item_id ?>"
                            id="sw_check_box_<?php echo $item_id ?>" <?php if ($sw_status === 'true') echo ' checked' ?>>

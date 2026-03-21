@@ -3,7 +3,7 @@
 session_start();
 include('functions.php');
 include('../../../domenia7.com/public_html/domenia_db2.php');
-include('../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../cseven.eu/public_html/domenia/domenia.php');
 include('domenia3n_db.php');
 
 $domenia = new Domenia;
@@ -12,8 +12,8 @@ $domenia3n = new Domenia3n;
 $prod = new Production;
 $_COOKIE['start'] = gmdate("Y-m-d H:i:s");
 
-$picture_website = "https://domenia.blue7.it/";
-$base_url="https://blue7.it/studio/";
+$picture_website = "https://domenia.cseven.eu/";
+$base_url="https://cseven.eu/studio/";
 
 include('header2.php');
 include('menu.php');
@@ -1502,7 +1502,7 @@ $order = $prod->get_order($o_id);
                                 
                                 ?>
                                 <div class="col-md-6 d-flex">
-                                    <img src="https://domenia.blue7.it/<?php
+                                    <img src="https://domenia.cseven.eu/<?php
                                 if(!empty($main_client['mc_logo'])){
                                     echo $main_client['mc_logo'];
                                 }?>" alt="main_client_logo" style="width:100%;height:auto;">

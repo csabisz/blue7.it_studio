@@ -228,7 +228,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     $height = null;
                     $img=null;
                 
-                $main_client_data['mc_favicon_path']="https://domenia.blue7.it/mc_logos/".$favicon_name;
+                $main_client_data['mc_favicon_path']="https://domenia.cseven.eu/mc_logos/".$favicon_name;
                 //end favicon stuff
 
                 // $internal_file_name="main_client_logo_mc_".str_replace(' ', '_', $client['mc_id']).".".$file_extension;
@@ -521,7 +521,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
         <div class="row w-100 mx-0 py-2">
             <div class="col-md-4">
                 <label for="main_client_logo_path">Logo</label>
-                <img src="https://domenia.blue7.it/<?php
+                <img src="https://domenia.cseven.eu/<?php
                 if(!empty($main_client['mc_logo'])){
                     echo $main_client['mc_logo'];
                 }
@@ -725,7 +725,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                 }
                 else
                 {
-                    echo "https://domenia.blue7.it/mc_logos/logo_PLITT_real&virtual_ESTATE_Ltd..png";
+                    echo "https://domenia.cseven.eu/mc_logos/logo_PLITT_real&virtual_ESTATE_Ltd..png";
                 }?>" width="60" height="60">
             </div>
             <div class="col-md-8">

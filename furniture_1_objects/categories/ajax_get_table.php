@@ -21,7 +21,7 @@ $all_fto_categories = $prod->get_all_fto_categories();
     </td>
     <td class="text-right">
       <a
-        href="https://domenia.blue7.it/translations/index.php?option=create&text_id=<?= 'ftoc_' . $category['ftoc_id'] ?>&lang_id=49&translation_table=x-texts"
+        href="https://domenia.cseven.eu/translations/index.php?option=create&text_id=<?= 'ftoc_' . $category['ftoc_id'] ?>&lang_id=49&translation_table=x-texts"
         target="_blank"
         class="btn btn-sm mb-md-2 mb-lg-0 edit-fto-btn <?= isset($category_in_german) ? 'btn-primary' : 'btn-warning' ?> ">
         <i class="fa  fa-language"></i>

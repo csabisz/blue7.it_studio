@@ -543,7 +543,7 @@ if(
                                         if($pict_categ_name_array[1]==$door_shapes_pictures[$p]['dsp_id'])
                                         {
                                             $countDoorShapeImage++;
-                                            echo "https://domenia.blue7.it/".$door_shapes_pictures[$p]['dsp_pic'];
+                                            echo "https://domenia.cseven.eu/".$door_shapes_pictures[$p]['dsp_pic'];
                                         }
                                     }
 
@@ -554,7 +554,7 @@ if(
                                         if($pict_categ_name_array[1]==$roof_shapes_pictures[$p]['rs_id'])
                                         {
                                             $countDoorShapeImage++;
-                                            echo "https://domenia.blue7.it/".$roof_shapes_pictures[$p]['rs_pic'];
+                                            echo "https://domenia.cseven.eu/".$roof_shapes_pictures[$p]['rs_pic'];
                                         }
                                     }
 
@@ -565,7 +565,7 @@ if(
                                         if($pict_categ_name_array[1]==$gutters_shapes_pictures[$p]['gut_id'])
                                         {
                                             $countDoorShapeImage++;
-                                            echo "https://domenia.blue7.it/".$gutters_shapes_pictures[$p]['gut_pic'];
+                                            echo "https://domenia.cseven.eu/".$gutters_shapes_pictures[$p]['gut_pic'];
                                         }
                                     }
                                     ?>" alt="<?php 
@@ -658,7 +658,7 @@ if(
                                         if($pict_categ_name_array[1]==$door_shapes_pictures[$p]['dsp_id'])
                                         {
                                             $countDoorShapeImage++;
-                                            echo "https://domenia.blue7.it/".$door_shapes_pictures[$p]['dsp_pic'];
+                                            echo "https://domenia.cseven.eu/".$door_shapes_pictures[$p]['dsp_pic'];
                                         }
                                     }
 
@@ -669,7 +669,7 @@ if(
                                         if($pict_categ_name_array[1]==$roof_shapes_pictures[$p]['rs_id'])
                                         {
                                             $countDoorShapeImage++;
-                                            echo "https://domenia.blue7.it/".$roof_shapes_pictures[$p]['rs_pic'];
+                                            echo "https://domenia.cseven.eu/".$roof_shapes_pictures[$p]['rs_pic'];
                                         }
                                     }
 
@@ -680,7 +680,7 @@ if(
                                         if($pict_categ_name_array[1]==$gutters_shapes_pictures[$p]['gut_id'])
                                         {
                                             $countDoorShapeImage++;
-                                            echo "https://domenia.blue7.it/".$gutters_shapes_pictures[$p]['gut_pic'];
+                                            echo "https://domenia.cseven.eu/".$gutters_shapes_pictures[$p]['gut_pic'];
                                         }
                                     }
                                     ?>" alt="<?php 
@@ -1300,7 +1300,7 @@ if(
                                                                     <img id="door_shape_picture_<?php echo $result_files[$i]['orf_id']; ?>_<?php 
                                                                     echo $door_shape_pictures[$p]['dsp_id'];?>" class="door_shape_pictures <?php 
                                                                     if($pict_categ_name_array[1]==$door_shape_pictures[$p]['dsp_id']){echo "door_shape_pictures_clicked";}?>" src="<?php 
-                                                                    echo "https://domenia.blue7.it/".$door_shape_pictures[$p]['dsp_pic'];?>" data-dsp_id="<?php 
+                                                                    echo "https://domenia.cseven.eu/".$door_shape_pictures[$p]['dsp_pic'];?>" data-dsp_id="<?php 
                                                                     echo $door_shape_pictures[$p]['dsp_id'];?>" class="door_shape_pictures" alt="No picture" style="width:auto;height:150px;">
                                                                     <script type="text/javascript">
                                                                         
@@ -1460,7 +1460,7 @@ if(
                                                             <div class="col-md-6">
                                                                 
                                                                 <img id="roof_shape_picture_<?php echo $result_files[$i]['orf_id']; ?>_<?php echo $roof_shape_pictures[$r]['rs_id'];?>" src="<?php 
-                                                            echo "https://domenia.blue7.it/".$roof_shape_pictures[$r]['rs_pic'];?>" data-rs_id="<?php 
+                                                            echo "https://domenia.cseven.eu/".$roof_shape_pictures[$r]['rs_pic'];?>" data-rs_id="<?php 
                                                             echo $roof_shape_pictures[$r]['rs_id'];?>" class="door_shape_pictures" alt="No picture" style="width:auto;height:150px;">
                                                             </div>
                                                         </div>
@@ -1698,7 +1698,7 @@ if(
                                                             <div class="col-md-6">
                                                                 
                                                                 <img id="gutters_shape_picture_<?php echo $result_files[$i]['orf_id']; ?>_<?php echo $gutters_shape_pictures[$r]['gut_id'];?>" src="<?php 
-                                                            echo "https://domenia.blue7.it/".$gutters_shape_pictures[$r]['gut_pic'];?>" data-gut_id="<?php 
+                                                            echo "https://domenia.cseven.eu/".$gutters_shape_pictures[$r]['gut_pic'];?>" data-gut_id="<?php 
                                                             echo $gutters_shape_pictures[$r]['gut_id'];?>" class="door_shape_pictures" alt="No picture" style="width:auto;height:150px;">
                                                             </div>
                                                         </div>

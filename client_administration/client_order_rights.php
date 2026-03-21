@@ -610,7 +610,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
 
                                         <div class="col-md-4">
                                             <div class="card mb-4 shadow-sm">
-                                                <img src="https://domenia.blue7.it/<?= $shape['rs_pic'] ?>"
+                                                <img src="https://domenia.cseven.eu/<?= $shape['rs_pic'] ?>"
                                                      style="width: 200px;" alt="">
                                                 <div class="d-flex justify-content-between align-items-right">
                                                     <div class="text-block">  <p class="card-text" id="roof-type-text"
@@ -647,7 +647,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                         <div class="col-md-4">
                                             <div class="card mb-4 shadow-sm" <?= (empty($shape['rmp_pic'])) ? 'style="height:50px"' : '' ?>>
                                                 <?php if (!empty($shape['rmp_pic'])) : ?>
-                                                    <img src="https://domenia.blue7.it/<?= $shape['rmp_pic'] ?>"
+                                                    <img src="https://domenia.cseven.eu/<?= $shape['rmp_pic'] ?>"
                                                            alt="">
                                                 <?php endif ?>
                                                 <div class="card-footer">
@@ -699,7 +699,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                         <div class="col-md-4">
                                             <div class="card mb-4 shadow-sm" <?= (empty($shape['clp_pic'])) ? 'style="height:50px"' : '' ?>>
                                                 <?php if (!empty($shape['clp_pic'])) : ?>
-                                                    <img src="https://domenia.blue7.it/<?= $shape['clp_pic'] ?>"
+                                                    <img src="https://domenia.cseven.eu/<?= $shape['clp_pic'] ?>"
                                                          style="width: 200px;" alt="">
                                                 <?php endif ?>
                                                 <div class="d-flex justify-content-between align-items-right">
@@ -738,7 +738,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                         <div class="col-md-4">
                                             <div class="card mb-4 shadow-sm" <?= (empty($shape['clp_pic'])) ? 'style="height:50px"' : '' ?>>
                                                 <?php if (!empty($shape['clp_pic'])) : ?>
-                                                    <img src="https://domenia.blue7.it/<?= $shape['clp_pic'] ?>"
+                                                    <img src="https://domenia.cseven.eu/<?= $shape['clp_pic'] ?>"
                                                          style="width: 200px;" alt="">
                                                 <?php endif ?>
                                                 <div class="d-flex justify-content-between align-items-right">
@@ -776,7 +776,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                         <div class="col-md-4">
                                             <div class="card mb-4 shadow-sm" <?= (empty($shape['clp_pic'])) ? 'style="height:50px"' : '' ?>>
                                                 <?php if (!empty($shape['clp_pic'])) : ?>
-                                                    <img src="https://domenia.blue7.it/<?= $shape['clp_pic'] ?>"
+                                                    <img src="https://domenia.cseven.eu/<?= $shape['clp_pic'] ?>"
                                                          style="width: 200px;" alt="">
                                                 <?php endif ?>
                                                 <div class="d-flex justify-content-between align-items-right">
@@ -814,7 +814,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                         <div class="col-md-4">
                                             <div class="card mb-4 shadow-sm" <?= (empty($shape['clp_pic'])) ? 'style="height:50px"' : '' ?>>
                                                 <?php if (!empty($shape['clp_pic'])) : ?>
-                                                    <img src="https://domenia.blue7.it/<?= $shape['clp_pic'] ?>"
+                                                    <img src="https://domenia.cseven.eu/<?= $shape['clp_pic'] ?>"
                                                          style="width: 200px;" alt="">
                                                 <?php endif ?>
                                                 <div class="d-flex justify-content-between align-items-right">
@@ -852,7 +852,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                 <div class="col-md-4">
                                     <div class="card mb-4 shadow-sm" style="height: 280px">
                                         <?php if (!empty($shape['gut_pic'])) : ?>
-                                            <img src="https://domenia.blue7.it/<?= $shape['gut_pic'] ?>"
+                                            <img src="https://domenia.cseven.eu/<?= $shape['gut_pic'] ?>"
                                                  style="width: 200px;" alt="">
                                         <?php endif ?>
                                         <div class="card-footer" style="">
@@ -899,7 +899,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                 <div class="card mb-4 shadow-sm" id="door_shapes">
                                     <?= (empty($shape['dsp_pic'])) ? '&nbsp&nbsp&nbsp&nbspIMG &nbspMissing' : '' ?>
                                     <?php if (!empty($shape['dsp_pic'])) : ?>
-                                        <img src="https://domenia.blue7.it/<?= $shape['dsp_pic'] ?>"
+                                        <img src="https://domenia.cseven.eu/<?= $shape['dsp_pic'] ?>"
                                              style="width: 100px; object-fit: fill" alt="">
                                     <?php endif ?>
                                     <div class="card-footer" style="">
@@ -945,7 +945,7 @@ $client_order_rights = $prod->get_client_order_rights($selected_client_id);
                                 <div class="card mb-4 shadow-sm" id="door_shapes">
                                     <?= (empty($shape['dsp_pic'])) ? '&nbsp&nbsp&nbsp&nbspIMG &nbspMissing' : '' ?>
                                     <?php if (!empty($shape['dsp_pic'])) : ?>
-                                        <img src="https://domenia.blue7.it/<?= $shape['dsp_pic'] ?>"
+                                        <img src="https://domenia.cseven.eu/<?= $shape['dsp_pic'] ?>"
                                              style="width: 100px; object-fit: fill" alt="">
                                     <?php endif ?>
                                     <div class="card-footer" style="">

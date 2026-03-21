@@ -13,7 +13,7 @@ $prod = new Production;
 $notification = new Notifications;
 $_COOKIE['start'] = gmdate("Y-m-d H:i:s");
 
-$picture_website = "https://domenia.blue7.it/";
+$picture_website = "https://domenia.cseven.eu/";
 
 $page_title="Task Details";
 

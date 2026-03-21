@@ -248,7 +248,7 @@
                         if ($_COOKIE['examples_db'] > 0) {
                             ?>
                             <li class="nav-item"><a class="nav-link"
-                            href="https://domenia.blue7.it/examples/index.php?client_id=<?php echo $_COOKIE['client_id']; ?>"
+                            href="https://domenia.cseven.eu/examples/index.php?client_id=<?php echo $_COOKIE['client_id']; ?>"
                             target="_blank">Examples-DB</a></li>
                             <?php
                         }
