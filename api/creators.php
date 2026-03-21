@@ -72,7 +72,7 @@ if (!empty($u_prod_id)) {
         
         
 
-        $working_hours = json_decode(file_get_contents('https://blue7.it/studio/api/creator.php?uca_id=' . $all_creators[$i]['client_ID'] . '&timezone='.$timezone), true);
+        $working_hours = json_decode(file_get_contents('https://cseven.eu/studio/api/creator.php?uca_id=' . $all_creators[$i]['client_ID'] . '&timezone='.$timezone), true);
 
         
         $all_creators[$i]['shifts'] = $working_hours['shifts'];
@@ -93,7 +93,7 @@ if (!empty($u_prod_id)) {
         if(!empty($all_other_creators[$j]['client_ID']))
         {
             $all_other_creators[$j]['qualification'] = filter_useless_qualifications($prod->get_client_qualifications($all_other_creators[$j]['client_ID']));
-            //$working_hours = json_decode(file_get_contents('https://blue7.it/studio/api/creator.php?uca_id=' . $all_other_creators[$j]['client_ID'] . '&timezone='.$timezone), true);
+            //$working_hours = json_decode(file_get_contents('https://cseven.eu/studio/api/creator.php?uca_id=' . $all_other_creators[$j]['client_ID'] . '&timezone='.$timezone), true);
         }
 
         if(empty($working_hours))

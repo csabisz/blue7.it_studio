@@ -2,7 +2,7 @@
 include('../functions.php');
 
 $prod=new Production;
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 
 $orf_id=$prod->xss_fix($_GET['orf_id']);
 $o_id=$prod->xss_fix($_GET['o_id']);

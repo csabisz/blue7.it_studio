@@ -263,7 +263,7 @@ $pages=count($fin_orders);
                     <div id="unfinished_orders">
                     </div>
                     <div id="loading_spinner" class="d-none">
-                        <img src="https://blue7.it/studio/img/loading.gif" style="width:100px;height:100px;" alt="Loading...">
+                        <img src="https://cseven.eu/studio/img/loading.gif" style="width:100px;height:100px;" alt="Loading...">
                     </div>
                     <script type="text/javascript">
                         let start = 0;

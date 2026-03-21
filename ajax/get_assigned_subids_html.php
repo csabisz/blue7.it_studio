@@ -6,7 +6,7 @@ $prod=new Production;
 $of_id=$prod->xss_fix($_GET['of_id']);
 $o_id=$prod->xss_fix($_GET['o_id']);
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 ?>
 SubIDs for client file ID <?php 
 

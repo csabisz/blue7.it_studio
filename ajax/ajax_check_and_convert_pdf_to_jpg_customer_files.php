@@ -1,15 +1,15 @@
 <?php
 session_start();
 include('../functions.php');
-//include('../../../../blue7.it/public_html/domenia/domenia.php');
+
 
 $prod=new Production;
 //$domenia=new Domenia;
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 $o_id=$prod->xss_fix($_GET['o_id']);
 
-$client_files_dir="/home/adminhdd/domains/blue7.it/public_html/studio/client_files/".date("Y")."/".$o_id;
+$client_files_dir="/home/adminhdd/domains/cseven.eu/public_html/studio/client_files/".date("Y")."/".$o_id;
 
 if(is_dir($client_files_dir))
 {

@@ -4,7 +4,7 @@ $prod = new Production;
 
 $fto_category=$prod->xss_fix($_GET['fto_category']);
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 
 $ft_objects=$prod->get_all_ft_objects_by_category($fto_category);
 ?>

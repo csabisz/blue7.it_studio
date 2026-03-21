@@ -1,6 +1,6 @@
 <?php
 include('../functions.php');
-include("../../../../blue7.it/public_html/domenia/domenia.php");
+include("../../../../cseven.eu/public_html/domenia/domenia.php");
 include('../notifications.php');
 
 $prod = new Production;

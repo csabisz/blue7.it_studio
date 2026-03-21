@@ -251,15 +251,6 @@ for($i=0;$i<count($orders);$i++)
 
                 <a href="orderdetails4.php?o_id=<?php echo $orders[$i]['order_ID'];?>" class="btn btn-sm d-inline text-white btn-primary ml-4 ml-md-4 ml-auto">Details</a>
 
-                <!--<a href="https://blue7.it/<?php 
-                if($orders[$i]['om_id']==0)
-                {
-                    echo $orders[$i]['order_ID'];
-                }
-                else
-                {
-                    echo $orders[$i]['om_id'];
-                }?>" class="btn view btn-sm px-2 mr-auto mr-md-0 d-md-inline text-white" target="_blank">Pres. Old</a> -->
                 <a href="https://bauvorschau.com/<?php 
                 if($orders[$i]['om_id']==0)
                 {

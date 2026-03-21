@@ -91,7 +91,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
     {
         
         $validextensions=array("jpg","jpeg","png","svg","webp");
-        $logo_dir="../../../../blue7.it/public_html/domenia/mc_logos/";
+        $logo_dir="../../../../cseven.eu/public_html/domenia/mc_logos/";
 
         $presentation_infos['client_id']=$prod->xss_fix($_POST['clientid2']);
         $main_client_data['mc_id']=$prod->xss_fix($_POST['mainclientid']);

@@ -58,7 +58,7 @@ $room_kind_special=$prod->get_all_rooms_for_this_sub_id(json_encode($data));
       </div>
       <div class="modal-body">
         <img style="max-width: 100% !important; max-height: fit-content"
-             src="<?= 'https://blue7.it/studio/result_compress_files/' . $file['orf_compress_path'] ?>"
+             src="<?= 'https://cseven.eu/studio/result_compress_files/' . $file['orf_compress_path'] ?>"
              alt="image" loading="lazy">
 
         <div class="row justify-start mt-2">
@@ -185,7 +185,7 @@ $room_kind_special=$prod->get_all_rooms_for_this_sub_id(json_encode($data));
       </div>
       <div class="modal-body">
         <img style="max-width: 100% !important; max-height: fit-content"
-             src="<?= 'https://blue7.it/studio/result_compress_files/' . $file['orf_compress_path'] ?>"
+             src="<?= 'https://cseven.eu/studio/result_compress_files/' . $file['orf_compress_path'] ?>"
              alt="image" loading="lazy">
         <div class="row row-cols-2 mt-2">
 

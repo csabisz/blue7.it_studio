@@ -3,7 +3,7 @@
 session_start();
 include('../functions.php');
 include('../notifications.php');
-include('../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../cseven.eu/public_html/domenia/domenia.php');
 
 
 $prod=new Production;

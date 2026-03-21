@@ -73,7 +73,7 @@ for($i=0;$i<count($orders);$i++)
                     <div class="col-12 d-flex flex-row align-items-center justify-content-start px-0">
                         
                         
-                        <a href="https://blue7.it/<?php echo $orders[$i]['o_id'];?>" class="btn view text-white btn-sm mr-1 d-md-inline" target="_blank" style="background: #f0ad4e;">
+                        <a href="https://bauvorschau.com/<?php echo $orders[$i]['o_id'];?>" class="btn view text-white btn-sm mr-1 d-md-inline" target="_blank" style="background: #f0ad4e;">
                             Presentation
                         </a>
                     </div>

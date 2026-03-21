@@ -1,13 +1,13 @@
 <?php
 include('../functions.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 include('../domenia3n_db.php');
 
 $prod=new Production;
 $domenia=new Domenia;
 $domenia3n=new Domenia3n;
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 $total_interior_amount=$prod->xss_fix($_POST['total_interior_amount']);
 $o_id=$prod->xss_fix($_POST['o_id']);
 $order=$prod->get_order($o_id);

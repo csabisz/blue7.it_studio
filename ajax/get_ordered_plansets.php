@@ -120,7 +120,7 @@ switch ($sort_type) {
                     <button class="btn btn-primary btn-sm mr-3">Edit</button>
                     <button class="btn btn-danger btn-sm mr-3">Delete</button>
                     <a target="_blank" class="btn btn-info btn-sm mr-3"
-                       href="https://blue7.it/<?php echo $planset['pls_presentation_id'] ?>">Presentation</a></td>
+                       href="https://bauvorschau.com/<?php echo $planset['pls_presentation_id'] ?>">Presentation</a></td>
             </tr>
         <?php } ?>
 

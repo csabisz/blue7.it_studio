@@ -13,7 +13,7 @@ include('../domenia_db3.php');
 include('../notifications.php');
 include('../../../../superfloorplans.com/public_html/functions.php');
 include('../../../../superfloorplans.com/public_html/price_calculations.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 
 $prod=new Production;
 $price=new PriceCalculations;

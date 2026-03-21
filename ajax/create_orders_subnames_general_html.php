@@ -3,7 +3,7 @@ include('../functions.php');
 
 $prod=new Production;
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 $total_general_amount=$prod->xss_fix($_POST['total_general_amount']);
 $o_id=$prod->xss_fix($_POST['o_id']);
 

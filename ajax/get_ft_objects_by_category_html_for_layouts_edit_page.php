@@ -7,7 +7,7 @@ $flt_id=$prod->xss_fix($_GET['flt_id']);
 
 $ltr_id=$prod->xss_fix($_GET['ltr_id']);
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 
 $ft_objects=$prod->get_all_ft_objects_by_category($fto_category);
 $saved_ft_objects=explode(";",$prod->xss_fix($_GET['saved_ft_objects']));

@@ -560,7 +560,7 @@ $global_column_count = 0;
                                                         pannellum.viewer('panorama<?php echo $image_preview_counter;?>', {
 
                                                             "type": "equirectangular",
-                                                            "panorama": "https://blue7.it/studio/result_files/<?php echo $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom'];?>",
+                                                            "panorama": "https://cseven.eu/studio/result_files/<?php echo $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom'];?>",
                                                             // "autoLoad": true
 
                                                         });

@@ -6,7 +6,7 @@
 <?php
 session_start();
 include('../functions.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 
 $prod=new Production;
 $domenia=new Domenia;
@@ -83,7 +83,7 @@ include('../menu.php');
                         { ?>
                             <tr>
                                 <th scope="row">
-                                    <a href="https://blue7.it/studio/coordination/orderdetails4.php?o_id=<?php echo $orders[$i]['order_ID']; ?>" target="_blank"><?php 
+                                    <a href="https://cseven.eu/studio/coordination/orderdetails4.php?o_id=<?php echo $orders[$i]['order_ID']; ?>" target="_blank"><?php 
                                     echo $orders[$i]['order_ID'];
                                     if($orders[$i]['om_id']!=0)
                                     {
@@ -108,14 +108,14 @@ include('../menu.php');
                                 </td>
                                 <td>
                                     <div>
-                                        <?php $data = json_decode(file_get_contents("https://blue7.it/presentation/api2/order/".$orders[$i]["order_ID"]."/"."www.bauvorschau.com"."/"."12345"), TRUE);
+                                        <?php $data = json_decode(file_get_contents("https://cseven.eu/presentation/api2/order/".$orders[$i]["order_ID"]."/"."www.bauvorschau.com"."/"."12345"), TRUE);
                                             //print_r($data);
                                         ?>
                                         <img src="<?php if(!empty($data['exterior_subcategories'][0]['image_list'][0]['thumb'])){
                                             echo $data['exterior_subcategories'][0]['image_list'][0]['thumb'];
                                             //echo $data['first_image'];
                                         }else {
-                                            //$data = json_decode(file_get_contents("https://blue7.it/presentation/api2/order/" . $orders[$i]["om_id"] . "/" . "www.bauvorschau.com" . "/" . "12345"), TRUE);
+                                            //$data = json_decode(file_get_contents("https://cseven.eu/presentation/api2/order/" . $orders[$i]["om_id"] . "/" . "www.bauvorschau.com" . "/" . "12345"), TRUE);
                                             echo $data['interior_subcategories'][0]['image_list'][0]['thumb'];
                                             //echo $data['first_image'];
                                         }

@@ -263,19 +263,7 @@ for($i=0;$i<count($orders);$i++)
                     <span class="text-left pl-xl-2"><b><span id="timeleft<?php echo $orders[$i]['order_ID'];?>" class="blink"></span></b></span>
                     <a href="orderdetails4.php?o_id=<?php echo $orders[$i]['order_ID'];?>" class="btn btn-sm btn-primary d-inline mr-1  ml-auto">
                         Details
-                    </a>
-                    <!--<a href="https://blue7.it/<?php 
-                    if($orders[$i]['om_id']==0)
-                    {
-                        echo $orders[$i]['order_ID'];
-                    }
-                    else
-                    {
-                        echo $orders[$i]['om_id'];
-                    }
-                    ?>" class="btn view text-white btn-sm mr-1 d-md-inline" target="_blank">
-                        Pres. Old
-                    </a> -->
+                    </a>                    
                     <a href="https://bauvorschau.com/<?php 
                     if($orders[$i]['om_id']==0)
                     {

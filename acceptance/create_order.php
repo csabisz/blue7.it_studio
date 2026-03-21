@@ -3,7 +3,7 @@ session_start();
 
 include('../functions.php');
 include('../../../../domenia7.com/public_html/domenia_db2.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 include('../../../../superfloorplans.com/public_html/functions.php');
 include('../../../../superfloorplans.com/public_html/price_calculations.php');
 include('../domenia3n_db.php');

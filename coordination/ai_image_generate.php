@@ -463,7 +463,7 @@ try {
     // Generate unique filename for thumbnail
     $thumbnailFilename = 'ai_' . $ai_record_id . '_' . time() . '.jpg';
     $thumbnailPath = $thumbnailDir . $thumbnailFilename;
-    $thumbnailUrl = 'https://blue7.it/studio/ai_thumbnails/' . $thumbnailFilename;
+    $thumbnailUrl = 'https://cseven.eu/studio/ai_thumbnails/' . $thumbnailFilename;
 
     try {
         // Download the generated image temporarily

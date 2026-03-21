@@ -1,12 +1,12 @@
 <?php
 session_start();
 include('../functions.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 
 $prod=new Production;
 $domenia=new Domenia;
 
-$base_url="https://blue7.it/studio/";
+$base_url="https://cseven.eu/studio/";
 $o_id=$prod->xss_fix($_GET['o_id']);
 
 $order=$prod->get_order($o_id);

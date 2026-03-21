@@ -230,7 +230,7 @@ if (isset($_GET['o_id']))
                     echo $order['om_id'];
                 } ?>/tour" class="btn btn-success btn-sm px-2 ml-4 mr-auto mr-md-0 ml-md-4 ml-auto d-md-inline"
                    target="_blank">Presentation</a><br>
-                <!-- <a href="https://blue7.it/presentation/beta4/project/<?php echo $o_id; ?>" class="btn btn-success btn-sm px-2 ml-4 mr-auto mr-md-0 ml-md-4 ml-auto d-md-inline" target="_blank">Presentation 2 beta </a><br> -->
+                
 
                 <a href="https://bauvorschau.com/production/<?php
                 if ($order['om_id'] == 0) {
@@ -247,8 +247,8 @@ if (isset($_GET['o_id']))
                    target="_blank">Checkation</a><br>
                 <?php if ($o_id == 1013) {
                     ?>
-                    <!-- <a href="https://blue7.it/exterior1013/" class="btn btn-primary btn-sm px-2 ml-4 mr-auto mr-md-0 ml-md-4 ml-auto d-md-inline" target="_blank">Virtual reality Presentation</a> -->
-                    <a href="https://blue7.it/1013ext/"
+                    
+                    <a href="https://cseven.eu/1013ext/"
                        class="btn btn-primary btn-sm px-2 ml-4 mr-auto mr-md-0 ml-md-4 ml-auto d-md-inline"
                        target="_blank">Virtual reality Presentation</a>
                     <?php

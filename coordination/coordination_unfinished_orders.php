@@ -235,7 +235,7 @@ for($i=0;$i<count($orders);$i++)
             $total_tasks=$prod->count_total_tasks_coordination($orders[$i]['order_ID']);
             echo $total_tasks;
             ?></span> task(s) finished</p>
-            <a href="https://blue7.it/<?php echo $orders[$i]['order_ID'];?>"  class="btn btn-primary btn-sm px-2 ml-4 mr-auto mr-md-0 ml-md-4 ml-auto d-md-inline" target="_blank">Presentation</a>
+            <a href="https://bauvorschau.com/<?php echo $orders[$i]['order_ID'];?>"  class="btn btn-primary btn-sm px-2 ml-4 mr-auto mr-md-0 ml-md-4 ml-auto d-md-inline" target="_blank">Presentation</a>
                 <button id="on_stock_btn<?php echo $orders[$i]['order_ID'];?>" data-on_stock="<?php echo $orders[$i]['on_stock'];?>" class="btn btn-sm btn-warning d-inline"><?php echo ($orders[$i]['on_stock']==0)?"Put On stock":"On stock";?></button>
                 <script type="text/javascript">
                     $("#on_stock_btn<?php echo $orders[$i]['order_ID'];?>").click(function(){

@@ -413,7 +413,7 @@ try {
         'data' => [
             'orf_id' => $newOrfId,
             'filename' => $orfName,
-            'thumbnail_url' => 'https://blue7.it/studio/result_thumbnail_files/' . $thumbnailRelativePath
+            'thumbnail_url' => 'https://cseven.eu/studio/result_thumbnail_files/' . $thumbnailRelativePath
         ]
     ]);
 

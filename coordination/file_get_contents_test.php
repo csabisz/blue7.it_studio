@@ -1,9 +1,9 @@
 <?php
-$products = json_decode(file_get_contents("http://blue7.it/studio/api/orders.php?o_id=4141"));
+$products = json_decode(file_get_contents("http://cseven.eu/studio/api/orders.php?o_id=4141"));
 
 print_r($products);
 
-$Url="https://blue7.it/studio/api/orders.php?o_id=4141";
+$Url="https://cseven.eu/studio/api/orders.php?o_id=4141";
 
 function url_get_contents($Url) 
 {

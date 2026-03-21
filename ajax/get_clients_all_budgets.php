@@ -41,7 +41,7 @@ for($i=0;$i<count($budgets);$i++)
         echo $budgets[$i]['amount']-count($orders);
     }?></div>
     <div class="col"><a href="<?php 
-    echo "https://blue7.it/studio/budget/order_budget.php?option=edit&ucm_budget_id=".$budgets[$i]['ucm_budget_id'];
+    echo "https://cseven.eu/studio/budget/order_budget.php?option=edit&ucm_budget_id=".$budgets[$i]['ucm_budget_id'];
     ?>" class="btn btn-primary btn-sm">Edit</a></div>
 </div>
 <?php

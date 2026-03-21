@@ -4,7 +4,7 @@ include('../functions.php');
 //include('../../../superfloorplans.com/public_html/functions.php');
 //include('../../../superfloorplans.com/public_html/price_calculations.php');
 include('../../../../domenia7.com/public_html/domenia_db2.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 include('../../../../superplan7.com/public_html/functions.php');
 include('../domenia3n_db.php');
 include('../notifications.php');
@@ -2238,7 +2238,7 @@ if(isset($_GET['option']))
                             for($p=0;$p<count($plot_orders);$p++)
                             {
                             ?>
-                            <a href="https://blue7.it/studio/acceptance/orderdetails.php?o_id=<?php 
+                            <a href="https://cseven.eu/studio/acceptance/orderdetails.php?o_id=<?php 
                             echo $plot_orders[$p]['order_ID'];?>&status=accepted" class="btn btn-sm btn-primary" target="_blank">Order <?php 
                             echo $plot_orders[$p]['order_ID'];?></a>
                             <?php
