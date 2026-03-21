@@ -149,7 +149,7 @@
                     if( $_COOKIE['useradmin'] > 0 || $_COOKIE['cdesign'] > 0 || $_COOKIE['coordination'] > 0 || $_COOKIE['contracting'] > 0 || $_COOKIE['bookkeeping'] > 0
                     && $_COOKIE['change_vat'] > 0 || $_COOKIE['programs_of_employees'] > 0 || $_COOKIE['activity_view'] > 0 || $_COOKIE['apu_lists'] > 0 || $_COOKIE['examples_db'] > 0){ ?>
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:250px;background-color:#f2c526;">
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:250px;background-color:#f2c526;color:#000;">
                         Additional menu
                     </button>
                     <?php } ?>
