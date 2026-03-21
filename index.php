@@ -10,14 +10,14 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <link rel="apple-touch-icon" sizes="180x180" href="../icoblue7/apple-touch-icon.png">
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="../icoblue7/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../icoblue7/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../icoblue7/favicon-16x16.png">
     <link rel="manifest" href="../icoblue7/site.webmanifest">
     <link rel="mask-icon" href="../icoblue7/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-
+    <meta name="theme-color" content="#ffffff"> -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cseven.eu/studio/img/cseven_icon.png">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@ session_start();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-    <title>Blue7.it Studio</title>
+    <title>7s</title>
 </head>
 
 

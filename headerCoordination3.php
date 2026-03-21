@@ -8,14 +8,14 @@ $base_url="https://cseven.eu/studio/";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/icoblue7/apple-touch-icon.png">
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/icoblue7/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/icoblue7/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/icoblue7/favicon-16x16.png">
     <link rel="manifest" href="/icoblue7/site.webmanifest">
     <link rel="mask-icon" href="/icoblue7/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-
+    <meta name="theme-color" content="#ffffff"> -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cseven.eu/studio/img/cseven_icon.png">
 
 
     <link rel="stylesheet" href="<?php echo $base_url;?>css/newstylecoordination3.css">
@@ -50,7 +50,7 @@ $base_url="https://cseven.eu/studio/";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script> 
     
  
-    <title>7s <?php echo (!empty($page_title))?" - ".$page_title:""; ?></title>
+    <title><?php echo (!empty($page_title))?" - ".$page_title:""; ?></title>
 </head>
 <body id="home" data-target="#back2Top" data-spy="scroll">
 <?php
