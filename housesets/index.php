@@ -237,18 +237,14 @@ $housesets=array();
                             <h5 class="card-title "><?php echo $housesets[$i]['house_name']; ?></h5>
                             <p><b>House ID: <?php echo $housesets[$i]['house_id']; ?></b></p>
                             <?php 
-                            $data = json_decode(file_get_contents("https://blue7.it/presentation/api2/order/".$housesets[$i]['presentation_id']."/"."www.bauvorschau.com"."/"."12345"), TRUE);                                        
+                            $data = json_decode(file_get_contents("https://cseven.eu/presentation/api2/order/".$housesets[$i]['presentation_id']."/"."www.bauvorschau.com"."/"."12345"), TRUE);                                        
                             ?>
                             <img src="<?php 
                             if(!empty($data['exterior_subcategories'][0]['image_list'][0]['compress']))
                             {                                        
                                 echo $data['first_image'];
                             }
-                            /*else  no om id check
-                            {
-                                $data = json_decode(file_get_contents("https://blue7.it/presentation/api2/order/".$housesets[$i]['presentation_id']."/"."www.bauvorschau.com"."/"."12345"), TRUE);
-                                echo $data['first_image'];
-                            }*/
+                            
                             ?>" alt="No Image">
                             <br><br>
                             <a href="details.php?id=<?php echo $housesets[$i]['house_id']; ?>" class="btn btn-primary"><i class="fas fa-edit"></i>Edit</a>    

@@ -4,7 +4,7 @@ include('../functions.php');
 
 $prod = new Production;
 
-$base_url = "https://blue7.it/studio/";
+$base_url = "https://cseven.eu/studio/";
 
 $all_ft_objects = $prod->get_all_ft_objects();
 $all_ft_traders = $prod->get_all_ft_traders();
@@ -109,7 +109,7 @@ $all_fto_producers = $prod->get_all_fto_producers();
     $('#edit_fs_price_input').val(e.target.dataset.fs_price);
     $('#edit_fs_remarks_input').val(e.target.dataset.fs_remarks);
     $('#edit_fs_price_input').val(e.target.dataset.fs_price);
-    $('#model_thumbnail_file').attr("src","https://blue7.it/studio/"+e.target.dataset.fs_thumbnail);
+    $('#model_thumbnail_file').attr("src","https://cseven.eu/studio/"+e.target.dataset.fs_thumbnail);
     $('#edit_owner_input').val(e.target.dataset.owner);
     $('#edit_creator_input').val(e.target.dataset.creator);
     $('#edit_fto_id').val(e.target.dataset.ftoId);

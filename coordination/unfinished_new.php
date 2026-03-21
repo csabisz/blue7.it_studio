@@ -597,17 +597,6 @@ for($i=0;$i<count($orders);$i++)
 
                     </a>
 
-                    <!--<a href="https://blue7.it/<?php 
-                    if($orders[$i]['om_id']==0)
-                    {
-                        echo $orders[$i]['order_ID'];
-                    }
-                    else
-                    {
-                        echo $orders[$i]['om_id'];
-                    }?>" class="btn view text-white btn-sm mr-1 d-md-inline" target="_blank">
-                        Pres. Old
-                    </a> -->
                     <a href="https://bauvorschau.com/<?php 
                     if($orders[$i]['om_id']==0)
                     {

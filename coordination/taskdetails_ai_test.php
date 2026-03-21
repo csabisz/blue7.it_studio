@@ -5,7 +5,7 @@ session_start();
 include('../functions.php');
 include('../../../../domenia7.com/public_html/domenia_db2.php');
 include('../notifications.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 include('./ai_config/includes/config_functions.php');
 
 //$domenia=new Domenia;
@@ -10053,7 +10053,7 @@ include('../menu.php');
                                                     if ($result_files[$i]['orf_type_dom'] == 'jpg' or $result_files[$i]['orf_type_dom'] == 'jpeg' or $result_files[$i]['orf_type_dom'] == 'png'): ?>
                                                         <?php if ($result_files[$i]['orf_compress_path']): ?>
                                                             <a target="_blank"
-                                                               href="https://blue7.it/studio/result_compress_files/<?= $result_files[$i]['orf_compress_path'] ?>"
+                                                               href="https://cseven.eu/studio/result_compress_files/<?= $result_files[$i]['orf_compress_path'] ?>"
                                                                class="btn btn-primary btn-sm mt-2">Compressed file</a>
                                                             <?php echo $filesize = $prod->filesize_formatted("../result_compress_files/" . $result_files[$i]['orf_compress_path']); ?>
                                                         <?php else: ?>

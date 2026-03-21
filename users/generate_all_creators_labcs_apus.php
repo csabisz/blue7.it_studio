@@ -1,6 +1,6 @@
 <?php
 
-include('/home/admin/domains/blue7.it/public_html/studio/functions.php');
+include('/home/adminhdd/domains/cseven.eu/public_html/studio/functions.php');
 
 $prod=new Production;
 
@@ -4014,7 +4014,7 @@ $html .= "</b>";
 
 
 
-require('/home/admin/domains/blue7.it/public_html/studio/mpdf/mpdf.php');
+require('/home/adminhdd/domains/cseven.eu/public_html/studio/mpdf/mpdf.php');
 
 $pdf=new mPDF();
 
@@ -4026,7 +4026,7 @@ $pdf->WriteHTML($html);
 
 
 
-$pdf_file_name="/home/admin/domains/blue7.it/public_html/studio/users/pdf/all_creators_labcs_apus".$users_start_date."_".$users_end_date.".pdf";
+$pdf_file_name="/home/adminhdd/domains/cseven.eu/public_html/studio/users/pdf/all_creators_labcs_apus".$users_start_date."_".$users_end_date.".pdf";
 
 
 

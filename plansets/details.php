@@ -77,7 +77,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                         $validextensioncad = array("cad","dwg","ifc");
                         //upload file
                         
-                        $upload_files_dir = "../../../../blue7.it/public_html/studio/plans_architectural/";
+                        $upload_files_dir = "../../../../cseven.eu/public_html/studio/plans_architectural/";
 
                         $year = date("Y");
 
@@ -597,7 +597,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                                 <td>
                                     <label for="planset_description"> <a
                                                 class="btn btn-secondary btn-sm" target="_blank"
-                                                href="http://blue7.it/studio/plans_architectural/<?php echo $plan_sp7[$n]['file_path']; ?>"><i
+                                                href="http://cseven.eu/studio/plans_architectural/<?php echo $plan_sp7[$n]['file_path']; ?>"><i
                                                 class="fas fa-directions mr-1"></i>View File</a>
                                     </label>
                                 </td>

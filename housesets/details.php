@@ -78,7 +78,7 @@ $validextensionpfd = array("pdf", "jpg");
 $validextensioncad = array("cad", "ifc", "dwg");
 //upload file
 $housesets = $prod->get_all_plansets();
-$upload_files_dir = "../../../../blue7.it/public_html/studio/plans_architectural/";
+$upload_files_dir = "../../../../cseven.eu/public_html/studio/plans_architectural/";
 
 $year = date("Y");
 
@@ -257,7 +257,7 @@ else
                                  id="planset_id" name="planset_id"
                                  value="<?php echo $houseset['planset_id']; ?>">
                           <div class="input-group-append">
-                            <a href="https://blue7.it/studio/plansets/details.php?pls_id=<?= $houseset['planset_id'] ?>"
+                            <a href="https://cseven.eu/studio/plansets/details.php?pls_id=<?= $houseset['planset_id'] ?>"
                                class="btn">Go to planset</a>
                           </div>
                         </div>
@@ -674,7 +674,7 @@ else
                             <td>
                               <label for="planset_description"> <a
                                   class="btn btn-secondary btn-sm" target="_blank"
-                                  href="http://blue7.it/studio/plans_architectural/<?php echo $plan_sp7[$n]['file_path']; ?>"><i
+                                  href="http://cseven.eu/studio/plans_architectural/<?php echo $plan_sp7[$n]['file_path']; ?>"><i
                                     class="fas fa-directions mr-1"></i>View File</a>
                               </label>
                             </td>

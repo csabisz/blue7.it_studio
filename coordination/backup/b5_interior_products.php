@@ -924,7 +924,7 @@ $global_row_count = 0;
 
                                                                 "type": "equirectangular",
 
-                                                                "panorama": "https://blue7.it/studio/result_files/<?php echo $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom'];?>"
+                                                                "panorama": "https://cseven.eu/studio/result_files/<?php echo $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom'];?>"
 
                                                                 /*"panorama": "../result_files/<?php echo $result_files[$i]['orf_path_dom'] . $result_files[$i]['orf_internal_name_dom'];?>"*/
 

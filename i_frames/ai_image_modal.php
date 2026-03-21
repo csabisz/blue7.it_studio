@@ -82,7 +82,7 @@ try {
 
 // Build image URL
 $compress_path = $image_data['orf_compress_path'];
-$image_url = $compress_path ? "https://blue7.it/studio/result_compress_files/{$compress_path}" : '';
+$image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$compress_path}" : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">

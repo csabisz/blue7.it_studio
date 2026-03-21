@@ -4,7 +4,7 @@ include('../functions.php');
 
 $prod = new Production;
 
-$base_url = "https://blue7.it/studio/";
+$base_url = "https://cseven.eu/studio/";
 
 $all_furniture_set_4_units = $prod->get_all_furniture_set_4_units();
 $all_room_kind=$prod->get_all_room_kind();

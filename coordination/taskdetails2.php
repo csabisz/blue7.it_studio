@@ -5,7 +5,7 @@ session_start();
 include('../functions.php');
 include('../../../../domenia7.com/public_html/domenia_db2.php');
 include('../notifications.php');
-include('../../../../blue7.it/public_html/domenia/domenia.php');
+include('../../../../cseven.eu/public_html/domenia/domenia.php');
 
 //$domenia=new Domenia;
 $domenia2 = new Domenia2;

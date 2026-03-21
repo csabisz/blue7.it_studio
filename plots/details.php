@@ -214,7 +214,7 @@ $plot=$sp7->get_plot($plot_id);
                     for($p=0;$p<count($plot_orders);$p++)
                     {
                     ?>
-                    <a href="https://blue7.it/studio/acceptance/orderdetails.php?o_id=<?php 
+                    <a href="https://cseven.eu/studio/acceptance/orderdetails.php?o_id=<?php 
                     echo $plot_orders[$p]['order_ID'];?>&status=accepted" class="btn btn-sm btn-primary" target="_blank">Order <?php 
                     echo $plot_orders[$p]['order_ID'];?></a>
                     <?php

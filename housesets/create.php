@@ -62,9 +62,7 @@ include('../menu.php');
                             <input class="form-control" type="text"
                                     id="planset_id" name="planset_id"
                                     value="">
-                            <!--<div class="input-group-append">
-                                <a href="https://blue7.it/studio/plansets/details.php?pls_id=<?=$houseset['planset_id']?>" class="btn">Go to planset</a>
-                            </div> -->
+                            
                         </div>
                         <div class="col-md-3">
                             <?php
