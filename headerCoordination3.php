@@ -50,7 +50,7 @@ $base_url="https://cseven.eu/studio/";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script> 
     
  
-    <title><?php echo (!empty($page_title))?" - ".$page_title:""; ?></title>
+    <title><?php echo (!empty($page_title))?$page_title:""; ?></title>
 </head>
 <body id="home" data-target="#back2Top" data-spy="scroll">
 <?php

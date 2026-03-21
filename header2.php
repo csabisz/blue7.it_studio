@@ -158,7 +158,7 @@ $base_url="https://cseven.eu/studio/";
         }
     </style>
 
-    <title><?php echo (!empty($page_title))?" - ".$page_title:""; ?></title>
+    <title><?php echo (!empty($page_title))?$page_title:""; ?></title>
 </head>
 <body id="home" data-target="#back2Top" data-spy="scroll">
 <?php
