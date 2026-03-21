@@ -134,7 +134,7 @@
 
         <nav class="navbar navbar-expand-md navbar-light bg-light float-right ml-auto w-100 top_menu">
             <div class="form-inline my-lg-0 m-1">
-                <img src="<?php echo $base_url; ?>img/Blue7Logo.png" style="width:40px;" alt="logo">
+                <img src="<?php echo $base_url; ?>img/cseven_logo.png" style="width:40px;" alt="logo">
             </div>
             <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -148,8 +148,8 @@
                     
                     if( $_COOKIE['useradmin'] > 0 || $_COOKIE['cdesign'] > 0 || $_COOKIE['coordination'] > 0 || $_COOKIE['contracting'] > 0 || $_COOKIE['bookkeeping'] > 0
                     && $_COOKIE['change_vat'] > 0 || $_COOKIE['programs_of_employees'] > 0 || $_COOKIE['activity_view'] > 0 || $_COOKIE['apu_lists'] > 0 || $_COOKIE['examples_db'] > 0){ ?>
-                    <button class="btn btn-secondary dropdown-toggle bg-primary" type="button" id="dropdownMenu2"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:250px;">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:250px;background-color:#f2c526;">
                         Additional menu
                     </button>
                     <?php } ?>
