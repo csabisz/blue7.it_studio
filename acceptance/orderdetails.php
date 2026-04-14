@@ -1516,14 +1516,14 @@ if(!empty($update_ex_b8_data['col_amount_ex_b8']))
 		else
 		{
 			?>						
-			<meta http-equiv="refresh" content="1; url=index.php?orderstatus=1-9">
+			<meta http-equiv="refresh" content="1; url=orderdetails.php?o_id=<?php echo $update_data['o_id']; ?>&status=accepted">
 			<?php
 		}	
 	}
 	else
 	{
 		?>						
-		<meta http-equiv="refresh" content="1; url=index.php?orderstatus=1-9">
+		<meta http-equiv="refresh" content="1; url=orderdetails.php?o_id=<?php echo $update_data['o_id']; ?>">
 		<?php
 	}					
 }
