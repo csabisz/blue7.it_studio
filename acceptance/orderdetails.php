@@ -1505,7 +1505,7 @@ if(!empty($update_ex_b8_data['col_amount_ex_b8']))
 	}
 }
 
-	if(isset($_POST['accept_btn']))
+	if((isset($_POST['accept_btn']))||(isset($_POST['save_btn'])))
 	{			
 		if($order['notifications']==1)
 		{
