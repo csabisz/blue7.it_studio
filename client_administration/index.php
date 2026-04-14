@@ -88,7 +88,8 @@ include('../menu.php');
                     ?>
 
 
-                    <div class="col" id="searchbar" style="width: 23%; margin-left: 614px">
+                    <div class="col d-flex" id="searchbar" style="width: 23%; margin-left: 614px">
+                        <a href="create.php" class="btn btn-sm btn-primary mx-4 border">Create new client</a>
                         <div class="float-center">
                             <input id="searchBar" class="form-control mr-sm-2" type="text" placeholder="Search By Name"
                                    aria-label="Search By Name">
@@ -432,7 +433,7 @@ include('../menu.php');
                         }
                     }
                     ?>
-                    ?>
+                    
                     </tbody>
                 </table>
                 <br>
