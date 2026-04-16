@@ -1505,7 +1505,7 @@ if(!empty($update_ex_b8_data['col_amount_ex_b8']))
 	}
 }
 
-	if((isset($_POST['accept_btn']))||(isset($_POST['save_btn'])))
+	if(isset($_POST['accept_btn']))
 	{			
 		if($order['notifications']==1)
 		{
@@ -1522,9 +1522,18 @@ if(!empty($update_ex_b8_data['col_amount_ex_b8']))
 	}
 	else
 	{
-		?>						
-		<meta http-equiv="refresh" content="1; url=orderdetails.php?o_id=<?php echo $update_data['o_id']; ?>">
-		<?php
+        if(isset($_GET['status']))
+            {
+                ?>
+                <meta http-equiv="refresh" content="1; url=orderdetails.php?o_id=<?php echo $update_data['o_id']; ?>&status=accepted">
+                <?php
+            }
+            else
+            {            
+                ?>						
+                <meta http-equiv="refresh" content="1; url=orderdetails.php?o_id=<?php echo $update_data['o_id']; ?>">
+                <?php
+            }
 	}					
 }
 				
@@ -5719,7 +5728,7 @@ if(count($b1_in_products)>0)
                 <input type="text" class="form-control form-control-sm" name="fac_cl_in_b1" id="fac_cl_in_b1" value="<?php echo $o_desc_in_b1['fac_cl_in_b1']; /*echo (!empty($o_desc_in_b1['fac_cl_in_b1']))?$o_desc_in_b1['fac_cl_in_b1']:"1";*/?>" form="order_details" style="width:5em"> 
                 <b> X Amount of subIDs:</b> <input type="text" class="form-control form-control-sm" name="col_amount1_in_b1" id="col_amount1_in_b1" form="order_details" value="<?php echo $o_desc_in_b1['col_amount_in_b1']; /*echo (!empty($o_desc_in_b1['col_amount_in_b1']))?$o_desc_in_b1['col_amount_in_b1']:"1";*/?>" style="width:5em" > 
                 <b>=</b> 
-                <input type="text" class="form-control form-control-sm" name="o_price_in_b1" id="o_price_in_b1" value="<?php echo (!empty($o_desc_in_b1['o_price_in_b1']))?$o_desc_in_b1['o_price_in_b1']:"0";?>" form="order_details" style="width:5em">
+                <input type="text" class="form-control form-control-sm" name="o_price_in_b1" id="o_price_in_b1" value="<?php echo (!empty($o_desc_in_b1['o_price_in_b1']))?$o_desc_in_b1['o_price_in_b1']:"0.0";?>" form="order_details" style="width:5em">
                 <b><?php echo $currency; ?></b>			
                 <br><br>
             </div>
