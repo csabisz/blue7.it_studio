@@ -124,7 +124,7 @@ if ($o_id) {
 
         <!-- Header -->
         <div class="modal-header">
-            <h5 class="modal-title">AI Image Generation Settings</h5>
+            <h5 class="modal-title">AI Image Generation Settings test</h5>
             <button type="button" class="close" id="closeModalBtn" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
