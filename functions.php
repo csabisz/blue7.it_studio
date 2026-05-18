@@ -12606,6 +12606,7 @@ class Production
         $phone = mysqli_real_escape_string($mysqli, $data->phone ?? '');
         $email = mysqli_real_escape_string($mysqli, $data->email ?? '');
         $additional_emails = mysqli_real_escape_string($mysqli, $data->additional_emails ?? '');
+        $email_for_invoices = mysqli_real_escape_string($mysqli, $data->email_for_invoices ?? '');
         $VAT_tax_no = mysqli_real_escape_string($mysqli, $data->VAT_tax_no ?? '');
         $iban = mysqli_real_escape_string($mysqli, $data->iban ?? '');
         $street = mysqli_real_escape_string($mysqli, $data->street ?? '');
@@ -12621,7 +12622,7 @@ class Production
         $checkation_access = mysqli_real_escape_string($mysqli, $data->checkation_access ?? '0');
         $c_status = mysqli_real_escape_string($mysqli, $data->c_status ?? '');
 
-        $stmt = "update `u_clients` set `clientname`='$clientname',`mc_id`='$mc_id',`contact_status`='$contact_status',`lt_id`='$lt_id',`house_owner`='$house_owner',`public_presentation`='$public_presentation',`specials`='$specials',`client_credibility`='$client_credibility',`ls_ids`='$ls_ids',`referrer_id`='$referrer',`partner_since`='$partner_since',`l_title`='$l_title',`l_first_name`='$l_first_name', `l_middle_name`='$l_middle_name', `l_last_name`='$l_last_name', `l_gender`='$l_gender',`leaders_status`='$leaders_status',`c_title`='$c_title', `c_first_name`='$c_first_name',`c_middle_name`='$c_middle_name', `c_last_name`='$c_last_name',`c_gender`='$c_gender',`a_id`='$country',`postcode`='$postcode',`street`='$street',`no_or_housename`='$no_or_housename',`city`='$city',`phone`='$phone',`email`='$email',`additional_emails`='$additional_emails',`client_price_remarks`='$client_price_remarks',`remarks_internal`='$remarks_internal',`homepage`='$homepage',`vat_tax_no`='$VAT_tax_no',`iban`='$iban',`registration`='$registration',`supervisors`='$supervisors',`see_all_orders`='$see_all_orders',`c_status`='$c_status',`checkation_access`='$checkation_access' where `client_ID`='$client_id'";
+        $stmt = "update `u_clients` set `clientname`='$clientname',`mc_id`='$mc_id',`contact_status`='$contact_status',`lt_id`='$lt_id',`house_owner`='$house_owner',`public_presentation`='$public_presentation',`specials`='$specials',`client_credibility`='$client_credibility',`ls_ids`='$ls_ids',`referrer_id`='$referrer',`partner_since`='$partner_since',`l_title`='$l_title',`l_first_name`='$l_first_name', `l_middle_name`='$l_middle_name', `l_last_name`='$l_last_name', `l_gender`='$l_gender',`leaders_status`='$leaders_status',`c_title`='$c_title', `c_first_name`='$c_first_name',`c_middle_name`='$c_middle_name', `c_last_name`='$c_last_name',`c_gender`='$c_gender',`a_id`='$country',`postcode`='$postcode',`street`='$street',`no_or_housename`='$no_or_housename',`city`='$city',`phone`='$phone',`email`='$email',`additional_emails`='$additional_emails',`email_for_invoices`='$email_for_invoices',`client_price_remarks`='$client_price_remarks',`remarks_internal`='$remarks_internal',`homepage`='$homepage',`vat_tax_no`='$VAT_tax_no',`iban`='$iban',`registration`='$registration',`supervisors`='$supervisors',`see_all_orders`='$see_all_orders',`c_status`='$c_status',`checkation_access`='$checkation_access' where `client_ID`='$client_id'";
         
         
         mysqli_query($mysqli, $stmt) or die(mysqli_error($mysqli));

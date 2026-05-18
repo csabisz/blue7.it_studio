@@ -56,6 +56,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
 		$update_client_data['phone']=$prod->xss_fix($_POST['phone'] ?? '');
 		$update_client_data['email']=$prod->xss_fix($_POST['email'] ?? '');
         $update_client_data['additional_emails']=$prod->xss_fix($_POST['additional_emails'] ?? '');
+        $update_client_data['email_for_invoices']=$prod->xss_fix($_POST['email_for_invoices'] ?? '');
 		$update_client_data['VAT_tax_no']=$prod->xss_fix($_POST['VAT_tax_no'] ?? '');
 		$update_client_data['iban']=$prod->xss_fix($_POST['iban'] ?? '');
 		$update_client_data['street']=$prod->xss_fix($_POST['street'] ?? '');
@@ -385,6 +386,14 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     </div>
                     <div class="col-md-5">
                         <input class="form-control form-control-sm" type="text" id="additional_emails" name="additional_emails" placeholder="Separated by comma !" value="<?php echo $client['additional_emails'];?>">
+                    </div>
+                </div>
+                <div class="row w-100 mx-0">
+                    <div class="col-md-5">
+                        <label for="email_for_invoices">E-mail for invoices</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input class="form-control form-control-sm" type="email" id="email_for_invoices" name="email_for_invoices" placeholder="" value="<?php echo $client['email_for_invoices'];?>">
                     </div>
                 </div>
             </div>
