@@ -275,7 +275,18 @@ else
 		$invoice.=$main_client['leaders_status'].": ".$main_client['leaders_name']."<br>";
 		$invoice.=$main_client['street']." ".$main_client['no-or-housename']."<br>";
 		$invoice.="<b>".$main_client['postcode']." ".$main_client['city']."</b><br>";
-		$invoice.=$prod->get_country($main_client['a_id'])['area']."<br><br>";
+		$invoice.=$prod->get_country($main_client['a_id'])['area']."<br>";
+		if(!empty($main_client['email_for_invoices']))
+		{
+			$invoice.="<b>E-mail: </b>";		
+			$invoice.=$main_client['email_for_invoices']."<br>";
+		}
+		else
+		{
+			$invoice.="<b>E-mail: </b>";		
+			$invoice.=$main_client['email']."<br>";
+		}
+		$invoice.="<br>";
 	}
 	else
 	{
