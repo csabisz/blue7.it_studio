@@ -278,12 +278,12 @@ else
 		$invoice.=$prod->get_country($main_client['a_id'])['area']."<br>";
 		if(!empty($main_client['email_for_invoices']))
 		{
-			$invoice.="<b>E-mail: </b>";		
+			$invoice.="E-mail: ";		
 			$invoice.=$main_client['email_for_invoices']."<br>";
 		}
 		else
 		{
-			$invoice.="<b>E-mail: </b>";		
+			$invoice.="E-mail: ";		
 			$invoice.=$main_client['email']."<br>";
 		}
 		$invoice.="<br>";
