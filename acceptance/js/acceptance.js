@@ -1226,11 +1226,11 @@ $(document).ready(function() {
 			$('#product_'+$(this).val()+'_price').addClass('prices_in_b3');
 			$('#product_'+$(this).val()+'_apu').addClass('apus_in_b3');
 			$('#product_'+$(this).val()+'_labc').addClass('labcs_in_b3');
-			var col_amount0=$('#col_amount0').val();
-			console.log(col_amount0);
+			var col_amount0=$('#col_amount1_in_b3').val();
+			
 			if(col_amount0=="0")
 			{
-				$('#col_amount0').val("1");
+				$('#col_amount1_in_b3').val("1");
 			}
 
 			$('#col_amount0').val($('#col_amount1_in_b3').val()).trigger('change');
