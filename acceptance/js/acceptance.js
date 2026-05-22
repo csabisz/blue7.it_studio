@@ -1226,6 +1226,12 @@ $(document).ready(function() {
 			$('#product_'+$(this).val()+'_price').addClass('prices_in_b3');
 			$('#product_'+$(this).val()+'_apu').addClass('apus_in_b3');
 			$('#product_'+$(this).val()+'_labc').addClass('labcs_in_b3');
+			let col_amount0=$('#col_amount0').val();
+			if(col_amount0==0)
+			{
+				$('#col_amount0').val(1);
+			}
+
 			$('#col_amount0').val($('#col_amount1_in_b3').val()).trigger('change');
 			/*if(($(this).val()=="p1502")||($(this).val()=="p1503")||($(this).val()=="p1504")||($(this).val()=="p1505")||($(this).val()=="p1506")||($(this).val()=="p1507"))
 			{
