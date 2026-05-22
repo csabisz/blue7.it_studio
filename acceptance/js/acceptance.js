@@ -1228,7 +1228,7 @@ $(document).ready(function() {
 			$('#product_'+$(this).val()+'_labc').addClass('labcs_in_b3');
 			let col_amount0=$('#col_amount0').val();
 			console.log(col_amount0);
-			if(col_amount0==0)
+			if(col_amount0=="0")
 			{
 				$('#col_amount0').attr("value","1");
 			}
