@@ -1230,7 +1230,7 @@ $(document).ready(function() {
 			console.log(col_amount0);
 			if(col_amount0==0)
 			{
-				$('#col_amount0').val("1");
+				$('#col_amount0').attr("value","1");
 			}
 
 			$('#col_amount0').val($('#col_amount1_in_b3').val()).trigger('change');
