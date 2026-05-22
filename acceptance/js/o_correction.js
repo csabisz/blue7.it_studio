@@ -491,6 +491,7 @@ function calculatePricesAPUslabcs_with_multiplicator_in_b5()
 function calculatePricesAPUslabcs_with_multiplicator_ex_b5()
 {
     var p1561_fac=$('#p1561_fac').val();
+    var p1562_fac=$('#p1562_fac').val();
     var p1563_fac=$('#p1563_fac').val();
     var p1566_fac=$('#p1566_fac').val();
 
@@ -499,6 +500,13 @@ function calculatePricesAPUslabcs_with_multiplicator_ex_b5()
         $('#product_p1561_price').val(($('#product_p1561_price_original').val() * p1561_fac).toFixed(2));
         $('#product_p1561_apu').val(($('#product_p1561_apu_original').val() * p1561_fac).toFixed(2));
         $('#product_p1561_labc').val(($('#product_p1561_labc_original').val() * p1561_fac).toFixed(2));
+    }
+
+    if((p1562_fac!=0)&&(p1562_fac != undefined))
+    {
+        $('#product_p1562_price').val(($('#product_p1562_price_original').val() * p1562_fac).toFixed(2));
+        $('#product_p1562_apu').val(($('#product_p1562_apu_original').val() * p1562_fac).toFixed(2));
+        $('#product_p1562_labc').val(($('#product_p1562_labc_original').val() * p1562_fac).toFixed(2));
     }
 
     if((p1563_fac!=0)&&(p1563_fac != undefined))
@@ -654,6 +662,7 @@ function calculatePricesAPUslabcs_with_multiplicator_in_b7()
     var p1701_fac=$('#p1701_fac').val();
     var p1704_fac=$('#p1704_fac').val();
     var p1721_fac=$('#p1721_fac').val();
+    var p1723_fac=$('#p1723_fac').val();
     var p1724_fac=$('#p1724_fac').val();
     var p1741_fac=$('#p1741_fac').val();
     var p1744_fac=$('#p1744_fac').val();
@@ -691,6 +700,14 @@ function calculatePricesAPUslabcs_with_multiplicator_in_b7()
         $('#product_p1721_price').val(($('#product_p1721_price_original').val() * p1721_fac).toFixed(2));
         $('#product_p1721_apu').val(($('#product_p1721_apu_original').val() * p1721_fac).toFixed(2));
         $('#product_p1721_labc').val(($('#product_p1721_labc_original').val() * p1721_fac).toFixed(2));
+    }
+
+    if((p1723_fac!=0)&&(p1723_fac != undefined))
+    {
+        
+        $('#product_p1723_price').val(($('#product_p1723_price_original').val() * p1723_fac).toFixed(2));
+        $('#product_p1723_apu').val(($('#product_p1723_apu_original').val() * p1723_fac).toFixed(2));
+        $('#product_p1723_labc').val(($('#product_p1723_labc_original').val() * p1723_fac).toFixed(2));
     }
 
     if((p1724_fac!=0)&&(p1724_fac != undefined))
