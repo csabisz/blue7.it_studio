@@ -1229,7 +1229,7 @@ $(document).ready(function() {
 			let col_amount0=$('#col_amount0').val();
 			if(col_amount0==0)
 			{
-				$('#col_amount0').val(1);
+				$('#col_amount0').val("1");
 			}
 
 			$('#col_amount0').val($('#col_amount1_in_b3').val()).trigger('change');
