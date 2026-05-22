@@ -12713,6 +12713,7 @@ class Production
         $contact_at_client = mysqli_real_escape_string($mysqli, $data->contact_at_client);
         $phone = mysqli_real_escape_string($mysqli, $data->phone);
         $email = mysqli_real_escape_string($mysqli, $data->email);
+        $email_for_invoices = mysqli_real_escape_string($mysqli, $data->email_for_invoices);
         $VAT_tax_no = mysqli_real_escape_string($mysqli, $data->VAT_tax_no);
         $tax_number = mysqli_real_escape_string($mysqli, $data->tax_number);
         $iban=mysqli_real_escape_string($mysqli,$data->iban);
@@ -12724,7 +12725,7 @@ class Production
         $remarks_internal=mysqli_real_escape_string($mysqli,$data->remarks_internal);
         $price_remarks = mysqli_real_escape_string($mysqli, $data->price_remarks);
 
-        $stmt = "update `u_clients_main` set `clientname`='$clientname',`leaders_name`='$leaders_name',`leaders_status`='$leaders_status',`supervisory_authority`='$supervisory_authority', `contact-at-client`='$contact_at_client',`client_credibility`='$client_credibility',`price_request_at_superior`='$price_request_at_superior',`a_id`='$country',`postcode`='$postcode',`street`='$street',`no-or-housename`='$no_or_housename',`city`='$city',`phone`='$phone',`email`='$email',`homepage`='$homepage',`vat-tax-no`='$VAT_tax_no',`tax_number`='$tax_number',`registration`='$registration',`remarks_internal`='$remarks_internal',`iban`='$iban',`price_remarks`='$price_remarks' where `mc_id`='$mc_id'";
+        $stmt = "update `u_clients_main` set `clientname`='$clientname',`leaders_name`='$leaders_name',`leaders_status`='$leaders_status',`supervisory_authority`='$supervisory_authority', `contact-at-client`='$contact_at_client',`client_credibility`='$client_credibility',`price_request_at_superior`='$price_request_at_superior',`a_id`='$country',`postcode`='$postcode',`street`='$street',`no-or-housename`='$no_or_housename',`city`='$city',`phone`='$phone',`email`='$email',`email_for_invoices`='$email_for_invoices',`homepage`='$homepage',`vat-tax-no`='$VAT_tax_no',`tax_number`='$tax_number',`registration`='$registration',`remarks_internal`='$remarks_internal',`iban`='$iban',`price_remarks`='$price_remarks' where `mc_id`='$mc_id'";
         
 
         mysqli_query($mysqli, $stmt) or die(mysqli_error($mysqli));

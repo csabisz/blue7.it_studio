@@ -40,6 +40,7 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
 		$update_client_data['leaders_status']=$prod->xss_fix($_POST['leaders_status']);		
 		$update_client_data['phone']=$prod->xss_fix($_POST['phone']);
 		$update_client_data['email']=$prod->xss_fix($_POST['email']);
+        $update_client_data['email_for_invoices']=$prod->xss_fix($_POST['email_for_invoices']);
 		$update_client_data['VAT_tax_no']=$prod->xss_fix($_POST['VAT_tax_no']);
         $update_client_data['tax_number']=$prod->xss_fix($_POST['tax_number']);
 		$update_client_data['iban']=$prod->xss_fix($_POST['iban']);
@@ -284,6 +285,14 @@ if(isset($_COOKIE['client_id'])&&($_COOKIE['start']<$_COOKIE['expire']))
                     </div>
                     <div class="col-md-5">
                         <input class="form-control form-control-sm border-danger" type="email" id="email" name="email" value="<?php echo $main_client['email'];?>" required>
+                    </div>
+                </div>
+                <div class="row w-100 mx-0">
+                    <div class="col-md-5">
+                        <label for="email_for_invoices">Email for invoices</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input class="form-control form-control-sm" type="email" id="email_for_invoices" name="email_for_invoices" value="<?php echo $main_client['email_for_invoices'];?>">
                     </div>
                 </div>
                 <div class="row w-100 mx-0">
