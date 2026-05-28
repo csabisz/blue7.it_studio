@@ -11287,7 +11287,7 @@ include('../menu.php');
                 const token = 'task_' + Date.now();
 
                 // Set iframe source and show overlay
-                iframe.src = '/studio/i_frames/ai_image_modal.php?orf_id=' + encodeURIComponent(orfId) + '&token=' + encodeURIComponent(token);
+                iframe.src = '/studio/i_frames_old/ai_image_modal.php?orf_id=' + encodeURIComponent(orfId) + '&token=' + encodeURIComponent(token);
                 overlay.style.display = 'flex';
 
                 // Prevent body scroll when modal is open

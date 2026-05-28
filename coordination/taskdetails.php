@@ -11480,8 +11480,17 @@ include('../menu.php');
                 // Generate a simple token
                 const token = 'task_' + Date.now();
 
-                // Set iframe source and show overlay
-                iframe.src = '/studio/i_frames/ai_image_modal.php?orf_id=' + encodeURIComponent(orfId) + '&token=' + encodeURIComponent(token);
+                const ids = ['p1103', 'p1302', 'p1322', 'p1502', 'p1503', 'p1522', 'p1523', 'p1542', 'p1543', 'p1602', 'p1603', 'p1622', 'p1623', 'p1642', 'p1643', 'p1702', 'p1703', 'p1722', 'p1723', 'p1742', 'p1743', 'p1802', 'p1803', 'p1822', 'p1823', 'p1842', 'p1843'];
+
+                if (ids.includes('<? echo $prod_id ?>')) {
+                    // Set iframe source and show overlay
+                    iframe.src = '/studio/i_frames/ai_image_modal_task_floorplans.php?orf_id=' + encodeURIComponent(orfId) + '&token=' + encodeURIComponent(token);
+                } else {
+                    // Set iframe source and show overlay
+                    iframe.src = '/studio/i_frames/ai_image_modal.php?orf_id=' + encodeURIComponent(orfId) + '&token=' + encodeURIComponent(token);
+                }              
+
+              
                 overlay.style.display = 'flex';
 
                 // Prevent body scroll when modal is open

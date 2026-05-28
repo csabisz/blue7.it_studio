@@ -161,11 +161,38 @@ try {
         throw new Exception('Invalid request method');
     }
 
-    // Determine if this is URL-based or orf_id-based generation
-    $is_url_based = isset($_POST['image_url']) && !empty($_POST['image_url']);
+    // -------------------------------------------------------------------------
+    // Mode detection
+    // -------------------------------------------------------------------------
+    //
+    // Three supported request modes:
+    //
+    //   1. register-only ($skip_generation = true)
+    //      Used by external generators (e.g. Supergrundriss) that produced
+    //      the final image themselves. We skip the blue7.it call and only
+    //      register the already-rendered image into o_results_ai so the rest
+    //      of the system (Previously Generated Images, Save to Task) treats
+    //      it the same as a natively-generated record.
+    //      Requires:  orf_id, model, product_type, final_prompt
+    //                 + generated_image_file (upload) OR generated_image_url
+    //
+    //   2. URL-based   ($is_url_based = true)
+    //      Generation seeded by an external source image URL. Calls
+    //      blue7.it /api/generate/image normally.
+    //
+    //   3. orf_id-based (default)
+    //      Generation seeded by an existing o_results record. Calls
+    //      blue7.it /api/generate/image normally.
+    $skip_generation = isset($_POST['skip_generation']) && $_POST['skip_generation'] === '1';
+    $is_url_based    = !$skip_generation && isset($_POST['image_url']) && !empty($_POST['image_url']);
 
-    // Validate required fields - orf_id is only required for non-URL-based generation
-    if ($is_url_based) {
+    // Validate required fields per mode
+    if ($skip_generation) {
+        // Register-only path: we never touch blue7.it, but we still need
+        // the same descriptor columns the native path populates so the
+        // "Previously Generated Images" strip can render rich tooltips.
+        $required_fields = ['orf_id', 'model', 'product_type', 'final_prompt'];
+    } elseif ($is_url_based) {
         $required_fields = ['image_url', 'model', 'product_type', 'final_prompt'];
     } else {
         $required_fields = ['orf_id', 'model', 'product_type', 'final_prompt'];
@@ -175,6 +202,19 @@ try {
         if (!isset($_POST[$field]) || empty($_POST[$field])) {
             throw new Exception("Missing required field: $field");
         }
+    }
+
+    // For register-only mode, we additionally need EITHER an uploaded
+    // generated_image_file OR a remote generated_image_url so we have an
+    // actual image to register against the new DB row.
+    $has_generated_file = $skip_generation
+                          && isset($_FILES['generated_image_file'])
+                          && $_FILES['generated_image_file']['error'] === UPLOAD_ERR_OK
+                          && !empty($_FILES['generated_image_file']['tmp_name']);
+    $has_generated_url  = $skip_generation && !empty($_POST['generated_image_url'] ?? null);
+
+    if ($skip_generation && !$has_generated_file && !$has_generated_url) {
+        throw new Exception('Register-only mode requires generated_image_file upload or generated_image_url');
     }
 
     // Sanitize inputs
@@ -189,6 +229,7 @@ try {
     // Track temp file for cleanup
     $temp_image_path = null;
     $edited_image_path = null;
+    $registered_image_path = null;
 
     // Check for edited image upload - this takes priority over URL/orf_id
     $has_edited_image = isset($_FILES['edited_image']) &&
@@ -240,8 +281,9 @@ try {
 
     // Map common field names for backward compatibility
     foreach ($_POST as $key => $value) {
-        if (in_array($key, ['orf_id', 'model', 'product_type', 'additional_instructions', 'final_prompt'])) {
-            continue; // Skip already processed fields
+        if (in_array($key, ['orf_id', 'model', 'product_type', 'additional_instructions', 'final_prompt',
+                            'skip_generation', 'generated_image_url', 'image_url'])) {
+            continue; // Skip already processed / control fields
         }
 
         $sanitized_value = sanitizeInput($value);
@@ -288,6 +330,120 @@ try {
 
     $ai_record_id = mysqli_insert_id($mysqli);
     mysqli_stmt_close($stmt);
+
+    // =========================================================================
+    // REGISTER-ONLY SHORT-CIRCUIT
+    // =========================================================================
+    //
+    // The native generation path below (source image resolution + multipart
+    // POST to https://api.blue7.it/api/generate/image) is intentionally
+    // skipped when $skip_generation is set. The caller has already produced
+    // the final image (Supergrundriss, or any other external tool) and is
+    // only asking us to register it so it appears in "Previously Generated
+    // Images" and is eligible for the standard Save to Task flow.
+    //
+    // We still go through the existing thumbnail + UPDATE block below so the
+    // DB row ends up looking IDENTICAL to a natively-generated record.
+    if ($skip_generation) {
+        // Where the public-facing full-size image will end up. We co-locate
+        // it with the thumbnails dir to keep the layout simple and reuse the
+        // same web mapping (https://cseven.eu/studio/ai_thumbnails/...).
+        $thumbnailDir = $_SERVER['DOCUMENT_ROOT'] . '/studio/ai_thumbnails/';
+        if (!is_dir($thumbnailDir)) {
+            mkdir($thumbnailDir, 0755, true);
+        }
+
+        if ($has_generated_file) {
+            // Validate the uploaded generated image (mirrors the edited-image
+            // validation above; max 50MB is well above any sane image size).
+            $allowed_types = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'];
+            $max_file_size = 50 * 1024 * 1024;
+
+            $gen_file_type = $_FILES['generated_image_file']['type'];
+            $gen_file_size = $_FILES['generated_image_file']['size'];
+
+            if (!in_array($gen_file_type, $allowed_types)) {
+                throw new Exception('Invalid generated_image_file type. Allowed: JPEG, PNG, WebP, GIF');
+            }
+            if ($gen_file_size > $max_file_size) {
+                throw new Exception('Generated image too large. Maximum size: 50MB');
+            }
+
+            $ext = 'png';
+            if (strpos($gen_file_type, 'jpeg') !== false || strpos($gen_file_type, 'jpg') !== false) {
+                $ext = 'jpg';
+            } elseif (strpos($gen_file_type, 'webp') !== false) {
+                $ext = 'webp';
+            } elseif (strpos($gen_file_type, 'gif') !== false) {
+                $ext = 'gif';
+            }
+
+            $registered_filename = 'full_' . $ai_record_id . '_' . time() . '.' . $ext;
+            $registered_image_path = $thumbnailDir . $registered_filename;
+
+            if (!move_uploaded_file($_FILES['generated_image_file']['tmp_name'], $registered_image_path)) {
+                throw new Exception('Failed to persist uploaded generated_image_file');
+            }
+
+            $generated_image_url = 'https://cseven.eu/studio/ai_thumbnails/' . $registered_filename;
+        } else {
+            // URL fallback: download the remote image to a temp file so we
+            // can thumbnail it (the thumbnail step needs a local source).
+            $remote_url = sanitizeInput($_POST['generated_image_url']);
+            $registered_image_path = downloadImageToTemp($remote_url);
+            $generated_image_url = $remote_url;
+        }
+
+        // Create the thumbnail from the just-saved full-size image. Re-uses
+        // the exact same createThumbnail() helper the native path uses.
+        $thumbnailFilename = 'ai_' . $ai_record_id . '_' . time() . '.jpg';
+        $thumbnailPath = $thumbnailDir . $thumbnailFilename;
+        $thumbnailUrl = 'https://cseven.eu/studio/ai_thumbnails/' . $thumbnailFilename;
+
+        try {
+            createThumbnail($registered_image_path, $thumbnailPath);
+        } catch (Exception $thumbnailError) {
+            error_log('Failed to create thumbnail (register-only): ' . $thumbnailError->getMessage());
+            $thumbnailUrl = null;
+        }
+
+        // Persist the URLs onto the row we just inserted.
+        $query = "UPDATE `o_results_ai` SET `generated_image_url` = ?, `thumbnail_url` = ? WHERE `orf_ai_id` = ?";
+        $stmt = mysqli_prepare($mysqli, $query);
+        mysqli_stmt_bind_param($stmt, "ssi", $generated_image_url, $thumbnailUrl, $ai_record_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        mysqli_close($mysqli);
+
+        // Cleanup: only the temp file from a URL-based register is removable;
+        // the uploaded file IS the registered file, so we must keep it.
+        if ($temp_image_path && file_exists($temp_image_path)) {
+            unlink($temp_image_path);
+        }
+        if (!$has_generated_file && $registered_image_path && file_exists($registered_image_path)) {
+            // URL-based register: $registered_image_path was a temp download
+            // we no longer need now that the thumbnail is written.
+            unlink($registered_image_path);
+        }
+
+        // Mirror the native success payload so the frontend can use the
+        // EXACT same handling for both modes.
+        echo json_encode([
+            'success' => true,
+            'message' => 'Image registered successfully',
+            'data' => [
+                'ai_record_id'  => $ai_record_id,
+                'orf_ai_id'     => $ai_record_id, // alias for clarity
+                'image_url'     => $generated_image_url,
+                'thumbnail_url' => $thumbnailUrl,
+                'model'         => $model,
+                'size'          => $quality,
+                'registered'    => true,
+            ],
+        ]);
+        exit;
+    }
 
     // Get the image path - priority: edited image > URL > orf_id from database
     $image_path = null;
@@ -518,6 +674,15 @@ try {
     }
     if (isset($edited_image_path) && $edited_image_path && file_exists($edited_image_path)) {
         unlink($edited_image_path);
+    }
+    // Register-only: only remove the staged file if it was a URL-based
+    // temp download. A successful move_uploaded_file already lives at the
+    // canonical /studio/ai_thumbnails/full_*.<ext> location and must stay.
+    if (isset($skip_generation) && $skip_generation
+        && isset($has_generated_file) && !$has_generated_file
+        && isset($registered_image_path) && $registered_image_path
+        && file_exists($registered_image_path)) {
+        unlink($registered_image_path);
     }
 
     http_response_code(500);
