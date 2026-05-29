@@ -3344,7 +3344,7 @@ $html .= "</body></html>";
 
 //file_put_contents("apus.html",$html);
 
-
+/*
 
 require('../mpdf/mpdf.php');
 
@@ -3356,7 +3356,7 @@ $pdf->setAutoBottomMargin = 'stretch';
 
 $pdf->WriteHTML($html);
 
-$pdf->Output("apus_creators.pdf");
+$pdf->Output("apus_creators.pdf"); */
 
 ?>
 
