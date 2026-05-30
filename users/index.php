@@ -2974,7 +2974,10 @@ include('../menu.php');
                                 $creator=$prod->get_client($orders[$i]['uca_id']);
                                 if($creator['lt_id']==$selected_producer)
                                 {
-                                    if((substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160))
+                                    if(
+                                        ((substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160))||
+                                        ($orders[$i]['prod_id']=="p110v")
+                                    )
                                     {
                                         $o_desc_in_b1=$prod->get_o_desc_in_b1($orders[$i]['o_id']);
                                         $thisproductAPU=$prod->calculateProductAPU($orders[$i]['prod_id']);
@@ -3021,6 +3024,17 @@ include('../menu.php');
                                             else
                                             {
                                                 $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b1['fac_prod_in_b1'] * $o_desc_in_b1['p1108_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p110v")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                                $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b1['fac_prod_in_b1'] * $o_desc_in_b1['p110v_fac'] * $thisproductAPU,1,2);     
                                             }
                                         }
                                         else
@@ -4070,7 +4084,11 @@ include('../menu.php');
                                         }
                                     }
 
-                                    if(((substr($orders[$i]['prod_id'],1)>1560)&&(substr($orders[$i]['prod_id'],1)<1600))||($orders[$i]['prod_id']=="p156x")||($orders[$i]['prod_id']=="p156y")||($orders[$i]['prod_id']=="p156z"))
+                                    if(
+                                        ((substr($orders[$i]['prod_id'],1)>1560)&&(substr($orders[$i]['prod_id'],1)<1600))||
+                                        ($orders[$i]['prod_id']=="p156x")||
+                                        ($orders[$i]['prod_id']=="p156y")||
+                                        ($orders[$i]['prod_id']=="p156z"))
                                     {
                                         $o_desc_ex_b5=$prod->get_o_desc_ex_b5($orders[$i]['o_id']);            
                                         $thisproductAPU=$prod->calculateProductAPU($orders[$i]['prod_id']);
@@ -4121,7 +4139,10 @@ include('../menu.php');
                                         }
                                     }
             
-                                    if(((substr($orders[$i]['prod_id'],1)>1659)&&(substr($orders[$i]['prod_id'],1)<1700))||($orders[$i]['prod_id']=="p166x")||($orders[$i]['prod_id']=="p166y")||($orders[$i]['prod_id']=="p166z")||($orders[$i]['prod_id']=="p166p"))
+                                    if(
+                                        ((substr($orders[$i]['prod_id'],1)>1659)&&(substr($orders[$i]['prod_id'],1)<1700))||
+                                    ($orders[$i]['prod_id']=="p166x")||($orders[$i]['prod_id']=="p166y")||
+                                    ($orders[$i]['prod_id']=="p166z")||($orders[$i]['prod_id']=="p166p"))
                                     {
                                         $o_desc_ex_b6=$prod->get_o_desc_ex_b6($orders[$i]['o_id']);            
                                         $thisproductAPU=$prod->calculateProductAPU($orders[$i]['prod_id']);
@@ -4183,7 +4204,11 @@ include('../menu.php');
                                         }
                                     }
             
-                                    if(((substr($orders[$i]['prod_id'],1)>1759)&&(substr($orders[$i]['prod_id'],1)<1800))||($orders[$i]['prod_id']=="p176x")||($orders[$i]['prod_id']=="p176y")||($orders[$i]['prod_id']=="p176z"))
+                                    if(
+                                        ((substr($orders[$i]['prod_id'],1)>1759)&&(substr($orders[$i]['prod_id'],1)<1800))||
+                                        ($orders[$i]['prod_id']=="p176x")||
+                                        ($orders[$i]['prod_id']=="p176y")||
+                                        ($orders[$i]['prod_id']=="p176z"))
                                     {
                                         $o_desc_ex_b7=$prod->get_o_desc_ex_b7($orders[$i]['o_id']);            
                                         $thisproductAPU=$prod->calculateProductAPU($orders[$i]['prod_id']);
@@ -4221,6 +4246,17 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_ex_b7['fac_prod_ex_b7'] * $o_desc_ex_b7['p1766_fac'] * $thisproductAPU,1,2);                       
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1781")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_ex_b7['fac_prod_ex_b7'] * $o_desc_ex_b7['p1781_fac'] * $thisproductAPU,1,2);                       
+                                            }
+                                        }
                                         else
                                         {       
                                             if($orders[$i]['om_correction']==1)
@@ -4234,7 +4270,11 @@ include('../menu.php');
                                         }
                                     }
             
-                                    if(((substr($orders[$i]['prod_id'],1)>1859)&&(substr($orders[$i]['prod_id'],1)<1900))||($orders[$i]['prod_id']=="p186x")||($orders[$i]['prod_id']=="p186y")||($orders[$i]['prod_id']=="p186z"))
+                                    if(
+                                        ((substr($orders[$i]['prod_id'],1)>1859)&&(substr($orders[$i]['prod_id'],1)<1900))||
+                                        ($orders[$i]['prod_id']=="p186x")||
+                                        ($orders[$i]['prod_id']=="p186y")||
+                                        ($orders[$i]['prod_id']=="p186z"))
                                     {
                                         $o_desc_ex_b8=$prod->get_o_desc_ex_b8($orders[$i]['o_id']);            
                                         $thisproductAPU=$prod->calculateProductAPU($orders[$i]['prod_id']);
@@ -4270,6 +4310,17 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_ex_b8['fac_prod_ex_b8'] * $o_desc_ex_b8['p1866_fac'] * $thisproductAPU,1,2);                     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1881")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_ex_b8['fac_prod_ex_b8'] * $o_desc_ex_b8['p1881_fac'] * $thisproductAPU,1,2);                     
                                             }
                                         }
                                         else
