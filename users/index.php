@@ -3114,6 +3114,28 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1501_fac'] * $thisproductAPU,1,2);     
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1502")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1502_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1503")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1503_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1504")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3123,6 +3145,39 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1504_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1506")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1506_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1507")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1507_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1508")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1508_fac'] * $thisproductAPU,1,2);     
                                             }
                                         }
                                         elseif($orders[$i]['prod_id']=="p1521")
@@ -3136,6 +3191,28 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1521_fac'] * $thisproductAPU,1,2);   
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1522")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1522_fac'] * $thisproductAPU,1,2);   
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1523")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1523_fac'] * $thisproductAPU,1,2);   
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1524")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3145,39 +3222,6 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1524_fac'] * $thisproductAPU,1,2);   
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1541")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1541_fac'] * $thisproductAPU,1,2);   
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1544")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1544_fac'] * $thisproductAPU,1,2);     
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1506")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1506_fac'] * $thisproductAPU,1,2);        
                                             }
                                         }
                                         elseif($orders[$i]['prod_id']=="p1526")
@@ -3191,6 +3235,72 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1526_fac'] * $thisproductAPU,1,2);   
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1527")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1527_fac'] * $thisproductAPU,1,2);   
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1528")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1528_fac'] * $thisproductAPU,1,2);   
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1541")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1541_fac'] * $thisproductAPU,1,2);   
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1542")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1542_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1543")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1543_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1544")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1544_fac'] * $thisproductAPU,1,2);     
+                                            }
+                                        }                                        
                                         elseif($orders[$i]['prod_id']=="p1546")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3200,6 +3310,28 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1546_fac'] * $thisproductAPU,1,2);            
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1547")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1547_fac'] * $thisproductAPU,1,2);            
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1548")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1548_fac'] * $thisproductAPU,1,2);            
                                             }
                                         }
                                         else
@@ -3257,6 +3389,17 @@ include('../menu.php');
                                             }
                                         
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1606")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1606_fac'] * $thisproductAPU,1,2);
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1621")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3278,6 +3421,17 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1624_fac'] * $thisproductAPU,1,2);
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1626")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1626_fac'] * $thisproductAPU,1,2);                         
                                             }
                                         }
                                         elseif($orders[$i]['prod_id']=="p1641")
@@ -3302,28 +3456,8 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1644_fac'] * $thisproductAPU,1,2);                
                                             }
                                         }
-                                        elseif($orders[$i]['prod_id']=="p1606")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1606_fac'] * $thisproductAPU,1,2);
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1626")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1626_fac'] * $thisproductAPU,1,2);                         
-                                            }
-                                        }
+                                        
+                                        
                                         elseif($orders[$i]['prod_id']=="p1646")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3376,6 +3510,17 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1701_fac'] * $thisproductAPU,1,2);                                
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1703")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1701_fac'] * $thisproductAPU,1,2);                                
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1704")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3385,50 +3530,6 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1704_fac'] * $thisproductAPU,1,2);                                
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1721")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1721_fac'] * $thisproductAPU,1,2);                    
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1724")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1724_fac'] * $thisproductAPU,1,2);                    
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1741")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1741_fac'] * $thisproductAPU,1,2);  
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1744")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1744_fac'] * $thisproductAPU,1,2);  
                                             }
                                         }
                                         elseif($orders[$i]['prod_id']=="p1706")
@@ -3442,6 +3543,72 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1706_fac'] * $thisproductAPU,1,2);
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1707")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1707_fac'] * $thisproductAPU,1,2);
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1708")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1708_fac'] * $thisproductAPU,1,2);
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1721")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1721_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1722")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1722_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1723")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1723_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1724")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1724_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1726")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3453,6 +3620,74 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1726_fac'] * $thisproductAPU,1,2);    
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1727")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1726_fac'] * $thisproductAPU,1,2);    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1728")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1726_fac'] * $thisproductAPU,1,2);    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1741")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1741_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1742")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1742_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1743")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1743_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1744")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1744_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        
+                                        
                                         elseif($orders[$i]['prod_id']=="p1746")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3462,6 +3697,28 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1746_fac'] * $thisproductAPU,1,2);      
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1747")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1747_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1748")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1748_fac'] * $thisproductAPU,1,2);  
                                             }
                                         }
                                         else
@@ -3505,6 +3762,28 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1801_fac'] * $thisproductAPU,1,2);                                
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1802")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1802_fac'] * $thisproductAPU,1,2);                                
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1803")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1803_fac'] * $thisproductAPU,1,2);                                
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1804")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3514,50 +3793,6 @@ include('../menu.php');
                                             else
                                             {
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1804_fac'] * $thisproductAPU,1,2);                                
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1821")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1821_fac'] * $thisproductAPU,1,2);                    
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1824")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1824_fac'] * $thisproductAPU,1,2);                    
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1841")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1841_fac'] * $thisproductAPU,1,2);  
-                                            }
-                                        }
-                                        elseif($orders[$i]['prod_id']=="p1844")
-                                        {
-                                            if($orders[$i]['om_correction']==1)
-                                            {
-                                                $total_apus_with_fac_prod[]=0;
-                                            }   
-                                            else
-                                            {
-                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1844_fac'] * $thisproductAPU,1,2);  
                                             }
                                         }
                                         elseif($orders[$i]['prod_id']=="p1806")
@@ -3571,6 +3806,72 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1806_fac'] * $thisproductAPU,1,2);
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1807")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1807_fac'] * $thisproductAPU,1,2);
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1808")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1808_fac'] * $thisproductAPU,1,2);
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1821")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1821_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1822")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1822_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1823")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1823_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1824")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1824_fac'] * $thisproductAPU,1,2);                    
+                                            }
+                                        }
                                         elseif($orders[$i]['prod_id']=="p1826")
                                         {
                                             if($orders[$i]['om_correction']==1)
@@ -3582,6 +3883,74 @@ include('../menu.php');
                                             $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1826_fac'] * $thisproductAPU,1,2);    
                                             }
                                         }
+                                        elseif($orders[$i]['prod_id']=="p1827")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1827_fac'] * $thisproductAPU,1,2);    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1828")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1828_fac'] * $thisproductAPU,1,2);    
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1841")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1841_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1842")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1842_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1843")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1843_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        elseif($orders[$i]['prod_id']=="p1844")
+                                        {
+                                            if($orders[$i]['om_correction']==1)
+                                            {
+                                                $total_apus_with_fac_prod[]=0;
+                                            }   
+                                            else
+                                            {
+                                            $total_apus_with_fac_prod[]=bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1844_fac'] * $thisproductAPU,1,2);  
+                                            }
+                                        }
+                                        
+                                        
                                         elseif($orders[$i]['prod_id']=="p1846")
                                         {
                                             if($orders[$i]['om_correction']==1)
