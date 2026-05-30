@@ -4459,7 +4459,10 @@ include('../menu.php');
                                         $html .="</td>";
                                         $html .="<td style=\"border: 1px solid #000;text-align:center;\">";
                                     
-                                            if((substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160))
+                                            if(
+                                                ((substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160))||
+                                                ($orders[$i]['prod_id']=="p110v")
+                                            )
                                             {
                                                 $o_desc_in_b1=$prod->get_o_desc_in_b1($orders[$i]['o_id']);
                 
@@ -4482,6 +4485,11 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_in_b1['p1108_fac'];
                                                     $html .= $o_desc_in_b1['p1108_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p110v")
+                                                {
+                                                    echo $o_desc_in_b1['p110v_fac'];
+                                                    $html .= $o_desc_in_b1['p110v_fac'];
                                                 }
                                                 else
                                                 {
@@ -4528,45 +4536,105 @@ include('../menu.php');
                                                     echo $o_desc_in_b5['p1501_fac'];
                                                     $html .= $o_desc_in_b5['p1501_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1502")
+                                                {
+                                                    echo $o_desc_in_b5['p1502_fac'];
+                                                    $html .= $o_desc_in_b5['p1502_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1503")
+                                                {
+                                                    echo $o_desc_in_b5['p1503_fac'];
+                                                    $html .= $o_desc_in_b5['p1503_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1504")
                                                 {
                                                     echo $o_desc_in_b5['p1504_fac'];
                                                     $html .= $o_desc_in_b5['p1504_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1521")
-                                                {
-                                                    echo $o_desc_in_b5['p1521_fac'];
-                                                    $html .= $o_desc_in_b5['p1521_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1524")
-                                                {
-                                                    echo $o_desc_in_b5['p1524_fac'];
-                                                    $html .= $o_desc_in_b5['p1524_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1541")
-                                                {
-                                                    echo $o_desc_in_b5['p1541_fac'];
-                                                    $html .= $o_desc_in_b5['p1541_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1544")
-                                                {
-                                                    echo $o_desc_in_b5['p1544_fac'];
-                                                    $html .= $o_desc_in_b5['p1544_fac'];
                                                 }
                                                 elseif($orders[$i]['prod_id']=="p1506")
                                                 {
                                                     echo $o_desc_in_b5['p1506_fac'];
                                                     $html .= $o_desc_in_b5['p1506_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1507")
+                                                {
+                                                    echo $o_desc_in_b5['p1507_fac'];
+                                                    $html .= $o_desc_in_b5['p1507_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1508")
+                                                {
+                                                    echo $o_desc_in_b5['p1508_fac'];
+                                                    $html .= $o_desc_in_b5['p1508_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1521")
+                                                {
+                                                    echo $o_desc_in_b5['p1521_fac'];
+                                                    $html .= $o_desc_in_b5['p1521_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1522")
+                                                {
+                                                    echo $o_desc_in_b5['p1522_fac'];
+                                                    $html .= $o_desc_in_b5['p1522_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1523")
+                                                {
+                                                    echo $o_desc_in_b5['p1523_fac'];
+                                                    $html .= $o_desc_in_b5['p1523_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1524")
+                                                {
+                                                    echo $o_desc_in_b5['p1524_fac'];
+                                                    $html .= $o_desc_in_b5['p1524_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1526")
                                                 {
                                                     echo $o_desc_in_b5['p1526_fac'];
                                                     $html .= $o_desc_in_b5['p1526_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1527")
+                                                {
+                                                    echo $o_desc_in_b5['p1527_fac'];
+                                                    $html .= $o_desc_in_b5['p1527_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1528")
+                                                {
+                                                    echo $o_desc_in_b5['p1528_fac'];
+                                                    $html .= $o_desc_in_b5['p1528_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1541")
+                                                {
+                                                    echo $o_desc_in_b5['p1541_fac'];
+                                                    $html .= $o_desc_in_b5['p1541_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1542")
+                                                {
+                                                    echo $o_desc_in_b5['p1542_fac'];
+                                                    $html .= $o_desc_in_b5['p1542_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1543")
+                                                {
+                                                    echo $o_desc_in_b5['p1543_fac'];
+                                                    $html .= $o_desc_in_b5['p1543_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1544")
+                                                {
+                                                    echo $o_desc_in_b5['p1544_fac'];
+                                                    $html .= $o_desc_in_b5['p1544_fac'];
+                                                }                                                
                                                 elseif($orders[$i]['prod_id']=="p1546")
                                                 {
                                                     echo $o_desc_in_b5['p1546_fac'];
                                                     $html .= $o_desc_in_b5['p1546_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1547")
+                                                {
+                                                    echo $o_desc_in_b5['p1547_fac'];
+                                                    $html .= $o_desc_in_b5['p1547_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1548")
+                                                {
+                                                    echo $o_desc_in_b5['p1548_fac'];
+                                                    $html .= $o_desc_in_b5['p1548_fac'];
                                                 }
                                                 else
                                                 {
@@ -4587,11 +4655,16 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_in_b6['p1601_fac'];
                                                     $html .= $o_desc_in_b6['p1601_fac'];
-                                                }
+                                                }                                                
                                                 elseif($orders[$i]['prod_id']=="p1604")
                                                 {
                                                     echo $o_desc_in_b6['p1604_fac'];
                                                     $html .= $o_desc_in_b6['p1604_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1606")
+                                                {
+                                                    echo $o_desc_in_b6['p1606_fac'];
+                                                    $html .= $o_desc_in_b6['p1606_fac'];
                                                 }
                                                 elseif($orders[$i]['prod_id']=="p1621")
                                                 {
@@ -4603,6 +4676,11 @@ include('../menu.php');
                                                     echo $o_desc_in_b6['p1624_fac'];
                                                     $html .= $o_desc_in_b6['p1624_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1626")
+                                                {
+                                                    echo $o_desc_in_b6['p1626_fac'];
+                                                    $html .= $o_desc_in_b6['p1626_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1641")
                                                 {
                                                     echo $o_desc_in_b6['p1641_fac'];
@@ -4612,17 +4690,7 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_in_b6['p1644_fac'];
                                                     $html .= $o_desc_in_b6['p1644_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1606")
-                                                {
-                                                    echo $o_desc_in_b6['p1606_fac'];
-                                                    $html .= $o_desc_in_b6['p1606_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1626")
-                                                {
-                                                    echo $o_desc_in_b6['p1626_fac'];
-                                                    $html .= $o_desc_in_b6['p1626_fac'];
-                                                }
+                                                }                                                
                                                 elseif($orders[$i]['prod_id']=="p1646")
                                                 {
                                                     echo $o_desc_in_b6['p1646_fac'];
@@ -4648,20 +4716,60 @@ include('../menu.php');
                                                     echo $o_desc_in_b7['p1701_fac'];
                                                     $html .= $o_desc_in_b7['p1701_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1702")
+                                                {
+                                                    echo $o_desc_in_b7['p1702_fac'];
+                                                    $html .= $o_desc_in_b7['p1702_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1703")
+                                                {
+                                                    echo $o_desc_in_b7['p1703_fac'];
+                                                    $html .= $o_desc_in_b7['p1703_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1704")
                                                 {
                                                     echo $o_desc_in_b7['p1704_fac'];
                                                     $html .= $o_desc_in_b7['p1704_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1706")
+                                                {
+                                                    echo $o_desc_in_b7['p1706_fac'];
+                                                    $html .= $o_desc_in_b7['p1706_fac'];
                                                 }
                                                 elseif($orders[$i]['prod_id']=="p1721")
                                                 {
                                                     echo $o_desc_in_b7['p1721_fac'];
                                                     $html .= $o_desc_in_b7['p1721_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1722")
+                                                {
+                                                    echo $o_desc_in_b7['p1722_fac'];
+                                                    $html .= $o_desc_in_b7['p1722_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1723")
+                                                {
+                                                    echo $o_desc_in_b7['p1723_fac'];
+                                                    $html .= $o_desc_in_b7['p1723_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1724")
                                                 {
                                                     echo $o_desc_in_b7['p1724_fac'];
                                                     $html .= $o_desc_in_b7['p1724_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1726")
+                                                {
+                                                    echo $o_desc_in_b7['p1726_fac'];
+                                                    $html .= $o_desc_in_b7['p1726_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1727")
+                                                {
+                                                    echo $o_desc_in_b7['p1727_fac'];
+                                                    $html .= $o_desc_in_b7['p1727_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1728")
+                                                {
+                                                    echo $o_desc_in_b7['p1728_fac'];
+                                                    $html .= $o_desc_in_b7['p1728_fac'];
                                                 }
                                                 elseif($orders[$i]['prod_id']=="p1741")
                                                 {
@@ -4672,21 +4780,21 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_in_b7['p1744_fac'];
                                                     $html .= $o_desc_in_b7['p1744_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1706")
-                                                {
-                                                    echo $o_desc_in_b7['p1706_fac'];
-                                                    $html .= $o_desc_in_b7['p1706_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1726")
-                                                {
-                                                    echo $o_desc_in_b7['p1726_fac'];
-                                                    $html .= $o_desc_in_b7['p1726_fac'];
-                                                }
+                                                }                                                
                                                 elseif($orders[$i]['prod_id']=="p1746")
                                                 {
                                                     echo $o_desc_in_b7['p1746_fac'];
                                                     $html .= $o_desc_in_b7['p1746_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1747")
+                                                {
+                                                    echo $o_desc_in_b7['p1747_fac'];
+                                                    $html .= $o_desc_in_b7['p1747_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1748")
+                                                {
+                                                    echo $o_desc_in_b7['p1748_fac'];
+                                                    $html .= $o_desc_in_b7['p1748_fac'];
                                                 }
                                                 else
                                                 {
@@ -4708,45 +4816,105 @@ include('../menu.php');
                                                     echo $o_desc_in_b8['p1801_fac'];
                                                     $html .= $o_desc_in_b8['p1801_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1802")
+                                                {
+                                                    echo $o_desc_in_b8['p1802_fac'];
+                                                    $html .= $o_desc_in_b8['p1802_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1803")
+                                                {
+                                                    echo $o_desc_in_b8['p1803_fac'];
+                                                    $html .= $o_desc_in_b8['p1803_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1804")
                                                 {
                                                     echo $o_desc_in_b8['p1804_fac'];
                                                     $html .= $o_desc_in_b8['p1804_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1821")
-                                                {
-                                                    echo $o_desc_in_b8['p1821_fac'];
-                                                    $html .= $o_desc_in_b8['p1821_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1824")
-                                                {
-                                                    echo $o_desc_in_b8['p1824_fac'];
-                                                    $html .= $o_desc_in_b8['p1824_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1841")
-                                                {
-                                                    echo $o_desc_in_b8['p1841_fac'];
-                                                    $html .= $o_desc_in_b8['p1841_fac'];
-                                                }
-                                                elseif($orders[$i]['prod_id']=="p1844")
-                                                {
-                                                    echo $o_desc_in_b8['p1844_fac'];
-                                                    $html .= $o_desc_in_b8['p1844_fac'];
                                                 }
                                                 elseif($orders[$i]['prod_id']=="p1806")
                                                 {
                                                     echo $o_desc_in_b8['p1806_fac'];
                                                     $html .= $o_desc_in_b8['p1806_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1807")
+                                                {
+                                                    echo $o_desc_in_b8['p1807_fac'];
+                                                    $html .= $o_desc_in_b8['p1807_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1808")
+                                                {
+                                                    echo $o_desc_in_b8['p1808_fac'];
+                                                    $html .= $o_desc_in_b8['p1808_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1821")
+                                                {
+                                                    echo $o_desc_in_b8['p1821_fac'];
+                                                    $html .= $o_desc_in_b8['p1821_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1822")
+                                                {
+                                                    echo $o_desc_in_b8['p1822_fac'];
+                                                    $html .= $o_desc_in_b8['p1822_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1823")
+                                                {
+                                                    echo $o_desc_in_b8['p1823_fac'];
+                                                    $html .= $o_desc_in_b8['p1823_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1824")
+                                                {
+                                                    echo $o_desc_in_b8['p1824_fac'];
+                                                    $html .= $o_desc_in_b8['p1824_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p1826")
                                                 {
                                                     echo $o_desc_in_b8['p1826_fac'];
                                                     $html .= $o_desc_in_b8['p1826_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1827")
+                                                {
+                                                    echo $o_desc_in_b8['p1827_fac'];
+                                                    $html .= $o_desc_in_b8['p1827_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1828")
+                                                {
+                                                    echo $o_desc_in_b8['p1828_fac'];
+                                                    $html .= $o_desc_in_b8['p1828_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1841")
+                                                {
+                                                    echo $o_desc_in_b8['p1841_fac'];
+                                                    $html .= $o_desc_in_b8['p1841_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1842")
+                                                {
+                                                    echo $o_desc_in_b8['p1842_fac'];
+                                                    $html .= $o_desc_in_b8['p1842_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1843")
+                                                {
+                                                    echo $o_desc_in_b8['p1843_fac'];
+                                                    $html .= $o_desc_in_b8['p1843_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1844")
+                                                {
+                                                    echo $o_desc_in_b8['p1844_fac'];
+                                                    $html .= $o_desc_in_b8['p1844_fac'];
+                                                }                                                
                                                 elseif($orders[$i]['prod_id']=="p1846")
                                                 {
                                                     echo $o_desc_in_b8['p1846_fac'];
                                                     $html .= $o_desc_in_b8['p1846_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1847")
+                                                {
+                                                    echo $o_desc_in_b8['p1847_fac'];
+                                                    $html .= $o_desc_in_b8['p1847_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1848")
+                                                {
+                                                    echo $o_desc_in_b8['p1848_fac'];
+                                                    $html .= $o_desc_in_b8['p1848_fac'];
                                                 }
                                                 else
                                                 {
@@ -4779,6 +4947,11 @@ include('../menu.php');
                                                     echo $o_desc_ex_b1['p1168_fac'];
                                                     $html .= $o_desc_ex_b1['p1168_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1181")
+                                                {
+                                                    echo $o_desc_ex_b1['p1181_fac'];
+                                                    $html .= $o_desc_ex_b1['p1181_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p116b")
                                                 {
                                                     echo $o_desc_ex_b1['p116b_fac'];
@@ -4805,7 +4978,11 @@ include('../menu.php');
                                                 }
                                             }
 
-                                            if(((substr($orders[$i]['prod_id'],1)>1560)&&(substr($orders[$i]['prod_id'],1)<1600))||($orders[$i]['prod_id']=="p156x")||($orders[$i]['prod_id']=="p156y")||($orders[$i]['prod_id']=="p156z"))
+                                            if(
+                                                ((substr($orders[$i]['prod_id'],1)>1560)&&(substr($orders[$i]['prod_id'],1)<1600))||
+                                                ($orders[$i]['prod_id']=="p156x")||
+                                                ($orders[$i]['prod_id']=="p156y")||
+                                                ($orders[$i]['prod_id']=="p156z"))
                                             {
                                                 $o_desc_ex_b5=$prod->get_o_desc_ex_b5($orders[$i]['o_id']);
             
@@ -4823,6 +5000,11 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_ex_b5['p1566_fac'];
                                                     $html .= $o_desc_ex_b5['p1566_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1581")
+                                                {
+                                                    echo $o_desc_ex_b5['p1581_fac'];
+                                                    $html .= $o_desc_ex_b5['p1581_fac'];
                                                 }
                                                 else
                                                 {
@@ -4849,6 +5031,11 @@ include('../menu.php');
                                                     echo $o_desc_ex_b6['p1666_fac'];
                                                     $html .= $o_desc_ex_b6['p1666_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1681")
+                                                {
+                                                    echo $o_desc_ex_b6['p1681_fac'];
+                                                    $html .= $o_desc_ex_b6['p1681_fac'];
+                                                }
                                                 elseif($orders[$i]['prod_id']=="p166p")
                                                 {
                                                     echo $o_desc_ex_b6['p166p_fac'];
@@ -4860,7 +5047,10 @@ include('../menu.php');
                                                 }
                                             }
             
-                                            if(((substr($orders[$i]['prod_id'],1)>1759)&&(substr($orders[$i]['prod_id'],1)<1800))||($orders[$i]['prod_id']=="p176x")||($orders[$i]['prod_id']=="p176y")||($orders[$i]['prod_id']=="p176z"))
+                                            if(((substr($orders[$i]['prod_id'],1)>1759)&&(substr($orders[$i]['prod_id'],1)<1800))||
+                                            ($orders[$i]['prod_id']=="p176x")||
+                                            ($orders[$i]['prod_id']=="p176y")||
+                                            ($orders[$i]['prod_id']=="p176z"))
                                             {
                                                 $o_desc_ex_b7=$prod->get_o_desc_ex_b7($orders[$i]['o_id']);
             
@@ -4868,6 +5058,11 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_ex_b7['p1761_fac'];
                                                     $html .= $o_desc_ex_b7['p1761_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1762")
+                                                {
+                                                    echo $o_desc_ex_b7['p1762_fac'];
+                                                    $html .= $o_desc_ex_b7['p1762_fac'];
                                                 }
                                                 elseif($orders[$i]['prod_id']=="p1763")
                                                 {
@@ -4879,13 +5074,21 @@ include('../menu.php');
                                                     echo $o_desc_ex_b7['p1766_fac'];
                                                     $html .= $o_desc_ex_b7['p1766_fac'];
                                                 }
+                                                elseif($orders[$i]['prod_id']=="p1781")
+                                                {
+                                                    echo $o_desc_ex_b7['p1781_fac'];
+                                                    $html .= $o_desc_ex_b7['p1781_fac'];
+                                                }
                                                 else
                                                 {
                                                     //echo "1";
                                                 }
                                             }
             
-                                            if(((substr($orders[$i]['prod_id'],1)>1859)&&(substr($orders[$i]['prod_id'],1)<1900))||($orders[$i]['prod_id']=="p186x")||($orders[$i]['prod_id']=="p186y")||($orders[$i]['prod_id']=="p186z"))
+                                            if(((substr($orders[$i]['prod_id'],1)>1859)&&(substr($orders[$i]['prod_id'],1)<1900))||
+                                            ($orders[$i]['prod_id']=="p186x")||
+                                            ($orders[$i]['prod_id']=="p186y")||
+                                            ($orders[$i]['prod_id']=="p186z"))
                                             {
                                                 $o_desc_ex_b8=$prod->get_o_desc_ex_b8($orders[$i]['o_id']);
                                                 
@@ -4903,6 +5106,11 @@ include('../menu.php');
                                                 {
                                                     echo $o_desc_ex_b8['p1866_fac'];
                                                     $html .= $o_desc_ex_b8['p1866_fac'];
+                                                }
+                                                elseif($orders[$i]['prod_id']=="p1881")
+                                                {
+                                                    echo $o_desc_ex_b8['p1881_fac'];
+                                                    $html .= $o_desc_ex_b8['p1881_fac'];
                                                 }
                                                 else
                                                 {
@@ -4927,7 +5135,10 @@ include('../menu.php');
                                             $html .="</td>";
                                             $html .="<td style=\"border: 1px solid #000;text-align:center;\">";
             
-                                            if((substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160))
+                                            if(
+                                                (substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160)||
+                                                ($orders[$i]['prod_id']=="p110v")
+                                                )
                                             {
                                                 $o_desc_in_b1=$prod->get_o_desc_in_b1($orders[$i]['o_id']);      
                                                 if($orders[$i]['om_correction']==1)
@@ -5271,6 +5482,32 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1501_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1502")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1502_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1502_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1503")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1503_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1503_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1504")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5282,58 +5519,6 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1504_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1504_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1521")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1521_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1521_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1524")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1524_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1524_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1541")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1541_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1541_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1544")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1544_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1544_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             elseif($orders[$i]['prod_id']=="p1506")
@@ -5349,6 +5534,71 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1506_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1508")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1508_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1508_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1521")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1521_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1521_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1522")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1522_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1522_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1523")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1523_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1523_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1524")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1524_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1524_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1526")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5362,6 +5612,84 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1526_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1527")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1527_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1527_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1528")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1528_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1528_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1541")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1541_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1541_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1542")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1542_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1542_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1543")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1543_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1543_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1544")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1544_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1544_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }                                            
                                             elseif($orders[$i]['prod_id']=="p1546")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5373,6 +5701,32 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1546_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1546_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1547")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1547_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1547_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1548")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1548_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b5['fac_prod_in_b5'] * $o_desc_in_b5['p1548_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             else
@@ -5434,6 +5788,19 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1604_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1606")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1606_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1606_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1621")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5458,6 +5825,19 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1624_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1624_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1626")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1626_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1626_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             elseif($orders[$i]['prod_id']=="p1641")
@@ -5486,32 +5866,8 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1644_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
-                                            elseif($orders[$i]['prod_id']=="p1606")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1606_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1606_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1626")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1626_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b6['fac_prod_in_b6'] * $o_desc_in_b6['p1626_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
+                                            
+                                            
                                             elseif($orders[$i]['prod_id']=="p1646")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5571,6 +5927,32 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1701_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1702")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1702_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1702_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1703")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1703_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1703_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1704")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5582,58 +5964,6 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1704_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1704_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1721")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1721_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1721_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1724")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1724_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1724_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1741")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1741_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1741_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1744")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1744_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1744_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             elseif($orders[$i]['prod_id']=="p1706")
@@ -5649,6 +5979,84 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1706_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1707")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1707_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1707_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1708")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1708_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1708_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1721")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1721_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1721_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1722")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1722_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1722_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1723")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1723_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1723_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1724")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1724_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1724_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1726")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5662,6 +6070,84 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1726_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1727")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1727_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1727_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1728")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1728_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1728_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1741")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1741_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1741_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1742")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1742_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1742_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1743")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1743_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1743_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1744")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1744_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1744_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }                                            
                                             elseif($orders[$i]['prod_id']=="p1746")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5673,6 +6159,32 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1746_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1746_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1747")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1747_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1747_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1748")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1748_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b7['fac_prod_in_b7'] * $o_desc_in_b7['p1748_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             else
@@ -5721,6 +6233,32 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1801_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1802")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1802_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1802_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1803")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1803_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1803_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1804")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5732,58 +6270,6 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1804_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1804_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1821")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1821_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1821_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1824")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1824_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1824_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1841")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1841_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1841_fac'] * $thisproductAPU,1,2);
-                                                }
-                                            }
-                                            elseif($orders[$i]['prod_id']=="p1844")
-                                            {
-                                                if($orders[$i]['om_correction']==1)
-                                                {
-                                                    echo "0";
-                                                    $html .= "0";
-                                                }   
-                                                else
-                                                {
-                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1844_fac'] * $thisproductAPU,1,2);
-                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1844_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             elseif($orders[$i]['prod_id']=="p1806")
@@ -5799,6 +6285,84 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1806_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1807")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1807_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1807_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1808")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1808_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1808_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1821")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1821_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1821_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1822")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1822_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1822_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1823")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1823_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1823_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1824")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1824_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1824_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
                                             elseif($orders[$i]['prod_id']=="p1826")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5812,6 +6376,84 @@ include('../menu.php');
                                                 $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1826_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
+                                            elseif($orders[$i]['prod_id']=="p1827")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1827_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1827_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1828")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1828_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1828_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1841")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1841_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1841_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1842")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1842_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1842_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1843")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1843_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1843_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1844")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1844_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1844_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }                                                                                                                                   
                                             elseif($orders[$i]['prod_id']=="p1846")
                                             {
                                                 if($orders[$i]['om_correction']==1)
@@ -5823,6 +6465,32 @@ include('../menu.php');
                                                 {
                                                 echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1846_fac'] * $thisproductAPU,1,2);
                                                 $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1846_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1847")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1847_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1847_fac'] * $thisproductAPU,1,2);
+                                                }
+                                            }
+                                            elseif($orders[$i]['prod_id']=="p1848")
+                                            {
+                                                if($orders[$i]['om_correction']==1)
+                                                {
+                                                    echo "0";
+                                                    $html .= "0";
+                                                }   
+                                                else
+                                                {
+                                                echo bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1848_fac'] * $thisproductAPU,1,2);
+                                                $html .= bcdiv($o_desc_in_b8['fac_prod_in_b8'] * $o_desc_in_b8['p1848_fac'] * $thisproductAPU,1,2);
                                                 }
                                             }
                                             else
