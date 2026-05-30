@@ -2963,7 +2963,7 @@ include('../menu.php');
                             //$orders=$prod->get_trader_orders_by_date($trader['lt_id'],$traders_start_date,$traders_end_date); 
                             $orders=$prod->get_trader_orders_by_finish_date($trader['lt_id'],$traders_start_date,$traders_end_date); 
                             $total_apus_with_fac_prod=array();    
-                            
+                            print_r($total_apus_with_fac_prod);
                         for($i=0;$i<count($orders);$i++)
                         {	
                             //$products=$prod->get_o_prods_by_order_id($orders[$i]['order_ID']);
