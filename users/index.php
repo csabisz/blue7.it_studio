@@ -4343,16 +4343,9 @@ include('../menu.php');
                         $html .= "<h2 style=\"text-align:center;\">List of work</h2>";
                         $html .= "For ".$trader['Company']." done by ".$producer['Company']." between ".$traders_start_date." and ".$traders_end_date." - amount ".array_sum($total_apus_with_fac_prod)." APUs";
                         $html .= "<br><br>";
-                        $tot_apus=0;
-                        //$tot_apus=array_sum($total_apus_with_fac_prod);
-                        for($i=0;$i<count($total_apus_with_fac_prod);$i++)
-                        {
-                            $tot_apus+=$total_apus_with_fac_prod[$i];
-                        }
-                        //$tot_labc=0;
-                        //$tot_capc=0;
-                        //print_r($total_apus);
-                        echo $tot_apus;
+                        
+                        $tot_apus=array_sum($total_apus_with_fac_prod);                       
+                        
                         ?>
                         <br>
                         
