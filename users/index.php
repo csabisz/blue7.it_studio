@@ -2962,8 +2962,10 @@ include('../menu.php');
                             $producer=$prod->get_company($selected_producer);
                             //$orders=$prod->get_trader_orders_by_date($trader['lt_id'],$traders_start_date,$traders_end_date); 
                             $orders=$prod->get_trader_orders_by_finish_date($trader['lt_id'],$traders_start_date,$traders_end_date); 
+                            
                             $total_apus_with_fac_prod=array();    
                             
+                        /*
                         for($i=0;$i<count($orders);$i++)
                         {	
                             //$products=$prod->get_o_prods_by_order_id($orders[$i]['order_ID']);
@@ -4337,19 +4339,19 @@ include('../menu.php');
                                     }
                                 }
                             //}
-                        }
+                        } */
                         $html = "<html>";
                         $html .= "<body>";
                         $html .= "<h2 style=\"text-align:center;\">List of work</h2>";
                         $html .= "For ".$trader['Company']." done by ".$producer['Company']." between ".$traders_start_date." and ".$traders_end_date." - amount ".array_sum($total_apus_with_fac_prod)." APUs";
                         $html .= "<br><br>";
                         
-                        $tot_apus=array_sum($total_apus_with_fac_prod);                       
+                        //$tot_apus=array_sum($total_apus_with_fac_prod);                       
                         
                         ?>
                         <br>
                         
-                        <input type="hidden" name="tot_apus" id="tot_apus" value="<?php echo $tot_apus;?>">
+                        <input type="hidden" name="tot_apus" id="tot_apus" value="<?php echo /*$tot_apus;*/ "0";?>">
                         <div class="col-md-9">                            
                             <div style="overflow-y:scroll;height:650px;">
                             <table class="table" id="traders_apes_table" style="border:1px solid #000;">
@@ -5316,7 +5318,7 @@ include('../menu.php');
                                         <td style="border: 1px solid #000;color:red;text-align:right;">
                                         <?php
                                         $html .="</td>";
-                                        $html .="<td style=\"border: 1px solid #000;color:red;text-align:right;\">";
+                                        $html .="<td class=\"total_apes\" style=\"border: 1px solid #000;color:red;text-align:right;\">";
             
                                         if((substr($orders[$i]['prod_id'],1)>1100)&&(substr($orders[$i]['prod_id'],1)<1160))
                                         {
