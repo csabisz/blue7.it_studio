@@ -7043,7 +7043,7 @@ include('../menu.php');
                                             $.ajax({
                                                 url: "generate_traders_apes_pdf.php",
                                                 method: "post",
-                                                data: {html:<?php echo $url_to_be_sent;?>,trader:"<?php echo $trader['Company'];?>",producer:"<?php echo $producer['Company'];?>",traders_start_date:"<?php echo $traders_start_date;?>",traders_end_date:"<?php echo $traders_end_date;?>",total_apes:total.toFixed(2)},
+                                                data: {html:"<?php echo $url_to_be_sent;?>",trader:"<?php echo $trader['Company'];?>",producer:"<?php echo $producer['Company'];?>",traders_start_date:"<?php echo $traders_start_date;?>",traders_end_date:"<?php echo $traders_end_date;?>",total_apes:total.toFixed(2)},
                                                 dataType:"html",
                                                 success:function(data) {
                                                     
