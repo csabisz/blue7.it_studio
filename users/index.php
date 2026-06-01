@@ -5315,7 +5315,7 @@ include('../menu.php');
                                             }
                                             ?>
                                         </td>
-                                        <td style="border: 1px solid #000;color:red;text-align:right;">
+                                        <td class="total_apes" style="border: 1px solid #000;color:red;text-align:right;">
                                         <?php
                                         $html .="</td>";
                                         $html .="<td class=\"total_apes\" style=\"border: 1px solid #000;color:red;text-align:right;\">";
