@@ -4340,11 +4340,7 @@ include('../menu.php');
                                 }
                             //}
                         } */
-                        $html = "<html>";
-                        $html .= "<body>";
-                        $html .= "<h2 style=\"text-align:center;\">List of work</h2>";
-                        $html .= "For ".$trader['Company']." done by ".$producer['Company']." between ".$traders_start_date." and ".$traders_end_date." - amount ".array_sum($total_apus_with_fac_prod)." APUs";
-                        $html .= "<br><br>";
+                        
                         
                         //$tot_apus=array_sum($total_apus_with_fac_prod);                       
                         
@@ -4371,7 +4367,7 @@ include('../menu.php');
                                 </thead>
                                 <tbody style="overflow-y:scroll;height:650px;">
                         <?php
-                        $html .="<table style=\"border:1px solid #000;\">";
+                        $html ="<table style=\"border:1px solid #000;\">";
                         $html .="<tr style=\"border: 1px solid #000;\">";
                         $html .="<th style=\"border: 1px solid #000;\">Order date</th>";
                         $html .="<th style=\"border: 1px solid #000;\">Products</th>";
@@ -7023,42 +7019,40 @@ include('../menu.php');
                                         </tbody>
                                         </table>
 
-                                        <script type="text/javascript">
-                                            $(document).ready(function(){
-                                                let total = 0;
-
-                                                $('#traders_apes_table .total_apes').each(function () {
-                                                    total += parseFloat($(this).text().trim()) || 0;
-                                                });
-                                                $('#tot_apes').val(total.toFixed(2));
-
-                                                setTimeout(function(){
-                                                    $('#total_apus').text($('#tot_apes').val());
-                                                },1000);
-                                            });
-                                        </script>
+                                        
                                     </div> 
                                 </div>    
                                 <?php
                                 $html .="</table>";
             
-                                $html .= "<br><b>Total APEs = 0".$tot_apus."</b>&nbsp;";
-                                
-                                $html .= "</body></html>";
-                                
-                                
-                                //file_put_contents("apus.html",$html);
-                                
-                                require_once '../vendor/autoload.php';
-
-                                
-
-                                $pdf=new \Mpdf\Mpdf();
-                                $pdf->setAutoBottomMargin = 'stretch';
-                                //$pdf->SetHTMLFooter($signature);
-                                $pdf->WriteHTML($html);
-                                $pdf->Output("apus_traders.pdf");
+                                $encrypted_client_data=base64_encode($html);
+                                $url_to_be_sent=urlencode($encrypted_client_data);
                                 ?>
+                                <script type="text/javascript">
+                                    $(document).ready(function(){
+                                        let total = 0;
+
+                                        $('#traders_apes_table .total_apes').each(function () {
+                                            total += parseFloat($(this).text().trim()) || 0;
+                                        });
+                                        $('#tot_apes').val(total.toFixed(2));
+
+                                        setTimeout(function(){
+                                            $('#total_apus').text($('#tot_apes').val());
+
+                                            $.ajax({
+                                                url: "generate_traders_apes_pdf.php",
+                                                method: "post",
+                                                data: {html:<?php echo $url_to_be_sent;?>,trader:"<?php echo $trader['Company'];?>",producer:"<?php echo $producer['Company'];?>",traders_start_date:"<?php echo $traders_start_date;?>",traders_end_date:"<?php echo $traders_end_date;?>",total_apes:total.toFixed(2)},
+                                                dataType:"html",
+                                                success:function(data) {
+                                                    
+                                                }
+                                            });
+
+                                        },1000);
+                                    });
+                                </script>
                                 <br>
                                 
                             <?php
