@@ -7034,7 +7034,7 @@ include('../menu.php');
 
                                                 setTimeout(function(){
                                                     $('#total_apus').text($('#tot_apes').val());
-                                                },2000);
+                                                },1000);
                                             });
                                         </script>
                                     </div> 
@@ -7042,7 +7042,7 @@ include('../menu.php');
                                 <?php
                                 $html .="</table>";
             
-                                $html .= "<br><b>Total APEs = ".$tot_apus."</b>&nbsp;";
+                                $html .= "<br><b>Total APEs = 0".$tot_apus."</b>&nbsp;";
                                 
                                 $html .= "</body></html>";
                                 
