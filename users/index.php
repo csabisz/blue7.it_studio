@@ -4352,6 +4352,7 @@ include('../menu.php');
                         <br>
                         
                         <input type="hidden" name="tot_apus" id="tot_apus" value="<?php echo /*$tot_apus;*/ "0";?>">
+                        <input type="hidden" name="tot_apes" id="tot_apes" value="<?php echo "0";?>">
                         <div class="col-md-9">                            
                             <div style="overflow-y:scroll;height:650px;">
                             <table class="table" id="traders_apes_table" style="border:1px solid #000;">
@@ -7029,7 +7030,7 @@ include('../menu.php');
                                                 $('#traders_apes_table .total_apes').each(function () {
                                                     total += parseFloat($(this).text().trim()) || 0;
                                                 });
-                                                $('#total_apus').text(total);
+                                                $('#tot_apes').val(total);
                                             });
                                         </script>
                                     </div> 
