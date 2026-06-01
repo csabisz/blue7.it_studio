@@ -7021,6 +7021,17 @@ include('../menu.php');
                                     ?>
                                         </tbody>
                                         </table>
+
+                                        <script type="text/javascript">
+                                            $(document).ready(function(){
+                                                let total = 0;
+
+                                                $('#traders_apes_table .total-apes').each(function () {
+                                                    total += parseFloat($(this).text().trim()) || 0;
+                                                });
+                                                $('#tot_apus').val(total);
+                                            });
+                                        </script>
                                     </div> 
                                 </div>    
                                 <?php
