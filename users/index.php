@@ -7030,7 +7030,11 @@ include('../menu.php');
                                                 $('#traders_apes_table .total_apes').each(function () {
                                                     total += parseFloat($(this).text().trim()) || 0;
                                                 });
-                                                $('#tot_apes').val(total);
+                                                $('#tot_apes').val(total.toFixed(2));
+
+                                                setTimeout(function(){
+                                                    $('#total_apus').text($('#tot_apes').val());
+                                                },2000);
                                             });
                                         </script>
                                     </div> 
