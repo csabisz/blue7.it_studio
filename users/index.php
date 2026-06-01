@@ -7026,10 +7026,10 @@ include('../menu.php');
                                             $(document).ready(function(){
                                                 let total = 0;
 
-                                                $('#traders_apes_table .total-apes').each(function () {
+                                                $('#traders_apes_table .total_apes').each(function () {
                                                     total += parseFloat($(this).text().trim()) || 0;
                                                 });
-                                                $('#tot_apus').val(total);
+                                                $('#total_apus').text(total);
                                             });
                                         </script>
                                     </div> 
