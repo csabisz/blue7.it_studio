@@ -555,29 +555,29 @@ $update_ex_b7_data['col_amount_ex_b7']=(!empty($_POST['col_amount1_ex_b7'])?$pro
 $update_ex_b8_data['o_id']=$update_data['o_id'];
 
 
-$update_ex_b8_data['col_price_ex_b8']=(!empty($_POST['col_price_ex_b8'])?$prod->xss_fix($_POST['col_price_ex_b8']):"1");
-$update_ex_b8_data['fac_cl_ex_b8']=(!empty($_POST['fac_cl_ex_b8'])?$prod->xss_fix($_POST['fac_cl_ex_b8']):"1");
-$update_ex_b8_data['o_price_ex_b8']=(!empty($_POST['o_price_ex_b8'])?$prod->xss_fix($_POST['o_price_ex_b8']):"1");
+$update_ex_b8_data['col_price_ex_b8']=(!empty($_POST['col_price_ex_b8'])?$prod->xss_fix($_POST['col_price_ex_b8']):"1.00");
+$update_ex_b8_data['fac_cl_ex_b8']=(!empty($_POST['fac_cl_ex_b8'])?$prod->xss_fix($_POST['fac_cl_ex_b8']):"1.00");
+$update_ex_b8_data['o_price_ex_b8']=(!empty($_POST['o_price_ex_b8'])?$prod->xss_fix($_POST['o_price_ex_b8']):"1.00");
 
-$update_ex_b8_data['p1861_fac']=(!empty($_POST['p1861_fac'])?$prod->xss_fix($_POST['p1861_fac']):"1");
-$update_ex_b8_data['p1863_fac']=(!empty($_POST['p1863_fac'])?$prod->xss_fix($_POST['p1863_fac']):"1");
-$update_ex_b8_data['p1866_fac']=(!empty($_POST['p1866_fac'])?$prod->xss_fix($_POST['p1866_fac']):"1");
-$update_ex_b8_data['p1881_fac']=(!empty($_POST['p1881_fac'])?$prod->xss_fix($_POST['p1881_fac']):"1");
+$update_ex_b8_data['p1861_fac']=(!empty($_POST['p1861_fac'])?$prod->xss_fix($_POST['p1861_fac']):"1.00");
+$update_ex_b8_data['p1863_fac']=(!empty($_POST['p1863_fac'])?$prod->xss_fix($_POST['p1863_fac']):"1.00");
+$update_ex_b8_data['p1866_fac']=(!empty($_POST['p1866_fac'])?$prod->xss_fix($_POST['p1866_fac']):"1.00");
+$update_ex_b8_data['p1881_fac']=(!empty($_POST['p1881_fac'])?$prod->xss_fix($_POST['p1881_fac']):"1.00");
 
-$update_ex_b8_data['col_apus_ex_b8']=(!empty($_POST['col_apus_ex_b8'])?$prod->xss_fix($_POST['col_apus_ex_b8']):"1");
-$update_ex_b8_data['fac_prod_ex_b8']=(!empty($_POST['fac_prod_ex_b8'])?$prod->xss_fix($_POST['fac_prod_ex_b8']):"1");
-$update_ex_b8_data['o_apus_ex_b8']=(!empty($_POST['o_apus_ex_b8'])?$prod->xss_fix($_POST['o_apus_ex_b8']):"1");
+$update_ex_b8_data['col_apus_ex_b8']=(!empty($_POST['col_apus_ex_b8'])?$prod->xss_fix($_POST['col_apus_ex_b8']):"1.00");
+$update_ex_b8_data['fac_prod_ex_b8']=(!empty($_POST['fac_prod_ex_b8'])?$prod->xss_fix($_POST['fac_prod_ex_b8']):"1.00");
+$update_ex_b8_data['o_apus_ex_b8']=(!empty($_POST['o_apus_ex_b8'])?$prod->xss_fix($_POST['o_apus_ex_b8']):"1.00");
 
-$update_ex_b8_data['col_labc_ex_b8']=(!empty($_POST['col_labc_ex_b8'])?$prod->xss_fix($_POST['col_labc_ex_b8']):"1");
-$update_ex_b8_data['fac_labc_ex_b8']=(!empty($_POST['fac_labc_ex_b8'])?$prod->xss_fix($_POST['fac_labc_ex_b8']):"1");
-$update_ex_b8_data['total_labcs_ex_b8']=(!empty($_POST['total_labcs_ex_b8'])?$prod->xss_fix($_POST['total_labcs_ex_b8']):"1");
+$update_ex_b8_data['col_labc_ex_b8']=(!empty($_POST['col_labc_ex_b8'])?$prod->xss_fix($_POST['col_labc_ex_b8']):"1.00");
+$update_ex_b8_data['fac_labc_ex_b8']=(!empty($_POST['fac_labc_ex_b8'])?$prod->xss_fix($_POST['fac_labc_ex_b8']):"1.00");
+$update_ex_b8_data['total_labcs_ex_b8']=(!empty($_POST['total_labcs_ex_b8'])?$prod->xss_fix($_POST['total_labcs_ex_b8']):"1.00");
 
 $update_ex_b8_data['col_amount_ex_b8']=(!empty($_POST['col_amount1_ex_b8'])?$prod->xss_fix($_POST['col_amount1_ex_b8']):"0");
 
 if (strpos($update_data['collection'], 'p1501') === false) 
 {	
 	$update_in_b5_data['col_amount_in_b5']=0;
-	$update_in_b5_data['fac_cl_in_b5']=0;
+	$update_in_b5_data['fac_cl_in_b5']=0.00;
 	$update_in_b5_data['layout_id']=0;
 	$update_in_b5_data['window_id']=0;
 }
@@ -585,7 +585,7 @@ if (strpos($update_data['collection'], 'p1501') === false)
 if (strpos($update_data['collection'], 'p1601') === false) 
 {	
 	$update_in_b6_data['col_amount_in_b6']=0;
-	$update_in_b6_data['fac_cl_in_b6']=0;
+	$update_in_b6_data['fac_cl_in_b6']=0.00;
 	$update_in_b6_data['layout_id']=0;
 	$update_in_b6_data['window_id']=0;
 }
@@ -593,7 +593,7 @@ if (strpos($update_data['collection'], 'p1601') === false)
 if (strpos($update_data['collection'], 'p1701') === false) 
 {	
 	$update_in_b7_data['col_amount_in_b7']=0;
-	$update_in_b7_data['fac_cl_in_b7']=0;
+	$update_in_b7_data['fac_cl_in_b7']=0.00;
 	$update_in_b7_data['layout_id']=0;
 	$update_in_b7_data['window_id']=0;
 }
@@ -601,7 +601,7 @@ if (strpos($update_data['collection'], 'p1701') === false)
 if (strpos($update_data['collection'], 'p1801') === false) 
 {	
 	$update_in_b8_data['col_amount_in_b8']=0;
-	$update_in_b8_data['fac_cl_in_b8']=0;
+	$update_in_b8_data['fac_cl_in_b8']=0.00;
 	$update_in_b8_data['layout_id']=0;
 	$update_in_b8_data['window_id']=0;
 }
