@@ -186,6 +186,62 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         }
         .sg-status { font-size: 12px; color: #6c757d; padding: 4px 0; }
         .sg-status.error { color: #dc3545; }
+
+        /* -----------------------------------------------------------------
+         * Previously Generated Images — current-source highlight
+         * -----------------------------------------------------------------
+         *
+         * A click on a thumbnail in #aiGeneratedPreviews now promotes that
+         * image to the "current source" — the one that will be sent (or
+         * referenced) by the next generation. The visual marker is intentionally
+         * unobtrusive (a 2px ring + small chevron badge) so it does not fight
+         * with the existing "Saved to task" success badge that uses the
+         * top-right corner.
+         *
+         * The matching class is added/removed by sgHighlightCurrentSource()
+         * in JS, and is keyed off the wrapper's data-image-id attribute so it
+         * survives re-renders of the strip (e.g. after a new generation is
+         * prepended).
+         */
+        #aiGeneratedPreviews .position-relative.sg-is-current {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+            border-radius: .25rem;
+        }
+        #aiGeneratedPreviews .position-relative.sg-is-current::before {
+            content: "Source";
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            z-index: 10;
+            background: #007bff;
+            color: #fff;
+            font-size: 10px;
+            line-height: 1;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 3px;
+            letter-spacing: .03em;
+            pointer-events: none;
+        }
+        /* The synthetic "Original" entry uses a slightly different label so the
+         * user can always tell it apart from a generated source. */
+        #aiGeneratedPreviews .position-relative.sg-is-original::after {
+            content: "Original";
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            z-index: 10;
+            background: rgba(33, 37, 41, .85);
+            color: #fff;
+            font-size: 10px;
+            line-height: 1;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 3px;
+            letter-spacing: .03em;
+            pointer-events: none;
+        }
         .sg-quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 
         /* -----------------------------------------------------------------
@@ -1142,8 +1198,11 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
         if (editImageBtn) {
             editImageBtn.addEventListener('click', function() {
-                // Use edited image if available, otherwise original
-                var imageToEdit = editedImageDataUrl || originalImageUrl;
+                // Editing operates on whatever is currently visible — that's
+                // the original, the last manual edit, OR a previously-generated
+                // image the user just selected from the strip.
+                var imageToEdit = (sourceImagePreview && sourceImagePreview.src) ||
+                                  editedImageDataUrl || originalImageUrl;
 
                 AIImageEditor.init(imageToEdit, {
                     onApply: function(dataUrl) {
@@ -1155,6 +1214,22 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                             newImg.onload = function() {
                                 sourceImagePreview.src = dataUrl;
                                 editedIndicator.style.display = 'flex';
+
+                                // Manual edits force the next generation back
+                                // through /v1/generate (the SG side has no
+                                // "refine this generation with these pixel
+                                // edits" verb). Promote ourselves to 'edited'
+                                // and drop any pending generationId so the
+                                // branch in sgGenerate() picks /generate.
+                                sgCurrentSource = {
+                                    kind:         'edited',
+                                    generationId: null,
+                                    orfAiId:      null,
+                                    imageUrl:     dataUrl,
+                                    imageData:    null
+                                };
+                                sgHighlightCurrentSource(); // clears the strip outline
+                                sgUpdateGenerateButtonState();
                             };
                             newImg.onerror = function() {
                                 console.error('Failed to load edited image data URL');
@@ -1179,6 +1254,9 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 editedImageDataUrl = null;
                 sourceImagePreview.src = originalImageUrl;
                 editedIndicator.style.display = 'none';
+                // Revert always restores the synthetic "Original" entry as
+                // the current source — that's what the user sees on screen.
+                sgSetCurrentSource(sgBuildOriginalEntry());
             });
         }
 
@@ -1357,13 +1435,77 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
         AIModalShared.initComparisonModal(originalImageUrl, apiBaseUrl);
 
+        // -----------------------------------------------------------------
+        // Click handler for "Previously Generated Images"
+        // -----------------------------------------------------------------
+        //
+        // Two behaviours combined into a single click:
+        //
+        //   1. ALWAYS — promote the clicked image to "current source" so the
+        //      next Generate / Refine uses it. Updates #sourceImagePreview,
+        //      sgCurrentSource (logical state), and the strip highlight.
+        //
+        //   2. For real generated images (not the synthetic Original entry)
+        //      — also open the legacy comparison modal so the user can still
+        //      compare and use the existing "Save to Task" button. The
+        //      synthetic Original entry is the same image already shown in
+        //      #sourceImagePreview, so there's nothing to compare against
+        //      itself — we just promote and skip the modal.
         AIModalShared.initPreviewsContainer('aiGeneratedPreviews', function(imageData, index) {
+            sgSetCurrentSource(imageData);
+            if (imageData && imageData.is_original) return;
             AIModalShared.openComparisonModal(imageData, index, apiBaseUrl, onSaveButtonUpdate);
         });
 
         // =========================================================================
         // LOAD PREVIOUS IMAGES
         // =========================================================================
+
+        // Build the synthetic "Original" entry that gets prepended to the
+        // "Previously Generated Images" strip every time the modal loads (or
+        // the strip is refreshed). It mirrors the imageData shape produced by
+        // the regular AI flow so it can flow through AIModalShared.* helpers
+        // unchanged. The `is_original` flag is the marker the click handler,
+        // sgSetCurrentSource(), and the generate/refine branch use to tell
+        // it apart from a real DB record (it has no orf_ai_id, so the
+        // comparison modal / Save-to-Task button cannot meaningfully act on
+        // it).
+        function sgBuildOriginalEntry() {
+            return {
+                id:             SG_ORIGINAL_SOURCE_ID,
+                image_url:      originalImageUrl,
+                thumbnail_url:  originalImageUrl,
+                model:          'Source',
+                room_type:      'Original task image',
+                style_preset:   '',
+                quality:        '',
+                created_at:     'Original',
+                is_original:    true,
+                provider:       'source'
+            };
+        }
+
+        // Render the "Previously Generated Images" strip from a list of
+        // imageData objects. The Original entry is ALWAYS first; the rest
+        // come from ai_image_fetch_previous.php in the order the backend
+        // returned them (newest first). Highlights whichever entry matches
+        // sgCurrentSource so the user always sees what's wired as the next
+        // generation's input.
+        function sgRenderPreviewsStrip(images) {
+            var full = [sgBuildOriginalEntry()].concat(Array.isArray(images) ? images : []);
+            AIModalShared.setGeneratedImages(full);
+
+            previewsContainer.innerHTML = '';
+            full.forEach(function(imageData) {
+                var imagePreview = AIModalShared.createImagePreview(imageData);
+                if (imageData.is_original) {
+                    imagePreview.classList.add('sg-is-original');
+                }
+                previewsContainer.appendChild(imagePreview);
+            });
+
+            sgHighlightCurrentSource();
+        }
 
         function loadPreviousImages() {
             previewsContainer.innerHTML = '\
@@ -1375,25 +1517,19 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             fetch(apiBaseUrl + '/ai_image_fetch_previous.php?orf_id=' + orfId)
                 .then(function(response) { return response.json(); })
                 .then(function(data) {
-                    if (data.success && data.data.images.length > 0) {
-                        AIModalShared.setGeneratedImages(data.data.images);
-
-                        previewsContainer.innerHTML = '';
-                        data.data.images.forEach(function(imageData) {
-                            var imagePreview = AIModalShared.createImagePreview(imageData);
-                            previewsContainer.appendChild(imagePreview);
-                        });
-                    } else {
-                        AIModalShared.setGeneratedImages([]);
-                        previewsContainer.innerHTML = '<div class="text-muted small"><em>No previously generated images yet.</em></div>';
-                    }
+                    var images = (data && data.success && data.data && Array.isArray(data.data.images))
+                                 ? data.data.images : [];
+                    sgRenderPreviewsStrip(images);
+                    // The Original entry is always first and is the default
+                    // selected source on modal open.
+                    sgSetCurrentSource(sgBuildOriginalEntry());
                     imagesLoaded = true;
                     checkReady();
                 })
                 .catch(function(error) {
                     console.error('Error loading previous images:', error);
-                    AIModalShared.setGeneratedImages([]);
-                    previewsContainer.innerHTML = '<div class="text-muted small"><em>Error loading previous images.</em></div>';
+                    sgRenderPreviewsStrip([]);
+                    sgSetCurrentSource(sgBuildOriginalEntry());
                     imagesLoaded = true;
                     checkReady();
                 });
@@ -1829,6 +1965,53 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         // tear down a long-running poll if the user closes the modal.
         var sgActiveAbort = null;
 
+        // -----------------------------------------------------------------
+        // Current-source state (drives /generate vs /refine selection)
+        // -----------------------------------------------------------------
+        //
+        // Every modal session has exactly one "current source" — the image
+        // that will be the input of the next AI generation. There are three
+        // possible flavours:
+        //
+        //   kind: 'original'  — the unmodified task image (originalImageUrl).
+        //                       Default on modal open. Next generation runs
+        //                       through POST /v1/generate with the source
+        //                       image uploaded as main_image.
+        //
+        //   kind: 'edited'    — originalImageUrl with manual edits applied
+        //                       in the image editor (data: URL stored in
+        //                       editedImageDataUrl). Same code path as
+        //                       'original' — /v1/generate, edited blob is
+        //                       what sgGetSourceBlob() returns.
+        //
+        //   kind: 'generated' — a previously-generated SG image the user
+        //                       clicked in the "Previously Generated Images"
+        //                       strip. When generationId is set AND the
+        //                       generation is still alive on the SG side
+        //                       (same API-key user, status=completed), the
+        //                       next generation runs through
+        //                       POST /v1/generations/{generationId}/refine
+        //                       — which is cheaper (first 3 free per
+        //                       session) and faster (no main_image upload).
+        //                       When generationId is missing (e.g. record
+        //                       loaded from an older session before refine
+        //                       support existed), we transparently fall
+        //                       back to /v1/generate after fetching the
+        //                       image_url as a blob via sgGetSourceBlob().
+        //
+        // The DOM is still the visual source of truth — sgSetCurrentSource()
+        // mutates #sourceImagePreview.src so sgGetSourceBlob() keeps working
+        // unchanged for the /generate path. sgCurrentSource is the *logical*
+        // source of truth used to pick which endpoint to call.
+        var SG_ORIGINAL_SOURCE_ID = '__sg_original__';
+        var sgCurrentSource = {
+            kind:         'original',
+            generationId: null,
+            orfAiId:      null,
+            imageUrl:     originalImageUrl,
+            imageData:    null
+        };
+
         function sgIsThreeD() {
             return String(sgState.toolSlug || '').toLowerCase().indexOf('3d') !== -1;
         }
@@ -2153,11 +2336,45 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                             savedItems.push(newImageData);
 
                             try {
-                                AIModalShared.addGeneratedImage(newImageData);
+                                // Insert into the shared images array at
+                                // index AFTER the synthetic Original entry
+                                // (position 0). Using addGeneratedImage()
+                                // here would unshift to position 0 and push
+                                // the Original out of its pinned slot — and
+                                // because the strip click handler keys off
+                                // visual index → allGeneratedImages[index],
+                                // a mismatch would mean clicks open the
+                                // wrong image. Keep them in lockstep.
+                                var all = (AIModalShared.getGeneratedImages && AIModalShared.getGeneratedImages()) || [];
+                                var originalIdx = -1;
+                                for (var ai = 0; ai < all.length; ai++) {
+                                    if (all[ai] && all[ai].is_original) { originalIdx = ai; break; }
+                                }
+                                if (originalIdx === -1) {
+                                    // No Original in the list — fall back to
+                                    // legacy "prepend" behaviour so we
+                                    // never lose the generated record.
+                                    all.unshift(newImageData);
+                                } else {
+                                    all.splice(originalIdx + 1, 0, newImageData);
+                                }
+                                AIModalShared.setGeneratedImages(all);
+
                                 if (previewsContainer && AIModalShared.createImagePreview) {
                                     var thumb = AIModalShared.createImagePreview(newImageData);
-                                    previewsContainer.insertBefore(thumb, previewsContainer.firstChild);
+                                    var originalEl = previewsContainer.querySelector('.position-relative.sg-is-original');
+                                    if (originalEl && originalEl.nextSibling) {
+                                        previewsContainer.insertBefore(thumb, originalEl.nextSibling);
+                                    } else if (originalEl) {
+                                        previewsContainer.appendChild(thumb);
+                                    } else {
+                                        previewsContainer.insertBefore(thumb, previewsContainer.firstChild);
+                                    }
                                 }
+
+                                // Re-apply the current-source outline in
+                                // case the new thumbnail landed next to it.
+                                sgHighlightCurrentSource();
                             } catch (uiErr) {
                                 // UI integration failures should never
                                 // break the save flow — just log them.
@@ -2370,7 +2587,21 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             else if (!sgPresetSelected())          reason = 'Pick a Colors & Textures preset in the Floor Plan Options panel.';
 
             generateFloorPlanBtn.disabled = reason !== null;
-            generateFloorPlanBtn.title = reason || 'Generate via Supergrundriss /v1/generate';
+
+            // Surface refine-mode in the button label + tooltip when the
+            // currently selected source is an in-session SG generation. The
+            // icon stays the same (drafting compass) so the button shape is
+            // stable, only the verb changes. Generate stays the default for
+            // the original image and any record that lacks generation_id.
+            var refineMode = sgCurrentSource &&
+                             sgCurrentSource.kind === 'generated' &&
+                             sgCurrentSource.generationId != null;
+            var label   = refineMode ? 'Refine Selected Image' : 'Generate 2D Floor Plan';
+            var endpoint = refineMode
+                ? 'POST /v1/generations/' + sgCurrentSource.generationId + '/refine'
+                : 'POST /v1/generate';
+            AIModalShared.setButtonWithIcon(generateFloorPlanBtn, 'fas fa-drafting-compass', label);
+            generateFloorPlanBtn.title = reason || ('Generation will run via ' + endpoint);
         }
 
         // Wire real-time validation listeners to the center dynamic-fields
@@ -2434,6 +2665,84 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         function sgGetSourceImageSrc() {
             var sourceImg = document.querySelector('#sourceImageContainer img');
             return sourceImg && sourceImg.src ? sourceImg.src : '';
+        }
+
+        // -----------------------------------------------------------------
+        // Current-source selection — wired to the "Previously Generated
+        // Images" click handler and to the image editor / Revert button.
+        // -----------------------------------------------------------------
+        //
+        // Promotes `imageData` to the "current source" of the modal:
+        //   - Updates the visible #sourceImagePreview <img> (so the user
+        //     sees what will feed the next generation, AND so sgGetSourceBlob()
+        //     keeps returning the right blob for the /generate path).
+        //   - Clears any pending image editor state (selecting a generated
+        //     image means "use THIS one", not "use the original with my
+        //     manual edits applied on top").
+        //   - Stores generationId (when present) so sgGenerate() can route
+        //     to /v1/generations/{id}/refine instead of /v1/generate.
+        //   - Refreshes the strip highlight + the Generate button label.
+        function sgSetCurrentSource(imageData) {
+            if (!imageData) return;
+
+            if (imageData.is_original || imageData.id === SG_ORIGINAL_SOURCE_ID) {
+                sgCurrentSource = {
+                    kind:         'original',
+                    generationId: null,
+                    orfAiId:      null,
+                    imageUrl:     originalImageUrl,
+                    imageData:    imageData
+                };
+            } else {
+                // The SG generation id is only set when the image came from
+                // an in-session sgGenerate() / sgRefine() call (sgBuildImageData
+                // populates it). Records loaded from ai_image_fetch_previous.php
+                // typically lack it — in that case we keep kind='generated'
+                // but generationId=null, and sgGenerate() will transparently
+                // fall back to /v1/generate (uploading the image as main_image
+                // via sgGetSourceBlob()).
+                sgCurrentSource = {
+                    kind:         'generated',
+                    generationId: (imageData.generation_id != null) ? imageData.generation_id : null,
+                    orfAiId:      imageData.id || null,
+                    imageUrl:     imageData.image_url || imageData.thumbnail_url || '',
+                    imageData:    imageData
+                };
+            }
+
+            // Mirror the logical state on the DOM so sgGetSourceBlob() (which
+            // still reads from #sourceImagePreview.src) uploads the right
+            // image when we fall back to /v1/generate.
+            if (sourceImagePreview && sgCurrentSource.imageUrl) {
+                sourceImagePreview.src = sgCurrentSource.imageUrl;
+            }
+
+            // Reset the manual-edit overlay — selecting a generated image
+            // replaces any pending pencil edits on the original.
+            editedImageDataUrl = null;
+            if (editedIndicator) editedIndicator.style.display = 'none';
+
+            sgHighlightCurrentSource();
+            sgUpdateGenerateButtonState();
+        }
+
+        // Add / move the `.sg-is-current` class onto the wrapper whose
+        // data-image-id matches sgCurrentSource. Robust to re-renders of the
+        // strip (we look up by attribute every time, no stale references).
+        function sgHighlightCurrentSource() {
+            if (!previewsContainer) return;
+            var currentId = sgCurrentSource.kind === 'original'
+                          ? SG_ORIGINAL_SOURCE_ID
+                          : sgCurrentSource.orfAiId;
+
+            previewsContainer.querySelectorAll('.position-relative.sg-is-current').forEach(function(el) {
+                el.classList.remove('sg-is-current');
+            });
+            if (currentId == null) return;
+            var target = previewsContainer.querySelector(
+                '.position-relative[data-image-id="' + String(currentId).replace(/"/g, '\\"') + '"]'
+            );
+            if (target) target.classList.add('sg-is-current');
         }
 
         // Decode a data: URL into a Blob (with the declared MIME).
@@ -3502,8 +3811,240 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 .finally(restore);
         }
 
+        // -------------------------------------------------------------------------
+        // Refine handler — POST /v1/generations/{id}/refine
+        // -------------------------------------------------------------------------
+        //
+        // Spec: https://supergrundriss.de/api/v1/docs#tag/generations/POST/v1/generations/%7Bid%7D/refine
+        //
+        // Differences vs /v1/generate:
+        //
+        //   - Method/body  : POST application/json (NOT multipart). The source
+        //                    image is referenced server-side by `id` — we do
+        //                    NOT upload a main_image, do NOT send tool_slug,
+        //                    settings_json or preset (the refined job inherits
+        //                    those from the source generation).
+        //   - Required     : additional_instructions (1-1000 chars).
+        //   - Optional     : quality_tier (defaults to the source's quality).
+        //   - Pricing      : the first 3 successful refines in the same SG
+        //                    session are free; later refines cost the standard
+        //                    quality price. The credits_cost field on the
+        //                    returned Generation tells you what was actually
+        //                    debited (we just surface it in the console log).
+        //   - Errors       : 404 if the source generation doesn't exist, is
+        //                    not owned by this API key user, or isn't in
+        //                    status=completed.
+        //
+        // Everything downstream of the API call (status polling, result image
+        // download, results modal, DB register, "Previously Generated Images"
+        // strip update) is IDENTICAL to sgGenerate — we re-enter the same
+        // .then(generation => …) pipeline.
+        function sgRefine() {
+            if (sgIsGenerating) return;
+
+            if (!SUPERGRUNDRISS_CONFIG.apiKey) {
+                AIModalShared.showNotification('Missing Supergrundriss API key.', 'danger');
+                AIModalShared.sendToParent('error', { message: 'Missing Supergrundriss API key', code: 'SG_NO_API_KEY' });
+                return;
+            }
+
+            var sourceId = sgCurrentSource && sgCurrentSource.generationId;
+            if (sourceId == null) {
+                // Should never happen — the dispatcher only routes here when
+                // generationId is set — but defend anyway and degrade
+                // gracefully to /generate so the user is never stuck.
+                console.warn('[SG] sgRefine() called without a source generationId; falling back to /generate.');
+                return sgGenerate();
+            }
+
+            var additionalInstructions = sgBuildAdditionalInstructions();
+            if (!additionalInstructions) {
+                AIModalShared.showNotification(
+                    'Add a short note in "Additional Instructions" describing what to change (e.g. "make the walls lighter"). Refine requires a non-empty instruction.',
+                    'warning', 5000);
+                return;
+            }
+
+            sgIsGenerating = true;
+            sgUpdateGenerateButtonState();
+            AIModalShared.setButtonLoading(generateFloorPlanBtn, 'Refining…');
+            generatingOverlay.classList.add('active');
+            sgOpenProgress();
+            sgSetProgressStatus('Submitting refine request…');
+
+            sgActiveAbort = new AbortController();
+            var abortSignal = sgActiveAbort.signal;
+
+            var hardTimeoutId = setTimeout(function() {
+                if (sgActiveAbort) sgActiveAbort.abort();
+            }, SUPERGRUNDRISS_CONFIG.requestTimeoutMs);
+
+            var restore = function() {
+                sgIsGenerating = false;
+                clearTimeout(hardTimeoutId);
+                sgActiveAbort = null;
+                generatingOverlay.classList.remove('active');
+                sgCloseProgress();
+                // sgUpdateGenerateButtonState() will pick the right label
+                // (Refine vs Generate) from sgCurrentSource — no need to
+                // hard-code one here.
+                sgUpdateGenerateButtonState();
+            };
+
+            var body = { additional_instructions: additionalInstructions };
+            if (sgState.quality_tier) body.quality_tier = sgState.quality_tier;
+
+            console.log('[SG] POST /v1/generations/' + sourceId + '/refine', body);
+
+            fetch(SUPERGRUNDRISS_CONFIG.apiBaseUrl + '/generations/' + encodeURIComponent(sourceId) + '/refine', {
+                method:  'POST',
+                headers: sgAuthHeaders({ 'Content-Type': 'application/json' }),
+                body:    JSON.stringify(body),
+                signal:  abortSignal
+            })
+                .then(function(res) {
+                    return res.text().then(function(text) {
+                        var b;
+                        try { b = text ? JSON.parse(text) : {}; }
+                        catch (e) { throw new Error('Malformed server response (HTTP ' + res.status + ').'); }
+                        if (!res.ok || !b || b.success !== true || !b.data) {
+                            var msg = (b && (b.error || b.message)) || ('HTTP ' + res.status);
+                            var err = new Error(msg);
+                            err.code = (b && b.code) || ('HTTP_' + res.status);
+                            err.status = res.status;
+                            throw err;
+                        }
+                        console.log('[SG] refine accepted — credits_cost=' +
+                            (b.data.credits_cost != null ? b.data.credits_cost : '?') +
+                            ' new_id=' + b.data.id);
+                        return b.data;
+                    });
+                })
+                .then(function(generation) {
+                    sgSetProgressStatus('Status: ' + (generation.status || 'unknown'));
+                    if (generation.status === 'completed') return generation;
+                    if (generation.status === 'failed') {
+                        throw new Error(generation.error_message || 'Refine failed.');
+                    }
+                    return sgPollGeneration(generation.id, abortSignal);
+                })
+                .then(function(generation) {
+                    // Single-item path — refine always produces ONE child
+                    // generation. Reuse the same {full image + thumbnail}
+                    // download pipeline as sgGenerate.
+                    return Promise.all([
+                        sgGetResultImage(generation, abortSignal),
+                        sgFetchImageObjectUrl(generation.result_thumbnail_url).catch(function() { return null; })
+                    ]).then(function(results) {
+                        var resultImage = results[0];
+                        if (!resultImage || !resultImage.objectUrl) {
+                            throw new Error('Refine completed but no image could be downloaded.');
+                        }
+                        return [{
+                            generation:     generation,
+                            imageObjectUrl: resultImage.objectUrl,
+                            thumbObjectUrl: results[1] || resultImage.objectUrl,
+                            resultImage:    resultImage
+                        }];
+                    });
+                })
+                .then(function(items) {
+                    // Open results modal with the refined image so the user
+                    // sees the outcome immediately — same UX as a generation.
+                    sgOpenResults(items, sgCurrentSource.imageUrl || originalImageUrl);
+                    AIModalShared.showNotification('Refined floor plan ready!', 'success', 3000);
+
+                    items.forEach(function(item) {
+                        AIModalShared.sendToParent('imageGenerated', {
+                            orf_id:         orfId,
+                            provider:       'supergrundriss',
+                            refined:        true,
+                            source_generation_id: sourceId,
+                            generation_id:  item.generation.id,
+                            tool_type:      item.generation.tool_type,
+                            quality_tier:   item.generation.quality_tier,
+                            credits_cost:   item.generation.credits_cost,
+                            image_url:      item.imageObjectUrl,
+                            thumbnail_url:  item.thumbObjectUrl,
+                            result_image_url: item.resultImage && item.resultImage.url
+                        });
+                    });
+
+                    // Same DB-register + strip-prepend pipeline as generate.
+                    // Note: after the new image lands in "Previously Generated
+                    // Images" via sgPersistGeneratedItems → addGeneratedImage,
+                    // it carries its own generation_id (from sgBuildImageData)
+                    // so clicking it again chains into another refine. That
+                    // gives the user the "image#2 → image#3 → image#4 …"
+                    // loop the spec calls for.
+                    sgSetProgressStatus('Saving refined image to previously generated images…');
+                    sgPersistGeneratedItems(items);
+                })
+                .catch(function(err) {
+                    console.error('Supergrundriss refine failed:', err);
+                    var message;
+                    if (err && err.name === 'AbortError') {
+                        message = 'Refine cancelled (request took longer than ' +
+                                  Math.round(SUPERGRUNDRISS_CONFIG.requestTimeoutMs / 1000) + 's).';
+                    } else if (err && (err.code === 'invalid_api_key' || err.status === 401)) {
+                        message = 'Invalid or revoked Supergrundriss API key.';
+                    } else if (err && (err.code === 'forbidden' || err.status === 403)) {
+                        message = 'This origin is not whitelisted for the Supergrundriss key.';
+                    } else if (err && err.code === 'insufficient_credits') {
+                        message = 'Not enough Supergrundriss credits to refine (first 3 in the session are free).';
+                    } else if (err && err.code === 'rate_limited') {
+                        message = 'Rate limited — wait a minute and try again.';
+                    } else if (err && err.status === 404) {
+                        message = 'Source generation #' + sourceId +
+                                  ' is no longer available on the server (it may have expired or wasn\'t owned by this API key). ' +
+                                  'Re-select the original image to generate from scratch.';
+                    } else if (err && err.code === 'bad_request') {
+                        message = err.message || 'Bad request — check the additional instructions.';
+                    } else if (err && /NetworkError|Failed to fetch/i.test(err.message || '')) {
+                        message = 'Network error — please check your connection and try again.';
+                    } else {
+                        message = (err && err.message) || 'Unknown error during refine.';
+                    }
+                    AIModalShared.showNotification('Refine failed: ' + message, 'danger', 6000);
+                    AIModalShared.sendToParent('error', {
+                        message: 'Supergrundriss refine failed: ' + message,
+                        code: (err && err.code) || 'SG_REFINE_FAILED'
+                    });
+                })
+                .finally(restore);
+        }
+
+        // -------------------------------------------------------------------------
+        // Dispatcher — routes the single "Generate" button click to either
+        // /v1/generate or /v1/generations/{id}/refine depending on what the
+        // user picked in "Previously Generated Images".
+        // -------------------------------------------------------------------------
+        //
+        // Routing rules (single source of truth = sgCurrentSource):
+        //
+        //   kind=original / kind=edited        → sgGenerate()  → /v1/generate
+        //   kind=generated && generationId set → sgRefine()    → /v1/generations/{id}/refine
+        //   kind=generated && no generationId  → sgGenerate()  → /v1/generate
+        //                                         (image is fetched via
+        //                                         sgGetSourceBlob() because
+        //                                         #sourceImagePreview was
+        //                                         already pointed at it by
+        //                                         sgSetCurrentSource)
+        //
+        // This keeps sgGenerate() unchanged — it still works the same way for
+        // every non-refine case, including "use this previously-generated
+        // image as the source for a brand-new generation chain".
+        function sgGenerateOrRefine() {
+            if (sgCurrentSource &&
+                sgCurrentSource.kind === 'generated' &&
+                sgCurrentSource.generationId != null) {
+                return sgRefine();
+            }
+            return sgGenerate();
+        }
+
         if (generateFloorPlanBtn) {
-            generateFloorPlanBtn.addEventListener('click', sgGenerate);
+            generateFloorPlanBtn.addEventListener('click', sgGenerateOrRefine);
         }
 
         // -------------------------------------------------------------------------
