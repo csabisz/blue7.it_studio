@@ -23,6 +23,8 @@
  *   - imageSaved:      User explicitly clicked "Save to Task" and the
  *                      backend attached the AI record to a task file.
  *                      Carries: { orf_id, orf_ai_id, saved_orf_id }
+ *   - imageDeleted:    User deleted a previously-generated image from
+ *                      history. Carries: { orf_id, orf_ai_id }
  *   - error:           Any error occurred
  *   - close:           User clicked close button
  */
@@ -46,6 +48,20 @@ function validateToken($token) {
     return !empty($token);
 }
 
+/**
+ * Return a JSON response and terminate.
+ *
+ * @param int   $statusCode
+ * @param array $payload
+ * @return void
+ */
+function jsonResponse($statusCode, $payload) {
+    http_response_code($statusCode);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($payload);
+    exit;
+}
+
 // Validate request
 if (!$orf_id || !validateToken($token)) {
     http_response_code(403);
@@ -67,6 +83,169 @@ function getDbConnection() {
 
     mysqli_set_charset($mysqli, 'utf8mb4');
     return $mysqli;
+}
+
+/**
+ * Check whether a table has a specific column.
+ *
+ * @param mysqli $mysqli
+ * @param string $table
+ * @param string $column
+ * @return bool
+ */
+function dbColumnExists($mysqli, $table, $column) {
+    $table = mysqli_real_escape_string($mysqli, $table);
+    $column = mysqli_real_escape_string($mysqli, $column);
+    $sql = "SHOW COLUMNS FROM `{$table}` LIKE '{$column}'";
+    $res = mysqli_query($mysqli, $sql);
+    if (!$res) {
+        return false;
+    }
+    $exists = mysqli_num_rows($res) > 0;
+    mysqli_free_result($res);
+    return $exists;
+}
+
+/**
+ * Convert public image URL into a local path for cleanup.
+ *
+ * @param string $url
+ * @return string|null
+ */
+function resolveLocalImagePathFromUrl($url) {
+    if (!$url || !is_string($url)) return null;
+    $url = trim($url);
+    if ($url === '') return null;
+
+    // Already a local absolute path.
+    if (strpos($url, DIRECTORY_SEPARATOR) === 0 && file_exists($url)) {
+        return $url;
+    }
+
+    $parts = @parse_url($url);
+    if (!$parts || empty($parts['path'])) {
+        return null;
+    }
+
+    $path = $parts['path'];
+    if (strpos($path, '/studio/') !== 0) {
+        return null;
+    }
+
+    $local = rtrim($_SERVER['DOCUMENT_ROOT'], '/\\') . $path;
+    return $local;
+}
+
+// JSON delete endpoint: deletes one generated image from history.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'delete_generated_image') {
+    try {
+        $rawBody = file_get_contents('php://input');
+        $jsonBody = json_decode($rawBody, true);
+        if (!is_array($jsonBody)) {
+            $jsonBody = [];
+        }
+
+        $request = array_merge($_POST, $jsonBody);
+        $deleteOrfId = isset($request['orf_id']) ? intval($request['orf_id']) : (isset($_GET['orf_id']) ? intval($_GET['orf_id']) : 0);
+        $deleteToken = isset($request['token']) ? (string)$request['token'] : (isset($_GET['token']) ? (string)$_GET['token'] : '');
+        $deleteOrfAiIdRaw = isset($request['orf_ai_id']) ? $request['orf_ai_id'] : null;
+        $deleteOrfAiId = intval($deleteOrfAiIdRaw);
+
+        // Backend guard: original image is synthetic and has no numeric orf_ai_id.
+        if (!$deleteOrfAiIdRaw || $deleteOrfAiId <= 0) {
+            jsonResponse(400, [
+                'success' => false,
+                'error' => 'Only generated images can be deleted.'
+            ]);
+        }
+        if (!$deleteOrfId || !validateToken($deleteToken)) {
+            jsonResponse(403, [
+                'success' => false,
+                'error' => 'Invalid request: Missing or invalid orf_id or token.'
+            ]);
+        }
+
+        $mysqli = getDbConnection();
+        mysqli_begin_transaction($mysqli);
+
+        $selectSql = "SELECT orf_ai_id, orf_id, generated_image_url, thumbnail_url FROM o_results_ai WHERE orf_ai_id = ? AND orf_id = ? LIMIT 1";
+        $stmtSelect = mysqli_prepare($mysqli, $selectSql);
+        if (!$stmtSelect) {
+            throw new Exception('Failed to prepare lookup query.');
+        }
+        mysqli_stmt_bind_param($stmtSelect, 'ii', $deleteOrfAiId, $deleteOrfId);
+        mysqli_stmt_execute($stmtSelect);
+        $rowRes = mysqli_stmt_get_result($stmtSelect);
+        $aiRow = mysqli_fetch_assoc($rowRes);
+        mysqli_stmt_close($stmtSelect);
+
+        if (!$aiRow) {
+            throw new Exception('Generated image not found, already deleted, or does not belong to this task.');
+        }
+
+        // Optional linked cleanup: if o_results has orf_ai_id, remove linked task-saved copies.
+        $deletedLinkedRows = 0;
+        if (dbColumnExists($mysqli, 'o_results', 'orf_ai_id')) {
+            $stmtLinked = mysqli_prepare($mysqli, "DELETE FROM o_results WHERE orf_ai_id = ?");
+            if (!$stmtLinked) {
+                throw new Exception('Failed to prepare linked records cleanup.');
+            }
+            mysqli_stmt_bind_param($stmtLinked, 'i', $deleteOrfAiId);
+            mysqli_stmt_execute($stmtLinked);
+            $deletedLinkedRows = mysqli_stmt_affected_rows($stmtLinked);
+            mysqli_stmt_close($stmtLinked);
+        }
+
+        $stmtDelete = mysqli_prepare($mysqli, "DELETE FROM o_results_ai WHERE orf_ai_id = ? AND orf_id = ?");
+        if (!$stmtDelete) {
+            throw new Exception('Failed to prepare delete query.');
+        }
+        mysqli_stmt_bind_param($stmtDelete, 'ii', $deleteOrfAiId, $deleteOrfId);
+        mysqli_stmt_execute($stmtDelete);
+        $deletedRows = mysqli_stmt_affected_rows($stmtDelete);
+        mysqli_stmt_close($stmtDelete);
+
+        if ($deletedRows < 1) {
+            throw new Exception('Delete failed. Please try again.');
+        }
+
+        mysqli_commit($mysqli);
+        mysqli_close($mysqli);
+
+        // Remove generated file + thumbnail from disk after DB commit.
+        $fileWarnings = [];
+        $paths = [];
+        $fullPath = resolveLocalImagePathFromUrl($aiRow['generated_image_url'] ?? '');
+        $thumbPath = resolveLocalImagePathFromUrl($aiRow['thumbnail_url'] ?? '');
+        if ($fullPath) $paths[] = $fullPath;
+        if ($thumbPath) $paths[] = $thumbPath;
+        $paths = array_values(array_unique($paths));
+
+        foreach ($paths as $path) {
+            if (!file_exists($path)) continue;
+            if (!@unlink($path)) {
+                $fileWarnings[] = 'Failed to delete file: ' . basename($path);
+            }
+        }
+
+        jsonResponse(200, [
+            'success' => true,
+            'data' => [
+                'orf_ai_id' => $deleteOrfAiId,
+                'deleted_linked_rows' => $deletedLinkedRows,
+                'file_warnings' => $fileWarnings
+            ]
+        ]);
+    } catch (Throwable $e) {
+        if (isset($mysqli) && $mysqli instanceof mysqli) {
+            @mysqli_rollback($mysqli);
+            @mysqli_close($mysqli);
+        }
+        jsonResponse(500, [
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
 }
 
 // Load image data
@@ -241,6 +420,33 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             border-radius: 3px;
             letter-spacing: .03em;
             pointer-events: none;
+        }
+        #aiGeneratedPreviews .sg-delete-btn {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            z-index: 11;
+            width: 26px;
+            height: 26px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(220, 53, 69, .94);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+            transition: transform .12s ease, background .12s ease, opacity .12s ease;
+        }
+        #aiGeneratedPreviews .sg-delete-btn:hover {
+            background: rgba(189, 33, 48, .98);
+            transform: scale(1.05);
+        }
+        #aiGeneratedPreviews .sg-delete-btn:disabled {
+            opacity: .7;
+            cursor: not-allowed;
+            transform: none;
         }
         .sg-quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 
@@ -1148,6 +1354,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         // Get orf_id from URL parameters
         var urlParams = new URLSearchParams(window.location.search);
         var orfId = urlParams.get('orf_id');
+        var authToken = urlParams.get('token') || '';
 
         // Base URL for API calls (same origin)
         var apiBaseUrl = '/studio/coordination';
@@ -1451,6 +1658,14 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         //      synthetic Original entry is the same image already shown in
         //      #sourceImagePreview, so there's nothing to compare against
         //      itself — we just promote and skip the modal.
+        function sgBuildDeleteActionUrl() {
+            var endpoint = new URL(window.location.href);
+            endpoint.searchParams.set('action', 'delete_generated_image');
+            endpoint.searchParams.set('orf_id', String(orfId || ''));
+            if (authToken) endpoint.searchParams.set('token', authToken);
+            return endpoint.toString();
+        }
+
         AIModalShared.initPreviewsContainer('aiGeneratedPreviews', function(imageData, index) {
             sgSetCurrentSource(imageData);
             if (imageData && imageData.is_original) return;
@@ -1485,6 +1700,127 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             };
         }
 
+        function sgGetGeneratedHistoryImages() {
+            var all = (AIModalShared.getGeneratedImages && AIModalShared.getGeneratedImages()) || [];
+            return all.filter(function(item) { return item && !item.is_original; });
+        }
+
+        function sgReconcileCurrentSourceAfterDeletion(deletedOrfAiId, remainingGenerated) {
+            var deletedId = String(deletedOrfAiId);
+            var wasDeletedCurrent = sgCurrentSource &&
+                sgCurrentSource.kind === 'generated' &&
+                sgCurrentSource.orfAiId != null &&
+                String(sgCurrentSource.orfAiId) === deletedId;
+
+            if (!wasDeletedCurrent) {
+                sgHighlightCurrentSource();
+                sgUpdateGenerateButtonState();
+                return;
+            }
+
+            if (remainingGenerated.length > 0) {
+                sgSetCurrentSource(remainingGenerated[0]);
+            } else {
+                sgSetCurrentSource(sgBuildOriginalEntry());
+            }
+        }
+
+        function sgDeleteGeneratedImage(imageData, deleteBtn) {
+            if (!imageData || imageData.is_original || imageData.id == null) {
+                return Promise.reject(new Error('Only generated images can be deleted.'));
+            }
+
+            var shouldDelete = window.confirm('Delete this generated image from history? This action cannot be undone.');
+            if (!shouldDelete) {
+                return Promise.resolve(false);
+            }
+
+            var originalBtnHtml = deleteBtn ? deleteBtn.innerHTML : '';
+            if (deleteBtn) {
+                deleteBtn.disabled = true;
+                deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            }
+
+            return fetch(sgBuildDeleteActionUrl(), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orf_id: orfId,
+                    token: authToken,
+                    orf_ai_id: imageData.id
+                })
+            })
+                .then(function(response) {
+                    return response.json().catch(function() {
+                        throw new Error('Unexpected server response.');
+                    }).then(function(payload) {
+                        if (!response.ok || !payload || payload.success !== true) {
+                            throw new Error((payload && (payload.error || payload.message)) || ('Delete failed (HTTP ' + response.status + ')'));
+                        }
+                        return payload;
+                    });
+                })
+                .then(function(payload) {
+                    var remaining = sgGetGeneratedHistoryImages().filter(function(item) {
+                        return String(item.id) !== String(imageData.id);
+                    });
+                    sgRenderPreviewsStrip(remaining);
+                    sgReconcileCurrentSourceAfterDeletion(imageData.id, remaining);
+
+                    if (AIModalShared.getCurrentAiRecordId && String(AIModalShared.getCurrentAiRecordId()) === String(imageData.id)) {
+                        $('#comparisonModal').modal('hide');
+                    }
+
+                    var warningCount = payload && payload.data && Array.isArray(payload.data.file_warnings)
+                        ? payload.data.file_warnings.length : 0;
+                    if (warningCount > 0) {
+                        AIModalShared.showNotification(
+                            'Image removed from history, but ' + warningCount + ' file cleanup warning(s) occurred.',
+                            'warning',
+                            4500
+                        );
+                    } else {
+                        AIModalShared.showNotification('Generated image deleted.', 'success', 1800);
+                    }
+                    AIModalShared.sendToParent('imageDeleted', {
+                        orf_id: orfId,
+                        orf_ai_id: imageData.id
+                    });
+                    return true;
+                })
+                .catch(function(err) {
+                    AIModalShared.showNotification('Failed to delete image: ' + err.message, 'danger', 4500);
+                    throw err;
+                })
+                .finally(function() {
+                    if (deleteBtn) {
+                        deleteBtn.disabled = false;
+                        deleteBtn.innerHTML = originalBtnHtml;
+                    }
+                });
+        }
+
+        function sgAttachDeleteControl(imagePreview, imageData) {
+            if (!imagePreview || !imageData || imageData.is_original) return;
+
+            var deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'sg-delete-btn';
+            deleteBtn.setAttribute('aria-label', 'Delete generated image');
+            deleteBtn.title = 'Delete generated image';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+
+            deleteBtn.addEventListener('click', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                sgDeleteGeneratedImage(imageData, deleteBtn).catch(function() {
+                    // Notification already shown in sgDeleteGeneratedImage().
+                });
+            });
+
+            imagePreview.appendChild(deleteBtn);
+        }
+
         // Render the "Previously Generated Images" strip from a list of
         // imageData objects. The Original entry is ALWAYS first; the rest
         // come from ai_image_fetch_previous.php in the order the backend
@@ -1500,6 +1836,8 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 var imagePreview = AIModalShared.createImagePreview(imageData);
                 if (imageData.is_original) {
                     imagePreview.classList.add('sg-is-original');
+                } else {
+                    sgAttachDeleteControl(imagePreview, imageData);
                 }
                 previewsContainer.appendChild(imagePreview);
             });
