@@ -664,6 +664,7 @@ $upload_date = gmdate("Y-m-d H:i:s");
                     else 
                     {
                         $original_file_name = $order['om_id'] . "." . $osub_id . "." . $prod_id . " - " . $nr_files . "." . $file_extension;
+                        $thumbnail_file_name = $internal_file_name . "_thumb." . $file_extension;
                         $compress_file_name = $internal_file_name . "_compress." . $file_extension;
                     }
 
