@@ -184,14 +184,24 @@ try {
     //      Generation seeded by an existing o_results record. Calls
     //      blue7.it /api/generate/image normally.
     $skip_generation = isset($_POST['skip_generation']) && $_POST['skip_generation'] === '1';
-    $is_url_based    = !$skip_generation && isset($_POST['image_url']) && !empty($_POST['image_url']);
+
+    // A source-image URL can key BOTH the native URL-based generation and the
+    // register-only path. The URL-based AI modal (ai_image_modal_url.php) has
+    // no orf_id, so it registers externally-produced images (e.g. Supergrundriss)
+    // against their source_image_url exactly the way it generates natively.
+    $has_image_url         = isset($_POST['image_url']) && !empty($_POST['image_url']);
+    $register_is_url_based  = $skip_generation && $has_image_url;
+    $is_url_based           = !$skip_generation && $has_image_url;
 
     // Validate required fields per mode
     if ($skip_generation) {
         // Register-only path: we never touch blue7.it, but we still need
         // the same descriptor columns the native path populates so the
         // "Previously Generated Images" strip can render rich tooltips.
-        $required_fields = ['orf_id', 'model', 'product_type', 'final_prompt'];
+        // It can be keyed by an orf_id OR by a source image_url.
+        $required_fields = $register_is_url_based
+            ? ['image_url', 'model', 'product_type', 'final_prompt']
+            : ['orf_id', 'model', 'product_type', 'final_prompt'];
     } elseif ($is_url_based) {
         $required_fields = ['image_url', 'model', 'product_type', 'final_prompt'];
     } else {
@@ -219,7 +229,7 @@ try {
 
     // Sanitize inputs
     $orf_id = isset($_POST['orf_id']) && !empty($_POST['orf_id']) ? intval($_POST['orf_id']) : null;
-    $image_url = $is_url_based ? sanitizeInput($_POST['image_url']) : null;
+    $image_url = ($is_url_based || $register_is_url_based) ? sanitizeInput($_POST['image_url']) : null;
     $prompt_type_id = isset($_POST['prompt_type_id']) ? intval($_POST['prompt_type_id']) : null;
     $model = sanitizeInput($_POST['model']);
     $product_type = sanitizeInput($_POST['product_type']);
@@ -306,7 +316,7 @@ try {
     $mysqli = getDbConnection();
 
     // Insert into database with new schema (supporting both orf_id and source_image_url)
-    if ($is_url_based) {
+    if ($is_url_based || $register_is_url_based) {
         // URL-based generation - store source_image_url, orf_id may be null
         $query = "INSERT INTO `o_results_ai`
                   (`orf_id`, `source_image_url`, `model`, `product_type`, `room_type`, `style_preset`, `quality`, `additional_instructions`, `final_prompt`, `field_values`)

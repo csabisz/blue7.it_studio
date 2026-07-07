@@ -248,6 +248,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     }
 }
 
+/**
+ * Same-origin proxy for Supergrundriss preview images outside /api/v1/*.
+ *
+ * Routes like /api/staging-styles/{id}/preview only get tenant-scoped CORS
+ * (no Authorization in Access-Control-Allow-Headers), so browser fetch() from
+ * this cross-origin iframe fails. /api/v1/* routes echo the caller Origin
+ * and allow Authorization — those stay as direct browser fetches in JS.
+ */
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'sg_proxy_image') {
+    $proxyOrfId = isset($_GET['orf_id']) ? intval($_GET['orf_id']) : 0;
+    $proxyToken = isset($_GET['token']) ? (string)$_GET['token'] : '';
+    if (!$proxyOrfId || !validateToken($proxyToken)) {
+        http_response_code(403);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'Forbidden';
+        exit;
+    }
+
+    $remoteUrl = isset($_GET['url']) ? trim((string)$_GET['url']) : '';
+    if ($remoteUrl === '' || !filter_var($remoteUrl, FILTER_VALIDATE_URL)) {
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'Missing or invalid url';
+        exit;
+    }
+
+    $parts = parse_url($remoteUrl);
+    $host = strtolower($parts['host'] ?? '');
+    $path = $parts['path'] ?? '';
+    if ($host !== 'supergrundriss.de' || strpos($path, '/api/') !== 0) {
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'URL not allowed';
+        exit;
+    }
+    // v1 URLs are CORS-safe from the browser — reject so they cannot be misrouted.
+    if (strpos($path, '/api/v1/') === 0) {
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'v1 URLs should be fetched directly';
+        exit;
+    }
+    if (!preg_match('#^/api/(staging-styles/\d+/preview|presets/\d+/preview|generations/\d+/(?:image|thumbnail))(?:/|$)#', $path)) {
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'Path not allowed';
+        exit;
+    }
+
+    $sgKey = isset($_GET['sg_key']) ? trim((string)$_GET['sg_key']) : '';
+    if ($sgKey === '') {
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo 'Missing API key';
+        exit;
+    }
+
+    $ch = curl_init($remoteUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_TIMEOUT        => 60,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . $sgKey,
+            'Accept: image/*,*/*',
+        ],
+    ]);
+    $body = curl_exec($ch);
+    $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE) ?: 'application/octet-stream';
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlError || $httpCode < 200 || $httpCode >= 300 || $body === false || $body === '') {
+        http_response_code($curlError ? 502 : ($httpCode >= 400 ? $httpCode : 502));
+        header('Content-Type: text/plain; charset=utf-8');
+        echo $curlError ?: ('Upstream HTTP ' . $httpCode);
+        exit;
+    }
+
+    header('Content-Type: ' . $contentType);
+    header('Cache-Control: private, max-age=3600');
+    header('Content-Length: ' . strlen($body));
+    echo $body;
+    exit;
+}
+
 // Load image data
 try {
     $mysqli = getDbConnection();
@@ -424,7 +512,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         #aiGeneratedPreviews .sg-delete-btn {
             position: absolute;
             top: 4px;
-            left: 4px;
+            right: 4px;
             z-index: 11;
             width: 26px;
             height: 26px;
@@ -448,7 +536,86 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             cursor: not-allowed;
             transform: none;
         }
-        .sg-quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+
+        #aiGeneratedPreviews .sg-view-btn {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            z-index: 11;
+            width: 26px;
+            height: 26px;
+            border: 0;
+            border-radius: 50%;
+            background: #007bff;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+            transition: transform .12s ease, background .12s ease, opacity .12s ease;
+        }
+        #aiGeneratedPreviews .sg-view-btn:hover {
+            background: #007bff;
+            transform: scale(1.05);
+        }
+        #aiGeneratedPreviews .sg-view-btn:disabled {
+            opacity: .7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+
+        .sg-gen-type-segment { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+        .sg-gen-type-segment .sg-chip { font-size: 11px; padding: 5px 6px; text-align: center; }
+        @media (min-width: 576px) {
+            .sg-gen-type-segment { grid-template-columns: repeat(4, 1fr); }
+        }
+        /* Dynamic tool controls (from GET /v1/tools controls[]) */
+        #sgDynamicControls .sg-dynamic-section { margin-bottom: 0.75rem; }
+        #sgDynamicControls .sg-dynamic-section.has-error { border-color: #dc3545; }
+        #sgDynamicControls .sg-segment-grid {
+            display: grid;
+            gap: 4px;
+        }
+        #sgDynamicControls .sg-segment-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        #sgDynamicControls .sg-segment-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        #sgDynamicControls .sg-segment-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+        #sgDynamicControls .sg-segment-chip {
+            padding: 6px 6px;
+            min-height: 30px;
+            text-align: center;
+            line-height: 1.1;
+            font-size: 12px;
+        }
+        #sgDynamicControls .sg-segment-chip:focus-visible {
+            outline: 2px solid #0056b3;
+            outline-offset: 1px;
+        }
+        @media (max-width: 575.98px) {
+            #sgDynamicControls .sg-segment-grid.cols-3,
+            #sgDynamicControls .sg-segment-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+        .sg-dynamic-control { margin-bottom: 0.75rem; }
+        .sg-dynamic-control .sg-section-label { margin-bottom: 4px; }
+        .sg-dynamic-control select.form-control-sm { width: 100%; }
+        .sg-dynamic-control .sg-segment { display: flex; gap: 4px; flex-wrap: wrap; }
+        .sg-dynamic-control .sg-segment.sg-segment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+            gap: 4px;
+        }
+        .sg-dynamic-control input[type="number"],
+        .sg-dynamic-control input[type="text"],
+        .sg-dynamic-control input[type="color"] {
+            width: 100%;
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .sg-dynamic-control input[type="range"] { width: 100%; }
+        .sg-dynamic-control .sg-check-item { font-size: 12px; }
 
         /* -----------------------------------------------------------------
          * Furniture tab strip
@@ -954,7 +1121,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
                     <h6 class="text-dark mb-3">
                         <i class="fas fa-drafting-compass mr-1"></i>
-                        Floor Plan Options
+                        Generation Options
                     </h6>
 
                     <div id="sgPanelStatus" class="sg-status">
@@ -962,63 +1129,26 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                         Loading Supergrundriss options...
                     </div>
 
-                    <!-- 2D / 3D-Plan ---------------------------------------------------- -->
-                    <fieldset class="sg-form-section" data-sg-field="plan_type">
-                        <legend>2D / 3D-Plan</legend>
-                        <div class="sg-segment" id="sgPlanType" role="radiogroup" aria-label="Plan type">
-                            <button type="button" class="sg-chip active" data-value="floorplan-2d">2D Floor Plan</button>
-                            <button type="button" class="sg-chip" data-value="floorplan-3d">3D Floor Plan</button>
+                    <!-- Generation type (2D / 3D / Interior / Exterior) ---------------- -->
+                    <fieldset class="sg-form-section" data-sg-field="generation_type">
+                        <legend>Generation Type</legend>
+                        <div class="sg-segment sg-gen-type-segment" id="sgPlanType" role="radiogroup" aria-label="Generation type">
+                            <button type="button" class="sg-chip active" data-value="floorplan-2d">2D Plan</button>
+                            <button type="button" class="sg-chip" data-value="floorplan-3d">3D Plan</button>
+                            <button type="button" class="sg-chip" data-value="staging">Interior</button>
+                            <button type="button" class="sg-chip" data-value="exterior">Exterior</button>
                         </div>
-                        <select class="form-control form-control-sm mt-2" id="sgTool" aria-label="Tool slug (auto)">
-                            <option value="floorplan-2d">2D Floor Plan</option>
-                            <option value="floorplan-3d">3D Floor Plan</option>
+                        <select class="form-control form-control-sm mt-2 d-none" id="sgTool" aria-label="Tool slug (auto)">
+                            <option value="floorplan-2d">2D Plan</option>
+                            <option value="floorplan-3d">3D Plan</option>
+                            <option value="staging">Interior</option>
+                            <option value="exterior">Exterior</option>
                         </select>
                     </fieldset>
 
-                    <!--
-                        Furniture selector (settings_json.furniture).
-
-                        Rendered as exactly four mutually-exclusive tabs that
-                        mirror the `furniture` control returned by GET /v1/tools
-                        for the `floorplan-2d` tool. Both 2D and 3D tools share
-                        the same option set, so the UI is identical for either
-                        plan type. Tabs are wired by JS (sgInitFurnitureSection)
-                        which:
-                          - tries to populate options live from /tools controls
-                          - falls back to the four static defaults below if the
-                            API call fails (so the form is never empty)
-                          - stores the picked raw `value` in sgState.furniture
-                          - triggers sgUpdateGenerateButtonState() so the
-                            Generate button enables only when one is picked
-                    -->
-                    <div class="sg-section mt-2" id="sgFurnitureSection">
-                        <div class="sg-section-label">
-                            Furniture <span class="sg-req-mark" aria-hidden="true">*</span>
-                        </div>
-                        <div class="sg-segment sg-furniture-tabs"
-                             id="sgFurniture"
-                             role="radiogroup"
-                             aria-label="Furniture & Functions">
-                            <!-- Fallback options match /v1/tools controls.furniture
-                                 for floorplan-2d. Re-rendered from the live API
-                                 response when /tools resolves. -->
-                            <button type="button" class="sg-chip sg-furniture-chip"
-                                    data-value="original" role="radio" aria-checked="false">Original</button>
-                            <button type="button" class="sg-chip sg-furniture-chip"
-                                    data-value="living" role="radio" aria-checked="false">Wohnen</button>
-                            <button type="button" class="sg-chip sg-furniture-chip"
-                                    data-value="business" role="radio" aria-checked="false">Büro</button>
-                            <button type="button" class="sg-chip sg-furniture-chip"
-                                    data-value="empty" role="radio" aria-checked="false">Leer</button>
-                        </div>
-                    </div>
-
-                    <!-- Color / Texture presets (visual cards) ------------------------- -->
-                    <div class="sg-section mt-2">
-                        <div class="sg-section-label">Colors & Textures</div>
-                        <div class="sg-card-grid" id="sgPresets">
-                            <div class="sg-status">Loading presets...</div>
-                        </div>
+                    <!-- Tool-specific controls (rendered from GET /v1/tools controls[]) -->
+                    <div id="sgDynamicControls">
+                        <div class="sg-status">Loading tool controls...</div>
                     </div>
 
                     <!-- Quality tier --------------------------------------------------- -->
@@ -1166,8 +1296,8 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 from firing if a script tries to programmatically click it.
             -->
             <button type="button" class="btn btn-primary btn-sm" id="generateFloorPlan" disabled
-                    title="Fill all required fields in the Fine-tune Generation Prompt section first.">
-                <i class="fas fa-drafting-compass mr-1"></i> Generate 2D Floor Plan
+                    title="Fill all required fields in Generation Options first.">
+                <i class="fas fa-drafting-compass mr-1"></i> Generate
             </button>
         </div>
     </div>
@@ -1275,7 +1405,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
      aria-labelledby="sgProgressTitle" aria-describedby="sgProgressMessage">
     <div class="sg-progress-card">
         <div class="sg-progress-spinner" aria-hidden="true"></div>
-        <div class="sg-progress-title" id="sgProgressTitle">Generating 2D Floor Plan…</div>
+        <div class="sg-progress-title" id="sgProgressTitle">Generating…</div>
         <div class="sg-progress-message" id="sgProgressMessage">
             Generation in progress. This can take 1–2 minutes, but at least 45 seconds!
         </div>
@@ -1298,7 +1428,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
      aria-labelledby="sgResultsTitle">
     <div class="sg-results-dialog">
         <div class="sg-results-header">
-            <h5 id="sgResultsTitle"><i class="fas fa-image mr-1"></i> Generated Floor Plan</h5>
+            <h5 id="sgResultsTitle"><i class="fas fa-image mr-1"></i> Generated Image</h5>
             <button type="button" class="sg-close" id="sgResultsClose" aria-label="Close">&times;</button>
         </div>
         <div class="sg-results-toolbar">
@@ -1669,7 +1799,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         AIModalShared.initPreviewsContainer('aiGeneratedPreviews', function(imageData, index) {
             sgSetCurrentSource(imageData);
             if (imageData && imageData.is_original) return;
-            AIModalShared.openComparisonModal(imageData, index, apiBaseUrl, onSaveButtonUpdate);
+            // AIModalShared.openComparisonModal(imageData, index, apiBaseUrl, onSaveButtonUpdate);
         });
 
         // =========================================================================
@@ -1819,6 +1949,33 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             });
 
             imagePreview.appendChild(deleteBtn);
+
+            var viewBtn = document.createElement('button');
+            viewBtn.type = 'button';
+            viewBtn.className = 'sg-view-btn';
+            viewBtn.setAttribute('aria-label', 'View generated image');
+            viewBtn.title = 'View generated image';
+            viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
+
+            viewBtn.addEventListener('click', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                AIModalShared.openComparisonModal(imageData);
+            });
+
+            imagePreview.appendChild(viewBtn);
+        }
+
+        // Shared thumbnail builder for the preview strip — ensures delete/view
+        // controls are attached for both loaded and newly saved images.
+        function sgCreateStripPreview(imageData) {
+            var imagePreview = AIModalShared.createImagePreview(imageData);
+            if (imageData && imageData.is_original) {
+                imagePreview.classList.add('sg-is-original');
+            } else {
+                sgAttachDeleteControl(imagePreview, imageData);
+            }
+            return imagePreview;
         }
 
         // Render the "Previously Generated Images" strip from a list of
@@ -1833,13 +1990,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
             previewsContainer.innerHTML = '';
             full.forEach(function(imageData) {
-                var imagePreview = AIModalShared.createImagePreview(imageData);
-                if (imageData.is_original) {
-                    imagePreview.classList.add('sg-is-original');
-                } else {
-                    sgAttachDeleteControl(imagePreview, imageData);
-                }
-                previewsContainer.appendChild(imagePreview);
+                previewsContainer.appendChild(sgCreateStripPreview(imageData));
             });
 
             sgHighlightCurrentSource();
@@ -2212,8 +2363,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         var sgPanelStatus        = document.getElementById('sgPanelStatus');
         var sgPlanTypeBox        = document.getElementById('sgPlanType');
         var sgToolSelect         = document.getElementById('sgTool');
-        var sgFurnitureBox       = document.getElementById('sgFurniture');
-        var sgPresetsBox         = document.getElementById('sgPresets');
+        var sgDynamicControlsBox = document.getElementById('sgDynamicControls');
         var sgQualityBox         = document.getElementById('sgQuality');
         var generateFloorPlanBtn = document.getElementById('generateFloorPlan');
 
@@ -2243,35 +2393,137 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         // -----------------------------------------------------------------
         // Internal state
         // -----------------------------------------------------------------
-        // sgState mirrors the *current* left-panel selection (tool, preset,
-        // quality, furniture). Center-form fields are validation-only gates
-        // and are no longer persisted into settings_json — see
-        // sgBuildSettingsJson() for the new minimal {furniture, preset}
-        // payload shape.
-        //
-        // Furniture mapping
-        // -----------------
-        // `furniture` holds the *raw* value of the active furniture tab (the
-        // value the API expects in settings_json.furniture). The matching
-        // human-readable label only lives on the DOM (chip text). Values are
-        // sourced live from GET /v1/tools controls.furniture for floorplan-2d
-        // (the same option set is reused for floorplan-3d). We seed it with
-        // '' so validation forces the user to make an explicit pick — the
-        // API's own default ("living") is then highlighted by the live render
-        // step if /tools resolves, which feels equivalent without bypassing
-        // validation when the API call fails.
-        var sgState = {
-            toolSlug:          SUPERGRUNDRISS_CONFIG.defaultToolSlug,
-            quality_tier:      'standard',
-            color_texture_set: '',
-            furniture:         ''
+        // UI labels for the four supported generation types. The API slug
+        // for Interior is always `staging` — never expose that word in the UI.
+        var SG_UI_TOOLS = [
+            { label: '2D Plan',   slug: 'floorplan-2d' },
+            { label: '3D Plan',   slug: 'floorplan-3d' },
+            { label: 'Interior',  slug: 'staging' },
+            { label: 'Exterior',  slug: 'exterior' }
+        ];
+
+        function sgUiLabelForSlug(slug) {
+            var match = SG_UI_TOOLS.find(function(t) { return t.slug === slug; });
+            return match ? match.label : slug;
+        }
+
+        function sgIsSupportedToolSlug(slug) {
+            return SG_UI_TOOLS.some(function(t) { return t.slug === slug; });
+        }
+
+        // English display labels for API-sourced control/option text (GET /v1/tools).
+        // Internal keys and opt.value are never changed — only visible UI text.
+        var SG_CONTROL_LABELS_EN = {
+            furniture:         'Furniture & Functions',
+            color_texture_set: 'Colors & Textures',
+            room_type:         'Room Type',
+            design_style:      'Design Style',
+            furniture_density: 'Furniture Density',
+            color_palette:     'Color Palette',
+            preset:            'Style',
+            time_of_day:       'Time of Day',
+            season:            'Season'
         };
 
-        // Live snapshot of the furniture options exposed by the floorplan
-        // tools' controls[]. Populated by sgInitPanel() after /tools resolves;
-        // falls back to the static HTML markup if the call fails. Each entry
-        // matches the shape returned by the API: { value, label, default? }.
-        var sgFurnitureOptions = [];
+        var SG_OPTION_LABELS_EN = {
+            original:    'Original',
+            living:      'Living',
+            business:    'Office',
+            empty:       'Empty',
+            living_room: 'Living Room',
+            bedroom:     'Bedroom',
+            dining_room: 'Dining Room',
+            office:      'Home Office',
+            kitchen:     'Kitchen',
+            bathroom:    'Bathroom',
+            minimal:     'Minimal',
+            moderate:    'Moderate',
+            full:        'Full',
+            neutral:     'Neutral Tones',
+            warm:        'Warm & Cozy',
+            cool:        'Cool & Calm',
+            bold:        'Bold & Vibrant',
+            day:         'Day',
+            golden_hour: 'Golden Hour',
+            night:       'Night',
+            summer:      'Summer',
+            autumn:      'Autumn',
+            winter:      'Winter',
+            spring:      'Spring'
+        };
+
+        // Fallback when only the German API label string is available.
+        var SG_GERMAN_LABEL_FALLBACK_EN = {
+            'M\u00f6bel & Funktionen': 'Furniture & Functions',
+            'Farben & Texturen':       'Colors & Textures',
+            'Raumtyp':                 'Room Type',
+            'Einrichtungsstil':        'Design Style',
+            'M\u00f6beldichte':        'Furniture Density',
+            'Farbpalette':             'Color Palette',
+            'Stil':                    'Style',
+            'Tageszeit':               'Time of Day',
+            'Jahreszeit':              'Season',
+            'Wohnen':                  'Living',
+            'B\u00fcro':               'Office',
+            'Leer':                    'Empty',
+            'Wohnzimmer':              'Living Room',
+            'Schlafzimmer':            'Bedroom',
+            'Esszimmer':               'Dining Room',
+            'Arbeitszimmer':           'Home Office',
+            'K\u00fcche':               'Kitchen',
+            'Badezimmer':              'Bathroom',
+            'Mittel':                  'Moderate',
+            'Voll':                    'Full',
+            'Neutrale T\u00f6ne':       'Neutral Tones',
+            'Warm & Gem\u00fctlich':    'Warm & Cozy',
+            'K\u00fchl & Ruhig':        'Cool & Calm',
+            'Kr\u00e4ftig & Lebhaft':   'Bold & Vibrant',
+            'Tag':                     'Day',
+            'Goldene Stunde':          'Golden Hour',
+            'Nacht':                   'Night',
+            'Sommer':                  'Summer',
+            'Herbst':                  'Autumn',
+            'Winter':                  'Winter',
+            'Fr\u00fchling':           'Spring'
+        };
+
+        function sgDisplayControlLabel(ctrl) {
+            if (!ctrl) return '';
+            if (ctrl.key && SG_CONTROL_LABELS_EN[ctrl.key]) {
+                return SG_CONTROL_LABELS_EN[ctrl.key];
+            }
+            var apiLabel = ctrl.label || ctrl.key || '';
+            return SG_GERMAN_LABEL_FALLBACK_EN[apiLabel] || apiLabel;
+        }
+
+        function sgDisplayOptionLabel(opt) {
+            if (!opt) return '';
+            if (opt.value && SG_OPTION_LABELS_EN[opt.value]) {
+                return SG_OPTION_LABELS_EN[opt.value];
+            }
+            var apiLabel = opt.label || opt.value || '';
+            return SG_GERMAN_LABEL_FALLBACK_EN[apiLabel] || apiLabel;
+        }
+
+        function sgDisplayItemName(item) {
+            if (!item) return '';
+            var name = item.name || item.slug || '';
+            return SG_GERMAN_LABEL_FALLBACK_EN[name] || name;
+        }
+
+        // sgState mirrors the current left-panel selection. controlValues holds
+        // every tool-specific setting keyed by the control.key from GET /v1/tools.
+        var sgState = {
+            toolSlug:      SUPERGRUNDRISS_CONFIG.defaultToolSlug,
+            quality_tier:  'standard',
+            controlValues: {}
+        };
+
+        // Full /v1/tools payload cached after first fetch.
+        var sgToolsCache = [];
+
+        // Visual-select item caches keyed by source + filter signature.
+        var sgVisualSelectCache = {};
 
         // The exact ids of the required center-form fields, sourced from
         // the product configuration loaded by ai_get_product_config.php
@@ -2289,8 +2541,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             'Technic'
         ];
 
-        // Cache of /v1/presets so 2D <-> 3D switching is instant.
-        var sgPresetsCache = [];
+        // Legacy preset thumb cache for visual-select card grids.
 
         // Cache of the current results modal images (for thumbnail strip).
         var sgResults = { items: [], currentIndex: 0, originalUrl: '' };
@@ -2396,13 +2647,42 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 });
         }
 
+        // Legacy /api/* preview routes (outside /api/v1/) are tenant-scoped in
+        // CORS and do not advertise Authorization — browser fetch from this
+        // iframe fails (e.g. /api/staging-styles/7/preview). v1 routes such
+        // as /api/v1/presets/luxury-estate/preview echo Origin and allow Bearer.
+        function sgRemoteImageNeedsProxy(absoluteUrl) {
+            try {
+                var parsed = new URL(absoluteUrl);
+                return parsed.pathname.indexOf('/api/v1/') !== 0 && parsed.pathname.indexOf('/api/') === 0;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Build a same-origin proxy URL; orf_id + token come from the page URL.
+        function sgBuildRemoteImageProxyUrl(absoluteUrl) {
+            var proxy = new URL(window.location.href);
+            proxy.searchParams.set('action', 'sg_proxy_image');
+            proxy.searchParams.set('url', absoluteUrl);
+            if (SUPERGRUNDRISS_CONFIG.apiKey) {
+                proxy.searchParams.set('sg_key', SUPERGRUNDRISS_CONFIG.apiKey);
+            }
+            return proxy.toString();
+        }
+
         // Authenticated download of a Supergrundriss-hosted image -> object URL
         // (result images require the Bearer token, so <img src> won't work
         // directly). Object URLs are revoked when the results modal closes.
         function sgFetchImageObjectUrl(relPath) {
             if (!relPath) return Promise.resolve(null);
             var url = (relPath.indexOf('http') === 0) ? relPath : (sgApiHost + relPath);
-            return fetch(url, { headers: sgAuthHeaders() })
+            var useProxy = sgRemoteImageNeedsProxy(url);
+            var fetchUrl = useProxy ? sgBuildRemoteImageProxyUrl(url) : url;
+            var fetchOpts = useProxy
+                ? { method: 'GET', credentials: 'same-origin' }
+                : { headers: sgAuthHeaders() };
+            return fetch(fetchUrl, fetchOpts)
                 .then(function(res) {
                     if (!res.ok) throw new Error('Image download HTTP ' + res.status);
                     return res.blob();
@@ -2495,10 +2775,12 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             // ai_image_generate.php normally stores in the AI record so
             // the previews strip shows useful labels later on.
             var promptSummaryParts = [];
-            if (generation && generation.tool_type)    promptSummaryParts.push('Tool: ' + generation.tool_type);
+            if (generation && generation.tool_type)    promptSummaryParts.push('Tool: ' + sgUiLabelForSlug(generation.tool_type));
             if (generation && generation.quality_tier) promptSummaryParts.push('Quality: ' + generation.quality_tier);
-            if (sgState.color_texture_set)             promptSummaryParts.push('Preset: ' + sgState.color_texture_set);
-            if (sgState.furniture)                     promptSummaryParts.push('Furniture: ' + sgState.furniture);
+            var presetVal = sgGetTopLevelPreset();
+            if (presetVal) promptSummaryParts.push('Preset: ' + presetVal);
+            var furnitureVal = (sgState.controlValues && sgState.controlValues.furniture) || sgState.furniture;
+            if (furnitureVal) promptSummaryParts.push('Furniture: ' + furnitureVal);
             var notesVal = (notesTextarea && notesTextarea.value || '').trim();
             if (notesVal) promptSummaryParts.push('Notes: ' + notesVal);
             var promptSummary = promptSummaryParts.join(' | ') ||
@@ -2515,7 +2797,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
             // ── Legacy descriptor columns (mapped server-side by name)
             if (generation && generation.tool_type)    fd.append('room_type',    generation.tool_type);
-            if (sgState.color_texture_set)             fd.append('style_preset', sgState.color_texture_set);
+            if (presetVal)                             fd.append('style_preset', presetVal);
             if (generation && generation.quality_tier) {
                 fd.append('quality', generation.quality_tier);
             } else if (sgState.quality_tier) {
@@ -2530,8 +2812,9 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             if (generation && generation.id != null)   fd.append('generation_id', generation.id);
             if (generation && generation.tool_type)    fd.append('tool_slug',     generation.tool_type);
             if (generation && generation.quality_tier) fd.append('quality_tier',  generation.quality_tier);
-            if (sgState.color_texture_set)             fd.append('preset',        sgState.color_texture_set);
-            if (sgState.furniture)                     fd.append('furniture',     sgState.furniture);
+            if (presetVal)                             fd.append('preset',        presetVal);
+            if (furnitureVal)                          fd.append('furniture',     furnitureVal);
+            fd.append('control_values_json', JSON.stringify(sgState.controlValues || {}));
 
             console.log('[SG] POST ai_image_generate.php (register-only) ->',
                 apiBaseUrl + '/ai_image_generate.php',
@@ -2595,7 +2878,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 thumbnail_url:  saved.thumbnail_url || item.thumbObjectUrl || item.imageObjectUrl,
                 model:          saved.model         || 'supergrundriss',
                 room_type:      (item.generation && item.generation.tool_type) || '',
-                style_preset:   sgState.color_texture_set || '',
+                style_preset:   sgGetTopLevelPreset() || sgState.color_texture_set || '',
                 quality:        (item.generation && item.generation.quality_tier) || sgState.quality_tier || '',
                 created_at:     'Just now',
                 // Carry the SG-side metadata along for any downstream
@@ -2665,7 +2948,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                             if (!saved || saved.orf_ai_id == null) {
                                 console.warn('[SG] save succeeded but no orf_ai_id in response; skipping local preview insert.');
                                 AIModalShared.showNotification(
-                                    'Floor plan saved, but the server did not return a record id. Reopen the modal to refresh the list.',
+                                    'Image saved, but the server did not return a record id. Reopen the modal to refresh the list.',
                                     'warning', 5000);
                                 return;
                             }
@@ -2699,7 +2982,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                                 AIModalShared.setGeneratedImages(all);
 
                                 if (previewsContainer && AIModalShared.createImagePreview) {
-                                    var thumb = AIModalShared.createImagePreview(newImageData);
+                                    var thumb = sgCreateStripPreview(newImageData);
                                     var originalEl = previewsContainer.querySelector('.position-relative.sg-is-original');
                                     if (originalEl && originalEl.nextSibling) {
                                         previewsContainer.insertBefore(thumb, originalEl.nextSibling);
@@ -2755,7 +3038,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                                 '. You can still download it from the results modal.',
                                 'warning', 6000);
                             AIModalShared.sendToParent('error', {
-                                message: 'Failed to save generated floor plan to DB (item ' + (idx + 1) + '): ' +
+                                message: 'Failed to save generated image to DB (item ' + (idx + 1) + '): ' +
                                          ((saveErr && saveErr.message) || 'unknown'),
                                 code: (saveErr && saveErr.code) || 'SG_DB_SAVE_FAILED'
                             });
@@ -2878,63 +3161,109 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             return true;
         }
 
-        // Furniture must be one of the API-returned values. We accept either
-        // a value from the live /tools fetch (sgFurnitureOptions) or, if the
-        // /tools call failed and we are still on the static markup, any of
-        // the four fallback values rendered in the HTML. Either way, the
-        // raw value is what ends up in settings_json.furniture.
-        function sgFurnitureSelected() {
-            return !!(sgState.furniture && String(sgState.furniture).trim());
+        function sgIsFloorplanTool(slug) {
+            slug = slug || sgState.toolSlug;
+            return slug === 'floorplan-2d' || slug === 'floorplan-3d';
         }
 
-        // Preset must be a non-empty slug. There is only one writer for
-        // sgState.color_texture_set (the sgRenderCardGrid onPick callback),
-        // so this also guarantees the matching settings_json.preset entry
-        // and the top-level multipart `preset` field are both populated.
-        function sgPresetSelected() {
-            return !!(sgState.color_texture_set && String(sgState.color_texture_set).trim());
+        function sgGetActiveTool() {
+            return sgToolsCache.find(function(t) { return t.slug === sgState.toolSlug; }) || null;
+        }
+
+        // Keep legacy sgState.furniture / color_texture_set in sync for 2D/3D
+        // save-metadata paths that still read those properties directly.
+        function sgSyncLegacyStateFromControls() {
+            var values = sgState.controlValues || {};
+            if (sgIsFloorplanTool()) {
+                sgState.furniture = values.furniture || '';
+                sgState.color_texture_set = values.color_texture_set || '';
+            }
+        }
+
+        function sgSetControlValue(key, value) {
+            if (!key) return;
+            sgState.controlValues[key] = value;
+            sgSyncLegacyStateFromControls();
+        }
+
+        function sgResolveFilterParams(filterParams) {
+            var resolved = {};
+            if (!filterParams) return resolved;
+            Object.keys(filterParams).forEach(function(paramKey) {
+                var refKey = filterParams[paramKey];
+                if (typeof refKey === 'string' && sgState.controlValues.hasOwnProperty(refKey)) {
+                    var refVal = sgState.controlValues[refKey];
+                    if (sgIsFilled(refVal)) resolved[paramKey] = refVal;
+                } else if (refKey != null && refKey !== '') {
+                    resolved[paramKey] = refKey;
+                }
+            });
+            return resolved;
+        }
+
+        function sgGetControlDefault(ctrl) {
+            if (!ctrl) return '';
+            if (ctrl.type === 'segment' || ctrl.type === 'select') {
+                var opts = Array.isArray(ctrl.options) ? ctrl.options : [];
+                var def = opts.find(function(o) { return o && o.default === true; });
+                return def ? def.value : '';
+            }
+            if (ctrl.default != null) return ctrl.default;
+            return '';
+        }
+
+        function sgInitControlDefaults(tool, preserveExisting) {
+            if (!tool || !Array.isArray(tool.controls)) return;
+            var next = preserveExisting ? Object.assign({}, sgState.controlValues) : {};
+            tool.controls.forEach(function(ctrl) {
+                if (!ctrl || !ctrl.key) return;
+                if (preserveExisting && sgIsFilled(next[ctrl.key])) return;
+                next[ctrl.key] = sgGetControlDefault(ctrl);
+            });
+            sgState.controlValues = next;
+            sgSyncLegacyStateFromControls();
+        }
+
+        function sgGetMissingControlReason() {
+            var tool = sgGetActiveTool();
+            if (!tool) {
+                return sgToolsCache.length ? 'Loading tool controls…' : 'Tool controls not available.';
+            }
+            if (!Array.isArray(tool.controls) || !tool.controls.length) return null;
+            for (var i = 0; i < tool.controls.length; i++) {
+                var ctrl = tool.controls[i];
+                if (!ctrl || !ctrl.key) continue;
+                if (!sgIsFilled(sgState.controlValues[ctrl.key])) {
+                    return 'Pick a value for "' + sgDisplayControlLabel(ctrl) + '" in Generation Options.';
+                }
+            }
+            return null;
+        }
+
+        function sgUiLabelForProgress() {
+            return sgUiLabelForSlug(sgState.toolSlug) || 'Image';
+        }
+
+        function sgUpdateProgressTitle() {
+            var el = document.getElementById('sgProgressTitle');
+            if (el) el.textContent = 'Generating ' + sgUiLabelForProgress() + '…';
         }
 
         // Single source of truth for the Generate button's disabled state.
-        // The button is disabled when any of the following are true:
-        //   - we are mid-generation (sgIsGenerating)
-        //   - the API key is not configured
-        //   - any required center-form field is empty
-        //   - no furniture tab is currently active (sgState.furniture is '')
-        //   - no Colors & Textures preset is selected
-        //     (sgState.color_texture_set is '')
-        // The title attribute is updated to give the user a hint about why
-        // the button is locked.
-        //
-        // Validation flow (single source of truth)
-        // ----------------------------------------
-        // Inputs   : generation lock, API key presence, center-form fields,
-        //            sgState.furniture, sgState.color_texture_set
-        // Triggers : sgAttachCenterFormValidation() delegated input/change,
-        //            furniture click handler in sgInitFurnitureSection(),
-        //            preset click in sgRenderCardGrid() onPick callback,
-        //            sgInitPanel() after /tools and /presets resolve,
-        //            generation start/end transitions.
-        // Output   : generateFloorPlanBtn.disabled + .title
         function sgUpdateGenerateButtonState() {
             if (!generateFloorPlanBtn) return;
             var reason = null;
-            if (sgIsGenerating)                    reason = 'Generation in progress…';
+            if (sgIsGenerating)                     reason = 'Generation in progress…';
             else if (!SUPERGRUNDRISS_CONFIG.apiKey) reason = 'Supergrundriss API key not configured.';
-            else if (!sgFurnitureSelected())       reason = 'Pick a Furniture option in the Floor Plan Options panel.';
-            else if (!sgPresetSelected())          reason = 'Pick a Colors & Textures preset in the Floor Plan Options panel.';
+            else reason = sgGetMissingControlReason();
 
             generateFloorPlanBtn.disabled = reason !== null;
 
-            // Surface refine-mode in the button label + tooltip when the
-            // currently selected source is an in-session SG generation. The
-            // icon stays the same (drafting compass) so the button shape is
-            // stable, only the verb changes. Generate stays the default for
-            // the original image and any record that lacks generation_id.
             var refineMode = sgCurrentSource &&
                              sgCurrentSource.kind === 'generated' &&
                              sgCurrentSource.generationId != null;
-            var label   = refineMode ? 'Refine Selected Image' : 'Generate 2D Floor Plan';
+            var typeLabel = sgUiLabelForProgress();
+            var label = refineMode ? 'Refine Selected Image' : ('Generate ' + typeLabel);
             var endpoint = refineMode
                 ? 'POST /v1/generations/' + sgCurrentSource.generationId + '/refine'
                 : 'POST /v1/generate';
@@ -3131,101 +3460,295 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         }
 
         // -------------------------------------------------------------------------
-        // Furniture tabs rendering
+        // Dynamic tool controls (GET /v1/tools controls[])
         // -------------------------------------------------------------------------
-        //
-        // Renders the `furniture` segment from the data we got back from
-        // GET /v1/tools (controls[] where key === 'furniture'). One tab per
-        // API option, in order; only ONE tab can be active at a time. Click
-        // updates sgState.furniture (raw value, matches the API) and forces
-        // a button-state recompute so validation lights up immediately.
-        //
-        // Reuses the .sg-chip token used by 2D/3D and Quality so styling
-        // (hover, focus, active, disabled) stays in sync with the rest of
-        // the left panel — no duplicate listeners or per-tab event wiring.
-        function sgRenderFurnitureTabs(options) {
-            if (!sgFurnitureBox) return;
-            sgFurnitureBox.innerHTML = '';
 
-            if (!Array.isArray(options) || !options.length) {
-                sgFurnitureBox.innerHTML = '<div class="sg-status">No furniture options available.</div>';
-                sgUpdateGenerateButtonState();
-                return;
+        function sgSyncSegmentChips(controlKey) {
+            if (!sgDynamicControlsBox || !controlKey) return;
+            var current = sgState.controlValues[controlKey];
+            sgDynamicControlsBox.querySelectorAll(
+                '.sg-segment-chip[data-control-key="' + controlKey + '"]'
+            ).forEach(function(chip) {
+                var active = chip.dataset.value === current;
+                chip.classList.toggle('active', active);
+                chip.setAttribute('aria-checked', active ? 'true' : 'false');
+            });
+        }
+
+        function sgFetchVisualSelectItems(ctrl) {
+            if (!ctrl || !ctrl.source) return Promise.resolve([]);
+            var filters = sgResolveFilterParams(ctrl.filter_params);
+            var cacheKey = ctrl.source + '|' + JSON.stringify(filters);
+            if (sgVisualSelectCache[cacheKey]) {
+                return Promise.resolve(sgVisualSelectCache[cacheKey]);
             }
 
-            // If the previously selected value is no longer in the option set
-            // (e.g. API removed it), drop the selection so validation correctly
-            // forces a fresh pick. If nothing is selected yet, prefer the API
-            // default flag, else the first option.
-            var values = options.map(function(o) { return o.value; });
-            if (!sgState.furniture || values.indexOf(sgState.furniture) === -1) {
-                var def = options.find(function(o) { return o.default === true; });
-                sgState.furniture = def ? def.value : '';
+            var path = '';
+            if (ctrl.source === 'presets') {
+                path = '/presets';
+            } else if (ctrl.source === 'staging-styles') {
+                path = '/staging-styles';
+                if (filters.room_type) {
+                    path += '?room_type=' + encodeURIComponent(filters.room_type);
+                }
+            } else {
+                console.warn('[SG] Unknown visual-select source:', ctrl.source);
+                return Promise.resolve([]);
+            }
+
+            return sgFetch(path).then(function(items) {
+                items = Array.isArray(items) ? items : [];
+                if (ctrl.source === 'presets' && filters.tool_category) {
+                    var want = String(filters.tool_category).toLowerCase();
+                    items = items.filter(function(p) {
+                        if (!p) return false;
+                        var cat = p.tool_category;
+                        if (cat == null) return true;
+                        if (Array.isArray(cat)) {
+                            return cat.some(function(c) {
+                                return String(c).toLowerCase() === want;
+                            });
+                        }
+                        return String(cat).toLowerCase() === want;
+                    });
+                }
+                sgVisualSelectCache[cacheKey] = items;
+                return items;
+            }).catch(function(err) {
+                console.warn('[SG] visual-select fetch failed (' + ctrl.source + '):', err);
+                return [];
+            });
+        }
+
+        function sgRenderSegmentControl(section, ctrl) {
+            var options = Array.isArray(ctrl.options) ? ctrl.options : [];
+            var wrap = document.createElement('div');
+            var colCount = Math.min(4, Math.max(2, options.length));
+            wrap.className = 'sg-segment sg-segment-grid cols-' + colCount;
+            wrap.setAttribute('role', 'radiogroup');
+            wrap.setAttribute('aria-label', sgDisplayControlLabel(ctrl));
+
+            var current = sgState.controlValues[ctrl.key];
+            if (!sgIsFilled(current)) {
+                var def = options.find(function(o) { return o && o.default === true; });
+                if (def) {
+                    current = def.value;
+                    sgSetControlValue(ctrl.key, current);
+                }
             }
 
             options.forEach(function(opt) {
                 var btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'sg-chip sg-furniture-chip';
+                btn.className = 'sg-chip sg-segment-chip';
+                btn.dataset.controlKey = ctrl.key;
+                btn.dataset.value = opt.value;
                 btn.setAttribute('role', 'radio');
-                btn.setAttribute('data-value', opt.value);
-                btn.textContent = opt.label || opt.value;
-
-                var isActive = opt.value === sgState.furniture;
+                btn.textContent = sgDisplayOptionLabel(opt);
+                var isActive = opt.value === current;
                 btn.classList.toggle('active', isActive);
                 btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
-
-                sgFurnitureBox.appendChild(btn);
+                wrap.appendChild(btn);
             });
-
-            sgUpdateGenerateButtonState();
+            section.appendChild(wrap);
         }
 
-        // Apply the active visual + ARIA state to whichever chip matches the
-        // current sgState.furniture. Called by the delegated click handler so
-        // we don't have to rebind listeners after every render.
-        function sgSyncFurnitureChips() {
-            if (!sgFurnitureBox) return;
-            sgFurnitureBox.querySelectorAll('.sg-furniture-chip').forEach(function(c) {
-                var isActive = c.dataset.value === sgState.furniture;
-                c.classList.toggle('active', isActive);
-                c.setAttribute('aria-checked', isActive ? 'true' : 'false');
+        function sgRenderSelectControl(section, ctrl) {
+            var select = document.createElement('select');
+            select.className = 'form-control form-control-sm';
+            select.dataset.controlKey = ctrl.key;
+            select.setAttribute('aria-label', sgDisplayControlLabel(ctrl));
+
+            var options = Array.isArray(ctrl.options) ? ctrl.options : [];
+            var current = sgState.controlValues[ctrl.key];
+            if (!sgIsFilled(current)) {
+                var def = options.find(function(o) { return o && o.default === true; });
+                if (def) {
+                    current = def.value;
+                    sgSetControlValue(ctrl.key, current);
+                }
+            }
+
+            options.forEach(function(opt) {
+                var optionEl = document.createElement('option');
+                optionEl.value = opt.value;
+                optionEl.textContent = sgDisplayOptionLabel(opt);
+                if (opt.value === current) optionEl.selected = true;
+                select.appendChild(optionEl);
             });
+            section.appendChild(select);
         }
 
-        // Wires a single delegated click handler on the furniture container.
-        // Doing this once (in sgInitPanel) means re-rendering the tabs from
-        // /tools never duplicates listeners. The handler is a no-op while
-        // generation is in flight, defending against rapid clicks during
-        // submission.
-        function sgInitFurnitureSection() {
-            if (!sgFurnitureBox) return;
-            sgFurnitureBox.addEventListener('click', function(ev) {
-                if (sgIsGenerating) return;
-                var chip = ev.target.closest('.sg-furniture-chip');
-                if (!chip || !sgFurnitureBox.contains(chip)) return;
-                sgState.furniture = chip.dataset.value || '';
-                sgSyncFurnitureChips();
+        function sgRenderVisualSelectControl(section, ctrl) {
+            var grid = document.createElement('div');
+            grid.className = 'sg-card-grid';
+            grid.dataset.controlKey = ctrl.key;
+            grid.innerHTML = '<div class="sg-status">Loading ' + AIModalShared.escapeHtml(sgDisplayControlLabel(ctrl)) + '…</div>';
+            section.appendChild(grid);
+
+            sgFetchVisualSelectItems(ctrl).then(function(items) {
+                if (!grid.parentNode) return;
+                var current = sgState.controlValues[ctrl.key];
+                sgRenderCardGrid(grid, items, current, function(item) {
+                    sgSetControlValue(ctrl.key, item && item.slug ? item.slug : '');
+                    sgRefreshDependentVisualSelects(ctrl.key);
+                    sgUpdateGenerateButtonState();
+                });
                 sgUpdateGenerateButtonState();
             });
         }
 
+        function sgRenderDynamicControl(ctrl) {
+            if (!ctrl || !ctrl.key) return null;
+            var section = document.createElement('div');
+            section.className = 'sg-dynamic-section sg-section';
+            section.dataset.controlKey = ctrl.key;
+
+            var label = document.createElement('div');
+            label.className = 'sg-section-label';
+            label.innerHTML = AIModalShared.escapeHtml(sgDisplayControlLabel(ctrl)) +
+                ' <span class="sg-req-mark" aria-hidden="true">*</span>';
+            section.appendChild(label);
+
+            switch (ctrl.type) {
+                case 'segment':
+                    sgRenderSegmentControl(section, ctrl);
+                    break;
+                case 'select':
+                    sgRenderSelectControl(section, ctrl);
+                    break;
+                case 'visual-select':
+                    sgRenderVisualSelectControl(section, ctrl);
+                    break;
+                default:
+                    console.warn('[SG] Unsupported control type "' + ctrl.type + '" for key ' + ctrl.key);
+                    section.innerHTML += '<div class="sg-status error">Unsupported control type: ' +
+                        AIModalShared.escapeHtml(ctrl.type) + '</div>';
+            }
+            return section;
+        }
+
+        function sgRenderDynamicControls() {
+            if (!sgDynamicControlsBox) return;
+            sgDynamicControlsBox.innerHTML = '';
+
+            var tool = sgGetActiveTool();
+            if (!tool) {
+                sgDynamicControlsBox.innerHTML = '<div class="sg-status">Loading tool controls…</div>';
+                return;
+            }
+            if (!Array.isArray(tool.controls) || !tool.controls.length) {
+                sgDynamicControlsBox.innerHTML = '<div class="sg-status">No configurable options for this generation type.</div>';
+                return;
+            }
+
+            tool.controls.forEach(function(ctrl) {
+                var el = sgRenderDynamicControl(ctrl);
+                if (el) sgDynamicControlsBox.appendChild(el);
+            });
+        }
+
+        function sgRefreshDependentVisualSelects(changedKey) {
+            var tool = sgGetActiveTool();
+            if (!tool || !Array.isArray(tool.controls) || !sgDynamicControlsBox) return;
+
+            tool.controls.forEach(function(ctrl) {
+                if (ctrl.type !== 'visual-select' || !ctrl.filter_params) return;
+                var depends = Object.keys(ctrl.filter_params).some(function(paramKey) {
+                    return ctrl.filter_params[paramKey] === changedKey;
+                });
+                if (!depends) return;
+
+                // Drop cached entries for this source so the next fetch uses new filters.
+                Object.keys(sgVisualSelectCache).forEach(function(k) {
+                    if (k.indexOf(ctrl.source + '|') === 0) delete sgVisualSelectCache[k];
+                });
+
+                var section = sgDynamicControlsBox.querySelector(
+                    '.sg-dynamic-section[data-control-key="' + ctrl.key + '"]'
+                );
+                if (!section) return;
+                section.innerHTML = '';
+                var label = document.createElement('div');
+                label.className = 'sg-section-label';
+                label.innerHTML = AIModalShared.escapeHtml(sgDisplayControlLabel(ctrl)) +
+                    ' <span class="sg-req-mark" aria-hidden="true">*</span>';
+                section.appendChild(label);
+
+                // Reset selection when upstream filter changes.
+                sgSetControlValue(ctrl.key, '');
+                sgRenderVisualSelectControl(section, ctrl);
+            });
+        }
+
+        function sgInitDynamicControlsEvents() {
+            if (!sgDynamicControlsBox || sgDynamicControlsBox._sgEventsWired) return;
+            sgDynamicControlsBox._sgEventsWired = true;
+
+            sgDynamicControlsBox.addEventListener('click', function(ev) {
+                if (sgIsGenerating) return;
+                var chip = ev.target.closest('.sg-segment-chip');
+                if (chip && sgDynamicControlsBox.contains(chip)) {
+                    var key = chip.dataset.controlKey;
+                    sgSetControlValue(key, chip.dataset.value || '');
+                    sgSyncSegmentChips(key);
+                    sgRefreshDependentVisualSelects(key);
+                    sgUpdateGenerateButtonState();
+                    return;
+                }
+                var card = ev.target.closest('.sg-card[data-control-key]');
+                if (card && sgDynamicControlsBox.contains(card)) {
+                    var grid = card.parentElement;
+                    grid.querySelectorAll('.sg-card').forEach(function(c) { c.classList.remove('active'); });
+                    card.classList.add('active');
+                    sgSetControlValue(card.dataset.controlKey, card.dataset.value || '');
+                    sgRefreshDependentVisualSelects(card.dataset.controlKey);
+                    sgUpdateGenerateButtonState();
+                }
+            });
+
+            sgDynamicControlsBox.addEventListener('change', function(ev) {
+                if (sgIsGenerating) return;
+                var sel = ev.target;
+                if (sel.matches('select[data-control-key]')) {
+                    sgSetControlValue(sel.dataset.controlKey, sel.value);
+                    sgRefreshDependentVisualSelects(sel.dataset.controlKey);
+                    sgUpdateGenerateButtonState();
+                }
+            });
+        }
+
+        function sgOnToolSlugChange(newSlug, preserveValues) {
+            if (!sgIsSupportedToolSlug(newSlug)) newSlug = 'floorplan-2d';
+            sgState.toolSlug = newSlug;
+            if (sgToolSelect) sgToolSelect.value = newSlug;
+            if (sgPlanTypeBox) {
+                sgPlanTypeBox.querySelectorAll('.sg-chip').forEach(function(c) {
+                    c.classList.toggle('active', c.dataset.value === newSlug);
+                });
+            }
+            var tool = sgGetActiveTool();
+            sgInitControlDefaults(tool, !!preserveValues);
+            sgRenderDynamicControls();
+            sgUpdateProgressTitle();
+            sgUpdateGenerateButtonState();
+        }
+
         // -------------------------------------------------------------------------
-        // Card grid / presets rendering (Colors & Textures)
+        // Card grid / visual-select rendering (presets, staging-styles, etc.)
         // -------------------------------------------------------------------------
         //
-        // Preset preview images are bearer-protected on the Supergrundriss
-        // API (the OpenAPI doc says: "Each entry includes a `preview_image`
-        // URL — bearer-protected — fetch as a blob to display the thumbnail").
-        // A plain `background-image: url(...)` won't carry the
-        // Authorization header, so the browser receives a 401/403 and
-        // renders an empty box.
+        // Preview images are bearer-protected on the Supergrundriss API.
+        // A plain `background-image: url(...)` won't carry Authorization.
         //
-        // To make the thumbnails actually show up we:
+        // To make thumbnails show up we:
         //   1. Compute the absolute API URL for the preview (`thumbUrl`).
-        //   2. Fetch it via sgFetchImageObjectUrl(), which adds the Bearer
-        //      header, takes the response as a Blob, and wraps it in a
-        //      same-origin URL.createObjectURL() handle.
+        //   2. Fetch via sgFetchImageObjectUrl():
+        //        - /api/v1/* paths  → direct browser fetch + Bearer header
+        //          (permissive CORS on supergrundriss.de).
+        //        - legacy /api/* paths (e.g. staging-styles preview) →
+        //          same-origin PHP proxy (sg_proxy_image) to avoid CORS.
+        //      Both paths return a Blob wrapped in URL.createObjectURL().
         //   3. Apply that object URL as the card's CSS `background-image`.
         // The fetch is async; we cache the resolved object URL so that
         // re-rendering (2D ↔ 3D toggle, /presets reload) does not re-hit
@@ -3285,6 +3808,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         }
 
         function sgRenderCardGrid(container, items, currentValue, onPick) {
+            var controlKey = container && container.dataset ? container.dataset.controlKey : '';
             container.innerHTML = '';
             if (!items || !items.length) {
                 container.innerHTML = '<div class="sg-status">No options available.</div>';
@@ -3294,15 +3818,13 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 var card = document.createElement('div');
                 card.className = 'sg-card' + (item.slug === currentValue ? ' active' : '');
                 card.setAttribute('data-value', item.slug);
+                if (controlKey) card.setAttribute('data-control-key', controlKey);
 
                 var thumb = document.createElement('div');
                 thumb.className = 'sg-card-thumb';
 
                 var thumbSrc = sgPickPreviewImage(item);
                 if (thumbSrc) {
-                    // Build the absolute API URL the same way sgFetchImageObjectUrl
-                    // does — the helper would do this internally, but resolving
-                    // it here gives us a stable cache key across re-renders.
                     var thumbUrl = (thumbSrc.indexOf('http') === 0) ? thumbSrc : (sgApiHost + thumbSrc);
                     sgLoadPresetThumb(thumb, thumbUrl);
                 }
@@ -3310,7 +3832,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
                 var label = document.createElement('div');
                 label.className = 'sg-card-label';
-                label.textContent = item.name || item.slug;
+                label.textContent = sgDisplayItemName(item);
                 card.appendChild(label);
 
                 card.addEventListener('click', function() {
@@ -3326,43 +3848,32 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
         // Panel initialisation
         // -------------------------------------------------------------------------
 
-        // Shared callback for sgRenderCardGrid onPick — writes to the
-        // single source of truth (sgState.color_texture_set) and forces a
-        // button-state re-check so the new "preset must be picked" gate
-        // lights up immediately. Centralised so we don't have to remember
-        // to call sgUpdateGenerateButtonState() at each of the three
-        // sgRenderCardGrid call sites (2D/3D switch, tool <select> change,
-        // initial /presets load).
-        function sgOnPresetPick(item) {
-            sgState.color_texture_set = item && item.slug ? item.slug : '';
-            sgUpdateGenerateButtonState();
-        }
-
         function sgInitPanel() {
-            // 2D / 3D segmented control -> updates sgState + mirrors to <select>
+            sgInitDynamicControlsEvents();
+
+            // Generation type segmented control -> tool_slug
             if (sgPlanTypeBox) {
                 sgPlanTypeBox.querySelectorAll('.sg-chip').forEach(function(chip) {
                     chip.addEventListener('click', function() {
-                        sgPlanTypeBox.querySelectorAll('.sg-chip').forEach(function(c) { c.classList.remove('active'); });
-                        chip.classList.add('active');
-                        sgState.toolSlug = chip.dataset.value;
-                        if (sgToolSelect) sgToolSelect.value = sgState.toolSlug;
-                        // Re-render presets to swap 2D <-> 3D thumbnail variant.
-                        sgRenderCardGrid(sgPresetsBox, sgPresetsCache, sgState.color_texture_set, sgOnPresetPick);
+                        if (sgIsGenerating) return;
+                        sgOnToolSlugChange(chip.dataset.value, true);
                     });
                 });
             }
 
-            // Tool <select> stays in sync with the segment (and remote /tools fetch).
+            // Hidden <select> mirror (accessibility / programmatic use)
             if (sgToolSelect) {
+                sgToolSelect.innerHTML = '';
+                SG_UI_TOOLS.forEach(function(t) {
+                    var opt = document.createElement('option');
+                    opt.value = t.slug;
+                    opt.textContent = t.label;
+                    if (t.slug === sgState.toolSlug) opt.selected = true;
+                    sgToolSelect.appendChild(opt);
+                });
                 sgToolSelect.addEventListener('change', function() {
-                    sgState.toolSlug = this.value;
-                    if (sgPlanTypeBox) {
-                        sgPlanTypeBox.querySelectorAll('.sg-chip').forEach(function(c) {
-                            c.classList.toggle('active', c.dataset.value === sgState.toolSlug);
-                        });
-                    }
-                    sgRenderCardGrid(sgPresetsBox, sgPresetsCache, sgState.color_texture_set, sgOnPresetPick);
+                    if (sgIsGenerating) return;
+                    sgOnToolSlugChange(this.value, true);
                 });
             }
 
@@ -3370,6 +3881,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             if (sgQualityBox) {
                 sgQualityBox.querySelectorAll('.sg-chip').forEach(function(chip) {
                     chip.addEventListener('click', function() {
+                        if (sgIsGenerating) return;
                         sgQualityBox.querySelectorAll('.sg-chip').forEach(function(c) { c.classList.remove('active'); });
                         chip.classList.add('active');
                         sgState.quality_tier = chip.dataset.value;
@@ -3377,108 +3889,41 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 });
             }
 
-            // Furniture tabs: a single delegated click handler is registered
-            // here once so subsequent re-renders (from /tools) never stack
-            // duplicate listeners. The static HTML in the markup already
-            // provides usable tabs; the live render only refreshes labels
-            // and order.
-            sgInitFurnitureSection();
-            // Make the initial static markup interactive *before* /tools
-            // resolves so the user can still pick a furniture option (and
-            // unblock the Generate button) even offline.
-            sgSyncFurnitureChips();
+            sgUpdateProgressTitle();
             sgUpdateGenerateButtonState();
 
-            // If no key is configured, lock the generate button with a clear
-            // explanation. Static panel controls remain interactive so the user
-            // can still see the UI shape.
             if (!SUPERGRUNDRISS_CONFIG.apiKey) {
                 sgSetStatus('Supergrundriss API key not configured. Set ?sg_key=flp_... in the iframe URL or window.SUPERGRUNDRISS_CONFIG.apiKey on the parent page.', true);
-                if (sgPresetsBox) sgPresetsBox.innerHTML = '<div class="sg-status">API key required to load presets.</div>';
+                if (sgDynamicControlsBox) {
+                    sgDynamicControlsBox.innerHTML = '<div class="sg-status">API key required to load tool controls.</div>';
+                }
                 sgUpdateGenerateButtonState();
                 return;
             }
 
-            sgSetStatus('Loading Supergrundriss options...');
+            sgSetStatus('Loading Supergrundriss options…');
 
-            // Fetch tools + presets in parallel. Failures degrade gracefully.
-            //
-            // /tools is the source of truth for furniture options. We pluck the
-            // `furniture` control from the floorplan-2d tool (3D shares the
-            // same option set) and re-render the tab strip. If the call fails,
-            // the static HTML chips remain interactive — so the form is never
-            // broken by a transient network error.
+            // GET /v1/tools is the source of truth for generation types and controls.
             sgFetch('/tools').then(function(tools) {
                 if (!Array.isArray(tools) || !tools.length) return;
-
-                // Tool <select> reflects the first two (2D, 3D) tools.
-                if (sgToolSelect) {
-                    var firstTwo = tools.slice(0, 2);
-                    sgToolSelect.innerHTML = '';
-                    firstTwo.forEach(function(tool) {
-                        var opt = document.createElement('option');
-                        opt.value = tool.slug;
-                        opt.textContent = tool.name + (tool.category ? ' (' + tool.category + ')' : '');
-                        if (tool.slug === sgState.toolSlug) opt.selected = true;
-                        sgToolSelect.appendChild(opt);
-                    });
-                }
-
-                // Furniture options live on the tool's controls[] array.
-                // Prefer the active plan tool (toolSlug) so 2D/3D-specific
-                // tweaks are picked up; both currently expose identical sets.
-                var planTool = tools.find(function(t) { return t.slug === sgState.toolSlug; })
-                            || tools.find(function(t) { return t.slug === 'floorplan-2d'; });
-                if (planTool && Array.isArray(planTool.controls)) {
-                    var furnitureCtl = planTool.controls.find(function(c) { return c && c.key === 'furniture'; });
-                    if (furnitureCtl && Array.isArray(furnitureCtl.options) && furnitureCtl.options.length) {
-                        sgFurnitureOptions = furnitureCtl.options.slice(0, 4); // exactly 4 tabs
-                        sgRenderFurnitureTabs(sgFurnitureOptions);
-                    }
-                }
-            }).catch(function(err) {
-                console.warn('SG /tools failed:', err);
-            });
-
-            sgFetch('/presets').then(function(presets) {
-                // -------------------------------------------------------------
-                // Filter: only show presets whose tool_category is "floorplan".
-                // -------------------------------------------------------------
-                // /v1/presets returns presets for every tool category exposed
-                // by the API (floorplan, staging, etc.). This modal is the
-                // 2D/3D floor plan entry point, so any non-floorplan preset
-                // would (a) clutter the visual card grid and (b) be silently
-                // rejected by /v1/generate because it's not compatible with
-                // the `floorplan-2d`/`floorplan-3d` tool_slug we send.
-                //
-                // The category field has shipped in two shapes across API
-                // versions, so we accept either:
-                //   tool_category: "floorplan"
-                //   tool_category: ["floorplan", ...]
-                // Anything else is dropped. Presets missing the field entirely
-                // are kept as a defensive fallback (older deployments).
-                var raw = Array.isArray(presets) ? presets : [];
-                sgPresetsCache = raw.filter(function(p) {
-                    if (!p) return false;
-                    var cat = p.tool_category;
-                    if (cat == null) return true; // defensive: legacy presets
-                    if (Array.isArray(cat)) {
-                        return cat.indexOf('floorplan') !== -1;
-                    }
-                    return String(cat).toLowerCase() === 'floorplan';
+                sgToolsCache = tools.filter(function(t) {
+                    return t && sgIsSupportedToolSlug(t.slug);
                 });
 
-                if (!sgPresetsCache.length) {
-                    sgPresetsBox.innerHTML = '<div class="sg-status">No floor plan presets available.</div>';
-                    return;
+                if (!sgIsSupportedToolSlug(sgState.toolSlug)) {
+                    sgState.toolSlug = SUPERGRUNDRISS_CONFIG.defaultToolSlug;
                 }
-                sgRenderCardGrid(sgPresetsBox, sgPresetsCache, sgState.color_texture_set, sgOnPresetPick);
+                sgOnToolSlugChange(sgState.toolSlug, false);
             }).catch(function(err) {
-                sgPresetsBox.innerHTML = '<div class="sg-status error">Failed to load presets: ' + (err.message || 'unknown error') + '</div>';
+                console.warn('SG /tools failed:', err);
+                if (sgDynamicControlsBox) {
+                    sgDynamicControlsBox.innerHTML = '<div class="sg-status error">Failed to load tool controls: ' +
+                        (err.message || 'unknown error') + '</div>';
+                }
+            }).finally(function() {
+                sgSetStatus('');
+                sgUpdateGenerateButtonState();
             });
-
-            sgSetStatus('');
-            sgUpdateGenerateButtonState();
         }
 
         // -------------------------------------------------------------------------
@@ -3574,7 +4019,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
             var g = it.generation || {};
             var parts = ['Generation #' + (g.id || '?')];
-            if (g.tool_type)    parts.push(g.tool_type);
+            if (g.tool_type)    parts.push(sgUiLabelForSlug(g.tool_type));
             if (g.quality_tier) parts.push(g.quality_tier);
             if (g.completed_at) parts.push('completed at ' + g.completed_at);
             sgResultMeta.textContent = parts.join(' · ');
@@ -3680,7 +4125,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 if (!it || !it.imageObjectUrl) return;
                 var a = document.createElement('a');
                 a.href = it.imageObjectUrl;
-                a.download = 'floor-plan-' + ((it.generation && it.generation.id) || Date.now()) + '.png';
+                a.download = 'generated-image-' + ((it.generation && it.generation.id) || Date.now()) + '.png';
                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
             });
             sgInitCompareInteractions();
@@ -3802,45 +4247,38 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
 
         // Build the JSON object that ships in settings_json.
         //
-        // Per the latest API contract, settings_json is now a *minimal*
-        // object with EXACTLY two keys — nothing else is injected:
-        //
-        //   {
-        //     "furniture": "<raw value of the active Furniture tab>",
-        //     "preset":    "<slug of the active Colors & Textures preset>"
-        //   }
-        //
-        // Everything that previously rode along inside settings_json
-        // (plan_type, tool_slug, quality_tier, color_texture_set, raw
-        // center-form values keyed by field id) has been removed. The other
-        // payload properties still travel as their own multipart fields
-        // alongside settings_json (see sgGenerate): main_image, tool_slug,
-        // quality_tier, preset, additional_instructions.
-        //
-        // Furniture mapping
-        // -----------------
-        // sgState.furniture holds the raw API value from
-        // /v1/tools.controls.furniture.options[].value (e.g. "living"),
-        // written by the chip click handler in sgInitFurnitureSection().
-        //
-        // Preset synchronisation
-        // ----------------------
-        // The `preset` key here reads from sgState.color_texture_set — the
-        // exact same source the top-level multipart `preset` field uses
-        // (see sgGenerate() below). There is only one writer for
-        // color_texture_set: the sgRenderCardGrid() onPick callback. Single
-        // source = no duplicate preset state, no drift between the JSON
-        // copy and the top-level form field.
-        //
-        // Both gates are already enforced by sgUpdateGenerateButtonState(),
-        // so by the time this builder runs both values are guaranteed to
-        // be non-empty. The null-coalescing fallback is a defence-in-depth
-        // measure for programmatic submissions only.
+        // Floorplan tools (2D/3D) preserve the exact legacy payload shape:
+        //   { furniture, preset } where preset mirrors color_texture_set.
+        // All other tools send control keys exactly as defined in GET /v1/tools.
         function sgBuildSettingsJson() {
-            return {
-                furniture: sgState.furniture || null,
-                preset:    sgState.color_texture_set || null
-            };
+            var values = sgState.controlValues || {};
+            if (sgIsFloorplanTool()) {
+                return {
+                    furniture: values.furniture || sgState.furniture || null,
+                    preset:    values.color_texture_set || sgState.color_texture_set || null
+                };
+            }
+            var tool = sgGetActiveTool();
+            var settings = {};
+            if (tool && Array.isArray(tool.controls)) {
+                tool.controls.forEach(function(ctrl) {
+                    if (!ctrl || !ctrl.key) return;
+                    var v = values[ctrl.key];
+                    if (sgIsFilled(v)) settings[ctrl.key] = v;
+                });
+            }
+            return settings;
+        }
+
+        // Top-level multipart `preset` field (system preset slug).
+        function sgGetTopLevelPreset() {
+            var values = sgState.controlValues || {};
+            if (sgIsFloorplanTool()) {
+                return values.color_texture_set || sgState.color_texture_set || null;
+            }
+            if (sgIsFilled(values.preset)) return values.preset;
+            if (sgIsFilled(values.color_texture_set)) return values.color_texture_set;
+            return null;
         }
 
         // The API's `additional_instructions` field maps 1:1 to the user's
@@ -3877,16 +4315,11 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 return;
             }
 
-            // Defense in depth: even though the button is `disabled` until
-            // every required center-form field is filled, we re-validate
-            // here so a manual JS click() can never bypass the rules.
-            if (!sgFurnitureSelected()) {
-                AIModalShared.showNotification('Please pick a Furniture option before generating.', 'warning', 4000);
-                sgUpdateGenerateButtonState();
-                return;
-            }
-            if (!sgPresetSelected()) {
-                AIModalShared.showNotification('Please pick a Colors & Textures preset before generating.', 'warning', 4000);
+            // Defense in depth: re-validate dynamic tool controls even though
+            // the button stays disabled until every control has a value.
+            var missingReason = sgGetMissingControlReason();
+            if (missingReason) {
+                AIModalShared.showNotification(missingReason, 'warning', 4000);
                 sgUpdateGenerateButtonState();
                 return;
             }
@@ -3894,12 +4327,14 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
             var settings = sgBuildSettingsJson();
             var additionalInstructions = sgBuildAdditionalInstructions();
             var toolSlug = sgState.toolSlug || SUPERGRUNDRISS_CONFIG.defaultToolSlug;
+            var topLevelPreset = sgGetTopLevelPreset();
 
             sgIsGenerating = true;
             sgUpdateGenerateButtonState();
             AIModalShared.setButtonLoading(generateFloorPlanBtn, 'Generating…');
             generatingOverlay.classList.add('active');
             sgOpenProgress();
+            sgUpdateProgressTitle();
             sgSetProgressStatus('Preparing source image…');
 
             // AbortController lets us cancel the in-flight fetch + polling if
@@ -3919,7 +4354,6 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                 sgActiveAbort = null;
                 generatingOverlay.classList.remove('active');
                 sgCloseProgress();
-                AIModalShared.setButtonWithIcon(generateFloorPlanBtn, 'fas fa-drafting-compass', 'Generate 2D Floor Plan');
                 sgUpdateGenerateButtonState();
             };
 
@@ -3937,13 +4371,20 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                     fd.append('tool_slug', toolSlug);
                     fd.append('quality_tier', sgState.quality_tier || 'standard');
                     fd.append('settings_json', JSON.stringify(settings));
-                    if (sgState.color_texture_set) {
+                    if (topLevelPreset) {
                         // System preset slug (mutually exclusive w/ user_preset_id).
-                        fd.append('preset', sgState.color_texture_set);
+                        fd.append('preset', topLevelPreset);
                     }
                     if (additionalInstructions) {
                         fd.append('additional_instructions', additionalInstructions);
                     }
+
+                    console.log('[SG] POST /v1/generate', {
+                        tool_slug: toolSlug,
+                        quality_tier: sgState.quality_tier || 'standard',
+                        settings_json: settings,
+                        preset: topLevelPreset || null
+                    });
 
                     return fetch(SUPERGRUNDRISS_CONFIG.apiBaseUrl + '/generate', {
                         method: 'POST',
@@ -4058,8 +4499,8 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                     sgOpenResults(items, originalImageUrl);
                     AIModalShared.showNotification(
                         items.length > 1
-                            ? items.length + ' floor plans generated successfully!'
-                            : '2D floor plan generated successfully!',
+                            ? items.length + ' images generated successfully!'
+                            : (sgUiLabelForProgress() + ' generated successfully!'),
                         'success', 3000);
 
                     // 2) Always emit imageGenerated so the parent page is
@@ -4140,7 +4581,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                     } else {
                         message = (err && err.message) || 'Unknown error during generation.';
                     }
-                    AIModalShared.showNotification('Floor plan generation failed: ' + message, 'danger', 6000);
+                    AIModalShared.showNotification('Generation failed: ' + message, 'danger', 6000);
                     AIModalShared.sendToParent('error', {
                         message: 'Supergrundriss generation failed: ' + message,
                         code: (err && err.code) || 'SG_GENERATION_FAILED'
@@ -4290,7 +4731,7 @@ $image_url = $compress_path ? "https://cseven.eu/studio/result_compress_files/{$
                     // Open results modal with the refined image so the user
                     // sees the outcome immediately — same UX as a generation.
                     sgOpenResults(items, sgCurrentSource.imageUrl || originalImageUrl);
-                    AIModalShared.showNotification('Refined floor plan ready!', 'success', 3000);
+                    AIModalShared.showNotification('Refined image ready!', 'success', 3000);
 
                     items.forEach(function(item) {
                         AIModalShared.sendToParent('imageGenerated', {
