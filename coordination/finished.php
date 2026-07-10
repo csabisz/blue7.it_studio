@@ -495,6 +495,82 @@ for($i=0;$i<count($orders);$i++)
 
                 </script>
 
+                <button id="show_with_creators_btn<?php echo $orders[$i]['order_ID'];?>" class="btn btn-sm mr-1 btn-light">Creators</button>
+
+                <script type="text/javascript">
+
+                $("#show_with_creators_btn<?php echo $orders[$i]['order_ID'];?>").click(function(){
+
+                    $(".assigned_creator_name<?php echo $orders[$i]['order_ID'];?>").toggleClass('d-none');
+
+                    
+
+                    var user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+
+                    $(".assigned_creator_name<?php echo $orders[$i]['order_ID'];?>").each(function(){
+
+                        let uca_id=$(this).data('uca_id');
+                        let o_id=$(this).data('o_id');
+                        let osub_id=$(this).data('osub_id');
+                        let prod_id=$(this).data('prod_id');
+
+                        if((uca_id!="")&&(uca_id!=undefined))
+                        {
+                            $.ajax({
+
+                                url: "../ajax/get_client.php",
+                                method: "get",
+                                data: {uca_id:uca_id},
+                                dataType:"html",
+                                success:function(data) {												
+
+                                    $("#assigned_creator_name"+o_id+"_"+osub_id+"_"+prod_id).html(data);
+
+                                }
+
+                            });
+                        }
+
+                    var creator_end_time=$(this).data("creator_end_time");
+
+
+
+                    var creatorUTCendtime = moment.tz(creator_end_time, 'UTC');
+
+                    var creator_end_dateset = creatorUTCendtime
+
+                        .clone()
+
+                        .tz(user_timezone)
+
+                        .format('YYYY-MM-DD HH:mm');
+
+                    
+
+                    var today=new Date();
+
+                    
+
+                    var time_diff=(new Date(creator_end_dateset).getTime() - new Date(today).getTime());                  
+
+
+
+                    if(time_diff>0)
+
+                    {
+
+                        $(this).addClass("green-border");
+
+                    }
+
+                    });
+
+                });
+
+                </script>
+
                 <button id="delete_order_btn<?php echo $orders[$i]['order_ID'];?>" class="btn btn-sm btn-danger d-inline">x</button>
 
                 <script type="text/javascript">
@@ -607,9 +683,81 @@ for($i=0;$i<count($orders);$i++)
 
             }
 
-            ?>"><a href="taskdetails.php?o_id=<?php echo $b5_exterior_products_with_extensions[$j]['o_id'];?>&osub_id=<?php echo $b5_exterior_products_with_extensions[$j]['osub_id'];?>&prod_id=<?php echo $b5_exterior_products_with_extensions[$j]['prod_id'];?>"><?php
+            ?>"><a id="taskdetails<?php 
+            echo $b5_exterior_products_with_extensions[$j]['o_id']."_".$b5_exterior_products_with_extensions[$j]['osub_id']."_".$b5_exterior_products_with_extensions[$j]['prod_id'];
+            ?>" data-o_id="<?php 
+            echo $b5_exterior_products_with_extensions[$j]['o_id'];
+            ?>" data-osub_id="<?php 
+            echo $b5_exterior_products_with_extensions[$j]['osub_id'];
+            ?>" data-prod_id="<?php 
+            echo $b5_exterior_products_with_extensions[$j]['prod_id'];
+            ?>" data-uca_id="<?php 
+            echo $b5_exterior_products_with_extensions[$j]['uca_id'];
+            ?>" href="taskdetails.php?o_id=<?php 
+            echo $b5_exterior_products_with_extensions[$j]['o_id'];?>&osub_id=<?php 
+            echo $b5_exterior_products_with_extensions[$j]['osub_id'];?>&prod_id=<?php 
+            echo $b5_exterior_products_with_extensions[$j]['prod_id'];?>" title="" class="<?php 
+            $check_tracking_data['o_id']=$b5_exterior_products_with_extensions[$j]['o_id'];
+            $check_tracking_data['osub_id']=$b5_exterior_products_with_extensions[$j]['osub_id'];
+            $check_tracking_data['prod_id']=$b5_exterior_products_with_extensions[$j]['prod_id'];
+            $check_tracking_data['date_visited']=gmdate("Y-m-d H:i:s");
 
-            echo $b5_exterior_products_with_extensions[$j]['osub_id'].".".$b5_exterior_products_with_extensions[$j]['prod_id'];?></a></p>  
+            $checking_user_tracking_taskdetails=$prod->get_valid_user_tracking_taskdetails(json_encode($check_tracking_data));
+            
+            if(!empty($checking_user_tracking_taskdetails))
+            {
+                echo "blinking_text";
+            }
+            ?>"><?php
+
+            echo $b5_exterior_products_with_extensions[$j]['osub_id'].".".$b5_exterior_products_with_extensions[$j]['prod_id'];?>
+            <br><span id="assigned_creator_name<?php
+                echo $orders[$i]['order_ID']."_".$b5_exterior_products_with_extensions[$j]['osub_id']."_".$b5_exterior_products_with_extensions[$j]['prod_id'];?>" data-o_id="<?php
+                echo $orders[$i]['order_ID'];?>" data-osub_id="<?php
+                echo $b5_exterior_products_with_extensions[$j]['osub_id']; ?>" data-prod_id="<?php 
+                echo $b5_exterior_products_with_extensions[$j]['prod_id']?>"
+                class="d-none assigned_creator_name<?php 
+                echo $orders[$i]['order_ID'];?>" data-uca_id="<?php 
+                echo $b5_exterior_products_with_extensions[$j]['uca_id'];?>" data-creator_end_time="<?php 
+
+                //showing creator's end time
+
+                $endtime=$prod->get_creator_end_time($b5_exterior_products_with_extensions[$j]['uca_id']);
+
+                echo $endtime['end_time'];
+
+
+
+                ?>"><?php
+            
+                ?></span></a>
+                <script type="text/javascript">
+                    $(document).ready(function(){
+
+                    $('#taskdetails<?php echo $b5_exterior_products_with_extensions[$j]['o_id']."_".$b5_exterior_products_with_extensions[$j]['osub_id']."_".$b5_exterior_products_with_extensions[$j]['prod_id']; ?>').hover(function(){
+                        let o_id=$(this).data('o_id');
+                        let osub_id=$(this).data('osub_id');
+                        let prod_id=$(this).data('prod_id');
+                        let uca_id=$(this).data('uca_id');
+                        
+                        $.ajax({
+
+                            url: "../ajax/get_creator_activity.php",
+                            method: "get",
+                            data: {o_id:o_id,osub_id:osub_id,prod_id:prod_id,uca_id:uca_id},
+                            dataType:"html",
+                            success:function(data) {
+
+                                $('#taskdetails<?php echo $b5_exterior_products_with_extensions[$j]['o_id']."_".$b5_exterior_products_with_extensions[$j]['osub_id']."_".$b5_exterior_products_with_extensions[$j]['prod_id']; ?>').attr('title',data);
+
+                            }
+
+                            });
+                    });
+
+                });
+                </script>
+                </p>  
 
         <?php
 
