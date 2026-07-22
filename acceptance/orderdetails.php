@@ -2354,7 +2354,7 @@ if(isset($_GET['option']))
                         });
                         
                     });
-
+                    /*
                     $('#generate_homepage_btn').click(function(){
                         if(confirm('Are you sure the homepage url is correct ?'))
                         {
@@ -2380,7 +2380,7 @@ if(isset($_GET['option']))
                                 alert('Warning ! Homepage URL is empty ! Nothing generated !');
                             }
                         }
-                    })
+                    })*/
                     </script>
                 </div>
                 <div class="form-group">
@@ -2410,7 +2410,7 @@ if(isset($_GET['option']))
                         });
                         
                     });
-
+                    /*
                     $('#generate_domain_homepage_btn').click(function(){
                         if(confirm('Are you sure the mainpage url is correct ?'))
                         {
@@ -2436,7 +2436,37 @@ if(isset($_GET['option']))
                                 alert('Warning ! Homepage URL is empty ! Nothing generated !');
                             }
                         }
-                    })
+                    })*/
+                    </script>
+                </div>
+                <div class="form-group">
+					<p class="d-inline"><b>Independent Panorama Tour: </b></p>
+                    <input type="text" class="form-control form-control-sm d-inline" id="independent_panorama_tour" name="independent_panorama_tour" data-o_id="<?php echo $o_id;?>" value="<?php echo $order['independent_panorama_tour'];?>" style="width:250px;" form="order_details" placeholder="" autocomplete="off">
+                    <!--<button type="button" name="generate_domain_homepage_btn" id="generate_domain_homepage_btn" data-o_id="<?php echo $o_id;?>" class="btn btn-sm btn-primary">Generate</button>-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="domain_homepage_message">
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                    $('#independent_panorama_tour').on('change',function(){
+                        
+                        let o_id=$(this).data('o_id');
+                        let independent_panorama_tour=$(this).val();                        
+
+                        $.ajax({
+                            url: "../ajax/update_order_independent_panorama_tour.php",
+                            method: "post",
+                            data: {o_id:o_id,independent_panorama_tour:independent_panorama_tour},
+                            dataType:"html",
+                            success:function(data) {
+                                console.log(data);	
+                            }
+                        });
+                        
+                    });
+                    
                     </script>
                 </div>
                 <?php

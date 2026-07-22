@@ -12189,6 +12189,21 @@ class Production
 
     }
 
+    public function update_order_independent_panorama_tour($orderid, $independent_panorama_tour)
+    {
+
+        $mysqli = $this->dbconnect();
+
+        $o_id = mysqli_real_escape_string($mysqli, $orderid);
+        $independent_panorama_tour = mysqli_real_escape_string($mysqli, $independent_panorama_tour);
+
+        $update_order_status_sql = "update `orders` set `independent_panorama_tour`='$independent_panorama_tour' where `order_ID`='$o_id'";
+        $update_order_status_result = mysqli_query($mysqli, $update_order_status_sql) or die(mysqli_error($mysqli));
+
+        mysqli_close($mysqli);
+
+    }
+
     public function update_order_creator_team($o_id, $team_id)
     {
         $mysqli = $this->dbconnect();
