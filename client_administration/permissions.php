@@ -436,14 +436,15 @@ $creator=$prod->get_client($client_id);
 							<label for="change_vat">Change Country VAT</label>
 						</div>
 					</div>
+					
+                </div>
+				<div class="col-md-6">	
 					<div class="row">
 						<div class="col-md-12 form-inline">
 							<input type="checkbox" value="coordination" class="form-control form-control-sm mr-3" id="coordination" name="rights[]" <?php echo ($rights['coordination']>0)?"checked":"";?>>
 							<label for="coordination">Coordination</label>
 						</div>
-					</div>
-                </div>
-				<div class="col-md-6">					
+					</div>				
 					<div class="row">
 						<div class="col-md-12 form-inline">
 							<input type="checkbox" value="qualified_for_all_tasks" class="form-control form-control-sm mr-3" id="qualified_for_all_tasks" name="rights[]" <?php echo ($rights['qualified_for_all_tasks']>0)?"checked":"";?>>
