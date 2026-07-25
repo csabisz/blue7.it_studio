@@ -3733,6 +3733,7 @@ class Production
         $contracting = mysqli_real_escape_string($mysqli, $data->contracting);
         $bookkeeping = mysqli_real_escape_string($mysqli, $data->bookkeeping);
         $coordination = mysqli_real_escape_string($mysqli, $data->coordination);
+        $qualified_for_all_tasks = mysqli_real_escape_string($mysqli, $data->qualified_for_all_tasks);
         $housesets = mysqli_real_escape_string($mysqli, $data->housesets);
         $plansets = mysqli_real_escape_string($mysqli, $data->plansets);
         $activity_view = mysqli_real_escape_string($mysqli, $data->activity_view);
@@ -3741,7 +3742,7 @@ class Production
         $trans_languages = mysqli_real_escape_string($mysqli, $data->trans_languages);
         $tutorials = mysqli_real_escape_string($mysqli, $data->tutorials);
 
-        $stmt = "insert into `u_clients_rights`(`client_id`,`uca_name`,`own_tasks`,`user_admin`,`main_client_admin`,`programs_of_employees`,`contracting`,`cdesign`,`cmeasures`,`change_vat`,`bookkeeping`,`coordination`,`plansets`,`housesets`,`plots`,`view_all_orders`,`activity_view`,`APU_lists`,`examples_db`,`trans_languages`,`tutorials`) values('$client_id','$own_tasks','$uca_name','$user_admin','$main_client_admin','$programs_of_employees','$contracting','$cdesign','$cmeasures','$change_vat','$bookkeeping','$coordination','$plansets','$housesets','$plots','$view_all_orders','$activity_view','$apu_list','$examples_db','$trans_languages','$tutorials')";
+        $stmt = "insert into `u_clients_rights`(`client_id`,`uca_name`,`own_tasks`,`user_admin`,`main_client_admin`,`programs_of_employees`,`contracting`,`cdesign`,`cmeasures`,`change_vat`,`bookkeeping`,`coordination`,`qualified_for_all_tasks`,`plansets`,`housesets`,`plots`,`view_all_orders`,`activity_view`,`APU_lists`,`examples_db`,`trans_languages`,`tutorials`) values('$client_id','$own_tasks','$uca_name','$user_admin','$main_client_admin','$programs_of_employees','$contracting','$cdesign','$cmeasures','$change_vat','$bookkeeping','$coordination','$qualified_for_all_tasks','$plansets','$housesets','$plots','$view_all_orders','$activity_view','$apu_list','$examples_db','$trans_languages','$tutorials')";
         mysqli_query($mysqli, $stmt) or die(mysqli_error($mysqli));
 
         mysqli_close($mysqli);
@@ -5533,6 +5534,7 @@ class Production
         $contracting = mysqli_real_escape_string($mysqli, $data->contracting ?? 0);
         $bookkeeping = mysqli_real_escape_string($mysqli, $data->bookkeeping ?? 0);
         $coordination = mysqli_real_escape_string($mysqli, $data->coordination ?? 0);
+        $qualified_for_all_tasks = mysqli_real_escape_string($mysqli, $data->qualified_for_all_tasks ?? 0);
         $housesets = mysqli_real_escape_string($mysqli, $data->housesets ?? 0);
         $plansets = mysqli_real_escape_string($mysqli, $data->plansets ?? 0);
         $activity_view = mysqli_real_escape_string($mysqli, $data->activity_view ?? 0);
@@ -5541,7 +5543,7 @@ class Production
         $trans_languages = mysqli_real_escape_string($mysqli, $data->trans_languages ?? 0);
         $tutorials = mysqli_real_escape_string($mysqli, $data->tutorials ?? 0);
 
-        $stmt = "update `u_clients_rights` set `uca_name`='$uca_name',`own_tasks`='$own_tasks',`client`='$client',`plansets`='$plansets',`housesets`='$housesets',`plots`='$plots',`view_all_orders`='$view_all_orders',`user_admin`='$user_admin',`main_client_admin`='$main_client_admin',`cdesign`='$cdesign',`cmeasures`='$cmeasures',`change_vat`='$change_vat',`programs_of_employees`='$programs_of_employees',`contracting`='$contracting',`bookkeeping`='$bookkeeping',`coordination`='$coordination',`activity_view`='$activity_view',`APU_lists`='$apu_list',`examples_db`='$examples_db',`trans_languages`='$trans_languages',`tutorials`='$tutorials' where `client_id`='$client_id'";
+        $stmt = "update `u_clients_rights` set `uca_name`='$uca_name',`own_tasks`='$own_tasks',`client`='$client',`plansets`='$plansets',`housesets`='$housesets',`plots`='$plots',`view_all_orders`='$view_all_orders',`user_admin`='$user_admin',`main_client_admin`='$main_client_admin',`cdesign`='$cdesign',`cmeasures`='$cmeasures',`change_vat`='$change_vat',`programs_of_employees`='$programs_of_employees',`contracting`='$contracting',`bookkeeping`='$bookkeeping',`coordination`='$coordination',`qualified_for_all_tasks`='$qualified_for_all_tasks',`activity_view`='$activity_view',`APU_lists`='$apu_list',`examples_db`='$examples_db',`trans_languages`='$trans_languages',`tutorials`='$tutorials' where `client_id`='$client_id'";
         mysqli_query($mysqli, $stmt) or die(mysqli_error($mysqli));
 
         mysqli_close($mysqli);

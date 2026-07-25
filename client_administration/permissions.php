@@ -93,6 +93,10 @@ include('../menu.php');
 				{
 					$rights_data['coordination']=1;
                 }
+				if($all_rights[$i]=="qualified_for_all_tasks")
+				{
+					$rights_data['qualified_for_all_tasks']=1;
+				}
 				if($all_rights[$i]=="housesets")
 				{
 					$rights_data['housesets']=1;
@@ -438,6 +442,12 @@ $creator=$prod->get_client($client_id);
 						<div class="col-md-12 form-inline">
 							<input type="checkbox" value="coordination" class="form-control form-control-sm mr-3" id="coordination" name="rights[]" <?php echo ($rights['coordination']>0)?"checked":"";?>>
 							<label for="coordination">Coordination</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-inline">
+							<input type="checkbox" value="qualified_for_all_tasks" class="form-control form-control-sm mr-3" id="qualified_for_all_tasks" name="rights[]" <?php echo ($rights['qualified_for_all_tasks']>0)?"checked":"";?>>
+							<label for="qualified_for_all_tasks">Qualified for all tasks</label>
 						</div>
 					</div>
 					<div class="row">
