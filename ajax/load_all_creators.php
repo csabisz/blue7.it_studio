@@ -18,7 +18,7 @@ for($c=0;$c<count($all_creators);$c++)
     <option value="<?php echo $all_creators[$c]['client_ID'];?>"><?php  
     $creator_name = $all_creators[$c]['c_first_name'];
     if(!empty($all_creators[$c]['c_middle_name'])) $creator_name .= ' ' . $all_creators[$c]['c_middle_name'];
-    $creator_name .= ' ' . $creator['c_last_name'];
+    $creator_name .= ' ' . $all_creators[$c]['c_last_name'];
 
     echo $creator_name;
 

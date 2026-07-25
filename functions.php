@@ -14610,6 +14610,21 @@ class Production
         mysqli_close($mysqli);
     }
 
+    public function assign_all_tasks_to_creator($o_id, $creator_id)
+    {
+        $mysqli = $this->dbconnect();
+        $o_id = mysqli_real_escape_string($mysqli, $o_id);        
+        $creator_id = mysqli_real_escape_string($mysqli, $creator_id);        
+
+        $stmt = mysqli_prepare($mysqli, "update `o_prods` set `uca_id`=?, `p_status`='2' where `o_id`=?");
+        mysqli_stmt_bind_param($stmt, "ii", $creator_id, $o_id);
+
+        mysqli_stmt_execute($stmt);
+
+        mysqli_stmt_close($stmt);
+        mysqli_close($mysqli);
+    }
+
     //tasksdetails page
 
     public function show_all_messages($o_id, $osub_id, $prod_id)
