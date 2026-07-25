@@ -451,6 +451,24 @@ if (isset($_GET['o_id']))
                         }
                     });
                 });
+
+                $('#assign_all_tasks_to_this_creator').on('change',function(){
+                    if(confirm('If some tasks already have creators assigned, they will be changed to the selected creator.\nAre you sure you want to continue ?'))
+                    {
+                        $.ajax({
+                            url: "../ajax/assign_all_tasks_to_this_creator.php",
+                            method: "post",
+                            data: {
+                                o_id:<?php echo $order['order_ID'];?>,
+                                client_id:$(this).val();
+                            },
+                            dataType:"html",
+                            success:function(data) {                                
+
+                            }
+                        });
+                    }
+                });
             </script>
         </div>
     </div>
