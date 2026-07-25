@@ -469,7 +469,7 @@ if (isset($_GET['o_id']))
                                         "https://cseven.eu/studio/coordination/orderdetails4.php?o_id=<?php echo $order['order_ID']; ?>&reload=" +
                                         new Date().getTime() +
                                         "#assign_all_tasks_to_this_creator";
-                                }, 2000);
+                                }, 1000);
                             }
                         });
                     }
