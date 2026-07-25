@@ -465,9 +465,10 @@ if (isset($_GET['o_id']))
                             dataType:"html",
                             success:function(data) {                                
                                 setTimeout(function () {
-                                    window.location.replace(
-                                        "https://cseven.eu/studio/coordination/orderdetails4.php?o_id=<?php echo $order['order_ID']; ?>#assign_all_tasks_to_this_creator"
-                                    );
+                                    window.location.href =
+                                        "https://cseven.eu/studio/coordination/orderdetails4.php?o_id=<?php echo $order['order_ID']; ?>&reload=" +
+                                        new Date().getTime() +
+                                        "#assign_all_tasks_to_this_creator";
                                 }, 2000);
                             }
                         });
