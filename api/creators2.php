@@ -76,6 +76,7 @@ if (!empty($u_prod_id))
             <?php
         }
     }
+}
     /*
     function filter_useless_qualifications($qualifications)
 
