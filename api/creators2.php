@@ -623,11 +623,11 @@ if (!empty($u_prod_id))
 
             } *//*
 
-        }*/
+        }
 
 
 
-    }
+    }*/
 
     //print_r($CREATORS);
 
@@ -650,15 +650,15 @@ if (!empty($u_prod_id))
 
     // }
 
-    echo json_encode($CREATORS);
+//     echo json_encode($CREATORS);
 
-} 
-else 
-{
+// } 
+// else 
+// {
 
-    $CREATORS['error']['message'] = 'Set `u_prod_id`';
-    echo json_encode($CREATORS);
-}
+//     $CREATORS['error']['message'] = 'Set `u_prod_id`';
+//     echo json_encode($CREATORS);
+// }
 
 
 
