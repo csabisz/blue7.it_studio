@@ -460,7 +460,7 @@ if (isset($_GET['o_id']))
                             method: "post",
                             data: {
                                 o_id:<?php echo $order['order_ID'];?>,
-                                client_id:$(this).val();
+                                client_id:$(this).val()
                             },
                             dataType:"html",
                             success:function(data) {                                
