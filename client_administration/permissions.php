@@ -430,8 +430,6 @@ $creator=$prod->get_client($client_id);
 							<label for="bookkeeping">Bookkeeping</label>
 						</div>
 					</div>
-                </div>
-				<div class="col-md-6">
 					<div class="row">
 						<div class="col-md-12 form-inline">
 							<input type="checkbox" value="change_vat" class="form-control form-control-sm mr-3" id="change_vat" name="rights[]" <?php echo ($rights['change_vat']>0)?"checked":"";?>>
@@ -444,6 +442,8 @@ $creator=$prod->get_client($client_id);
 							<label for="coordination">Coordination</label>
 						</div>
 					</div>
+                </div>
+				<div class="col-md-6">					
 					<div class="row">
 						<div class="col-md-12 form-inline">
 							<input type="checkbox" value="qualified_for_all_tasks" class="form-control form-control-sm mr-3" id="qualified_for_all_tasks" name="rights[]" <?php echo ($rights['qualified_for_all_tasks']>0)?"checked":"";?>>
