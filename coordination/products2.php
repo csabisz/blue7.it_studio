@@ -163,7 +163,7 @@ foreach ($products as $side => $product_side) {
 
                                                                             $.ajax({
 
-                                                                                url: '../api/creators.php',
+                                                                                url: '../api/creators2.php',
 
                                                                                 method: 'get',
 
@@ -181,11 +181,12 @@ foreach ($products as $side => $product_side) {
 
                                                                                 },
 
-                                                                                dataType: 'json',
+                                                                                dataType: 'html',
 
-                                                                                success: function (data) {
-
-                                                                                    
+                                                                                success: function (data) 
+                                                                                {
+                                                                                    $('#creators_<?=$prod_class?>').html(data);
+                                                                                    /*
 
                                                                                     let select = document.getElementById('creators_<?=$prod_class?>');
                                                                                     let selectedValue = select.value; // Store the currently selected value
@@ -277,7 +278,7 @@ foreach ($products as $side => $product_side) {
                                                                                     // Restore the selected value if it exists
                                                                                     if (selectedValue) {
                                                                                         select.value = selectedValue;
-                                                                                    }
+                                                                                    } */
 
                                                                                 }
 
