@@ -434,10 +434,24 @@ if (isset($_GET['o_id']))
             <b>Assign all tasks to this creator:</b>
         </div>
         <div class="col-md-2">
-            <select name="creators_<?= $prod_class ?>" id="creators_<?= $prod_class ?>" class="form-control form-control-sm">
-                <option value="">-- Choose creator --</option>
-                
+            <select name="assign_all_tasks_to_this_creator" id="assign_all_tasks_to_this_creator" class="form-control form-control-sm">
+                <option value="">-- Choose creator --</option>                
             </select>
+            <script type="text/javascript">
+                $('#assign_all_tasks_to_this_creator').on('focusin',function(){
+                    $.ajax({
+                        url: "../ajax/load_all_creators.php",
+                        method: "get",
+                        data: {
+
+                        },
+                        dataType:"html",
+                        success:function(data) {
+                            console.log("Loaded");	
+                        }
+                    });
+                });
+            </script>
         </div>
     </div>
 
