@@ -443,11 +443,11 @@ if (isset($_GET['o_id']))
                         url: "../ajax/load_all_creators.php",
                         method: "get",
                         data: {
-
+                            lt_id:<?php echo $order['u_prod_id'];?>
                         },
                         dataType:"html",
                         success:function(data) {
-                            console.log("Loaded");	
+                            console.log(data);	
                         }
                     });
                 });
