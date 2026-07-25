@@ -77,8 +77,12 @@ foreach ($order_products as $product) {
     $creator_active = $prod->get_client_rights($selected_creator['client_ID'])['u_status'];
 
 
-    if($creator_active) $product['current_creator'] = $selected_creator['c_first_name'] . ' ' . $selected_creator['c_last_name'];
-
+    if($creator_active) 
+    {
+        $product['current_creator'] = $selected_creator['c_first_name'];
+        if(!empty($selected_creator['c_middle_name'])) $product['current_creator'] .= ' ' . $selected_creator['c_middle_name'];
+        $product['current_creator'] .= ' ' . $selected_creator['c_last_name'];
+    }
 
     //Sorting
 
