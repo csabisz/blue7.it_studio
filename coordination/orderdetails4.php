@@ -429,6 +429,18 @@ if (isset($_GET['o_id']))
         </div>
     </div>
 
+    <div class="row mx-0 w-100" style="border-top: 4px solid #000;background: #eeeec3;">
+        <div class="col-md-auto">
+            <b>Assign all tasks to this creator:</b>
+        </div>
+        <div class="col-md-2">
+            <select name="creators_<?= $prod_class ?>" id="creators_<?= $prod_class ?>" class="form-control form-control-sm">
+                <option value="">-- Choose creator --</option>
+                
+            </select>
+        </div>
+    </div>
+
     <?php
     $global_creator_counter = 0;
     include('products.php');

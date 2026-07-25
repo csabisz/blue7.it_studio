@@ -24,19 +24,7 @@ foreach ($products as $side => $product_side) {
     ?>
 
     <div class="row mx-0 w-100 <?php ($side === 'interior') ? print 'interiordetails' : print 'exterior'; ?>">
-    <div class="row mx-0 w-100">
-        <div class="col-md-3">
-            Assign all tasks to this creator:
-        </div>
-        <div class="col-md-3">
-            <select name="creators_<?= $prod_class ?>" id="creators_<?= $prod_class ?>" class="form-control form-control-sm">
-                <option value="">-- Choose creator --</option>
-                <?php foreach ($all_creators as $creator) { ?>
-                    <option value="<?= $creator['client_ID'] ?>"><?= $creator['c_first_name'] . ' ' . $creator['c_middle_name'] . ' ' . $creator['c_last_name'] ?></option>
-                <?php } ?>
-            </select>
-        </div>
-    </div>
+    
 
         <?php foreach ($product_side as $product_type) { ?>
 
