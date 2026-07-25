@@ -223,7 +223,7 @@ foreach ($products as $side => $product_side) {
 
                                                                                            
 
-                                                                                            option.appendChild(document.createTextNode(creator.c_first_name + ' ' + creator.c_last_name));
+                                                                                            option.appendChild(document.createTextNode(creator.c_first_name + ' ' + (creator.c_middle_name ? creator.c_middle_name + ' ' : '') + creator.c_last_name));
 
                                                                                             option.value = creator.client_ID;
 
