@@ -447,7 +447,7 @@ if (isset($_GET['o_id']))
                         },
                         dataType:"html",
                         success:function(data) {
-                            console.log(data);	
+                            $('#assign_all_tasks_to_this_creator').html(data);	
                         }
                     });
                 });

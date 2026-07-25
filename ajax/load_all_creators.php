@@ -15,9 +15,9 @@ $all_other_creators = $prod->show_creators_other_companies($lt_id);
 for($c=0;$c<count($all_creators);$c++)
 {
     ?>
-    <option value="<?php echo $all_creators['client_ID'];?>"><?php  
-    $creator_name = $all_creators['c_first_name'];
-    if(!empty($all_creators['c_middle_name'])) $creator_name .= ' ' . $all_creators['c_middle_name'];
+    <option value="<?php echo $all_creators[$c]['client_ID'];?>"><?php  
+    $creator_name = $all_creators[$c]['c_first_name'];
+    if(!empty($all_creators[$c]['c_middle_name'])) $creator_name .= ' ' . $all_creators[$c]['c_middle_name'];
     $creator_name .= ' ' . $creator['c_last_name'];
 
     echo $creator_name;
@@ -30,9 +30,9 @@ for($c=0;$c<count($all_creators);$c++)
 for($c=0;$c<count($all_other_creators);$c++)
 {
     ?>
-    <option value="<?php echo $all_other_creators['client_ID'];?>"><?php  
-    $creator_name = $all_other_creators['c_first_name'];
-    if(!empty($all_other_creators['c_middle_name'])) $creator_name .= ' ' . $all_other_creators['c_middle_name'];
+    <option value="<?php echo $all_other_creators[$c]['client_ID'];?>"><?php  
+    $creator_name = $all_other_creators[$c]['c_first_name'];
+    if(!empty($all_other_creators[$c]['c_middle_name'])) $creator_name .= ' ' . $all_other_creators[$c]['c_middle_name'];
     $creator_name .= ' ' . $creator['c_last_name'];
 
     echo $creator_name;
