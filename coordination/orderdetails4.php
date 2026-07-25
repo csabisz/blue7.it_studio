@@ -429,7 +429,7 @@ if (isset($_GET['o_id']))
         </div>
     </div>
 
-    <div class="row mx-0 w-100" style="border-top: 4px solid #000;background: #eeeec3;">
+    <div class="row mx-0 w-100" style="border-top: 4px solid #000;background: green;color:white;">
         <div class="col-md-auto">
             <b>Assign all tasks to this creator:</b>
         </div>
