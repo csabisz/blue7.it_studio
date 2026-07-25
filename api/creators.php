@@ -179,18 +179,20 @@ if (!empty($u_prod_id)) {
 
 
 
-            $creator_name = $creator['c_first_name'] . ' ' . $creator['c_last_name'];
+            $creator_name = $creator['c_first_name'];
+            if(!empty($creator['c_middle_name'])) $creator_name .= ' ' . $creator['c_middle_name'];
+            $creator_name .= ' ' . $creator['c_last_name'];
 
             array_push($CREATORS[$company], $creator);
-            //$creator_desc = '';
+            $creator_desc = '';
 
 
 
-            // if ($company == 'other_companies') {
+            if ($company == 'other_companies') {
 
-            //     $creator_desc .= ' - ' . $prod->get_licence_mailnick($creator['lt_id'])['mailnick'] . ' - ';
+                $creator_desc .= ' - ' . $prod->get_licence_mailnick($creator['lt_id'])['mailnick'] . ' - ';
 
-            // }
+            }
 
 
             // if($creator['shifts']['today']['left']!="No shift")
