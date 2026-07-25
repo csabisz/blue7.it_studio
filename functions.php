@@ -6087,7 +6087,7 @@ class Production
         $lt_id = mysqli_real_escape_string($mysqli, $lt_id);
 
         //$stmt=mysqli_prepare($mysqli,"select * from `u_creators` where `lt_id`<>? order by `lt_id`,`uca_name` asc");
-        $stmt = mysqli_prepare($mysqli, "select `u_clients`.`client_ID`, `lt_id`, `c_first_name`, `c_last_name` from `u_clients` join `u_clients_rights` on `u_clients`.`client_ID`=`u_clients_rights`.`client_id` where `u_clients`.`lt_id`<>? and `u_clients_rights`.`u_status`='active' order by `u_clients`.`c_first_name` asc");
+        $stmt = mysqli_prepare($mysqli, "select `u_clients`.`client_ID`, `lt_id`, `c_first_name`, `c_middle_name`, `c_last_name` from `u_clients` join `u_clients_rights` on `u_clients`.`client_ID`=`u_clients_rights`.`client_id` where `u_clients`.`lt_id`<>? and `u_clients_rights`.`u_status`='active' order by `u_clients`.`c_first_name` asc");
 
         mysqli_stmt_bind_param($stmt, "i", $lt_id);
 
