@@ -38,7 +38,7 @@ if (!empty($u_prod_id))
     for($c=0;$c<count($all_creators);$c++)
     {
         $client_rights = $prod->get_client_rights($all_creators[$c]['client_ID']);
-        if($client_rights['qualified_for_all_tasks']>0)
+        if($client_rights['u_status']=="active")
         {
             ?>
             <option value="<?php echo $all_creators[$c]['client_ID'];?>"><?php  
@@ -60,7 +60,7 @@ if (!empty($u_prod_id))
     for($c=0;$c<count($all_other_creators);$c++)
     {
         $client_rights = $prod->get_client_rights($all_other_creators[$c]['client_ID']);
-        if($client_rights['qualified_for_all_tasks']>0)
+        if($client_rights['u_status']=="active")
         {
             ?>
             <option value="<?php echo $all_other_creators[$c]['client_ID'];?>"><?php  
