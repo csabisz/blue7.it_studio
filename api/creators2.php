@@ -28,6 +28,18 @@ $timezone = $_GET['timezone'];
 
 if (!empty($u_prod_id)) 
 {
+    function filter_useless_qualifications($qualifications)
+    {
+        foreach ($qualifications as $key => $value) {
+
+            if ($value == 0) unset($qualifications[$key]);
+
+        }
+
+        if (count($qualifications) > 1) return $qualifications; else return null;
+
+    }
+
 
     $all_creators = $prod->show_creators($lt_id);
 
@@ -40,6 +52,7 @@ if (!empty($u_prod_id))
         $client_rights = $prod->get_client_rights($all_creators[$c]['client_ID']);
         if($client_rights['u_status']=="active")
         {
+            $all_creators[$c]['qualification'] = filter_useless_qualifications($prod->get_client_qualifications($all_creators[$c]['client_ID']));
             ?>
             <option value="<?php echo $all_creators[$c]['client_ID'];?>"><?php  
             $creator_name = $all_creators[$c]['c_first_name'];
@@ -62,6 +75,8 @@ if (!empty($u_prod_id))
         $client_rights = $prod->get_client_rights($all_other_creators[$c]['client_ID']);
         if($client_rights['u_status']=="active")
         {
+            $all_other_creators[$c]['qualification'] = filter_useless_qualifications($prod->get_client_qualifications($all_other_creators[$c]['client_ID']));
+
             ?>
             <option value="<?php echo $all_other_creators[$c]['client_ID'];?>"><?php  
             $creator_name = $all_other_creators[$c]['c_first_name'];
