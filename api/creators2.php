@@ -85,6 +85,49 @@ if (!empty($u_prod_id))
                     $qualification_check = 1;
             }
 
+            if((substr($prod_id, -2) == "02")||(substr($prod_id, -2) == "03")||(substr($prod_id, -2) == "04")||(substr($prod_id, -2) == "05")||
+                (substr($prod_id, -2) == "22")||(substr($prod_id, -2) == "23")||(substr($prod_id, -2) == "24")||(substr($prod_id, -2) == "25")||
+                (substr($prod_id, -2) == "42")||(substr($prod_id, -2) == "43")||(substr($prod_id, -2) == "44")||(substr($prod_id, -2) == "45")
+                )
+            {
+                if ($all_creators[$c]['qualification']['b' . $type . '_render_stills']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_stills'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
+            if((substr($prod_id, -2) == "06")||(substr($prod_id, -2) == "26")||(substr($prod_id, -2) == "46"))
+            {
+                if ($all_creators[$c]['qualification']['b' . $type . '_render_360']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_360'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
+            if((substr($prod_id, -2) == "07")||(substr($prod_id, -2) == "27")||(substr($prod_id, -2) == "47"))
+            {
+                if ($all_creators[$c]['qualification']['b' . $type . '_render_slideshow']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_slideshow'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
+            if((substr($prod_id, -2) == "08")||(substr($prod_id, -2) == "28")||(substr($prod_id, -2) == "48"))
+            {
+                if ($all_creators[$c]['qualification']['b' . $type . '_render_movie']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_movie'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
             if($qualification_check == 1)
             {
                 ?>
@@ -98,225 +141,8 @@ if (!empty($u_prod_id))
                 $company_name = $prod->get_company($all_creators[$c]['lt_id']);
                 echo " - ".$company_name['mailnick'];
 
+                echo $qualification_text;
                 
-                /*
-                if ($all_creators[$c]['qualification']['b1_pictures']) 
-                {
-
-                    echo  ' (' . $all_creators[$c]['qualification']['b1_pictures'] . ')';
-                    
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_360']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_360'] . ')'. $creator_desc;
-                    
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_videos']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_videos'] . ')';
-                
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_base_picture']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_base_picture'] . ')';
-                
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_masks']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_masks'] . ')';
-                    
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_targets']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_targets'] . ')';
-                
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_suntour_model']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_suntour_model'] . ')';
-                    
-                }
-        
-                if ($all_creators[$c]['qualification']['b1_vr']) 
-                {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b1_vr'] . ')';
-                    
-                }*/
-                /**
-
-                    * B3 Interior
-
-                    */ /*
-
-
-                
-                if ($all_creators[$c]['qualification']['b3_walls'] || $all_creators[$c]['qualification']['b3_windows_doors']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b3_walls'] . ')(' . $all_creators[$c]['qualification']['b3_windows_doors'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b3_furniture']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b3_furniture'] . ')' ;                
-
-                }*/
-        
-        
-        
-        
-        
-                /**
-
-                    * Prod Types B5, B6, B7, B8 and so on if new appear wit same products
-
-                    */
-
-                
-
-                
-
-                
-    /*
-
-
-                
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_in_2d_configurator']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_2d_configurator'] . ')' ;    
-                    
-
-                }
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_in_2d_konfig_renders']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders'] . ')' ;    
-                    
-
-                }
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_2d_configurator']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_2d_configurator'] . ')' ;
-
-                    
-
-                }
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_premium_pictures']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_premium_pictures'] . ')' ;
-
-                    
-
-                }
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_3d_configurator']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_3d_configurator'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_render_stills']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_stills'] . ')' ;                 
-
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_render_360']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_360'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_render_slideshow']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_slideshow'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_render_movie']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_render_movie'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_environment']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_environment'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_furniture']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_furniture'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_creators[$c]['qualification']['b' . $type . '_walls']) {
-
-                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_walls'] . ')' ;
-
-                    
-
-                } */
 
                 ?></option>
                 <?php
@@ -422,237 +248,7 @@ if (!empty($u_prod_id))
                 echo " - ".$company_name['mailnick'];
 
                 echo $qualification_text;
-                /*
-                if ($all_other_creators[$c]['qualification']['b1_floorplans']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_floorplans'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_pictures']) 
-                {
-
-                    echo  ' (' . $all_other_creators[$c]['qualification']['b1_pictures'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_360']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_360'] . ')'. $creator_desc;
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_videos']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_videos'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_base_picture']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_base_picture'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_masks']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_masks'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_targets']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_targets'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_suntour_model']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_suntour_model'] . ')';
-                    
-                }
-        
-                if ($all_other_creators[$c]['qualification']['b1_vr']) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b1_vr'] . ')';
-                    
-                }
-                /**
-
-                    * B3 Interior
-
-                    
-
-
                 
-                if ($all_other_creators[$c]['qualification']['b3_walls'] || $all_other_creators[$c]['qualification']['b3_windows_doors']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b3_walls'] . ')(' . $all_other_creators[$c]['qualification']['b3_windows_doors'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b3_furniture']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b3_furniture'] . ')' ;                
-
-                }
-        
-        
-        
-        
-        
-                /**
-
-                    * Prod Types B5, B6, B7, B8 and so on if new appear wit same products
-
-                    
-
-                
-
-                $type = $prod_id['2'];
-
-                
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls'] || $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';
-
-                    
-
-                }
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_in_2d_configurator']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_2d_configurator'] . ')' ;    
-                    
-
-                }
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_in_2d_konfig_renders']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders'] . ')' ;    
-                    
-
-                }
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_2d_configurator']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_2d_configurator'] . ')' ;
-
-                    
-
-                }
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_premium_pictures']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_premium_pictures'] . ')' ;
-
-                    
-
-                }
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_3d_configurator']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_3d_configurator'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_render_stills']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_stills'] . ')' ;                 
-
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_render_360']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_360'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_render_slideshow']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_slideshow'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_render_movie']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_movie'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_environment']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_environment'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_furniture']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_furniture'] . ')' ;
-
-                    
-
-                }
-
-
-
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']) {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')' ;
-
-                    
-
-                } */
                 ?></option>
                 <?php
             }
