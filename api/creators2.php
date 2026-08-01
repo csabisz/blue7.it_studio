@@ -318,8 +318,42 @@ if (!empty($u_prod_id))
         $client_rights = $prod->get_client_rights($all_other_creators[$c]['client_ID']);
         if($client_rights['u_status']=="active")
         {
+            $qualification_check=0;
             $all_other_creators[$c]['qualification'] = filter_useless_qualifications($prod->get_client_qualifications($all_other_creators[$c]['client_ID']));
 
+            $type = $prod_id['2'];
+
+            if((substr($prod_id, -2) == "01"))
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';               
+                    $qualification_check = 1;
+                }
+            }
+
+            if((substr($prod_id, -2) == "21")||(substr($prod_id, -2) == "41"))
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_furniture']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_furniture'] . ')';
+                    $qualification_check = 1;
+                }
+
+                
+            }
+
+            if((substr($prod_id, -3) == "302")||(substr($prod_id, -3) == "322"))
+            {                   
+
+                    $qualification_text = ' (1)';    
+                    $qualification_check = 1;
+            }
+
+            if($qualification_check == 1)
+            {
             ?>
             <option value="<?php echo $all_other_creators[$c]['client_ID'];?>"><?php  
             $creator_name = $all_other_creators[$c]['c_first_name'];
@@ -331,36 +365,7 @@ if (!empty($u_prod_id))
             $company_name = $prod->get_company($all_other_creators[$c]['lt_id']);
             echo " - ".$company_name['mailnick'];
 
-            $type = $prod_id['2'];
-
-            if((substr($prod_id, -2) == "01"))
-            {
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';               
-
-                }
-            }
-
-            if((substr($prod_id, -2) == "21")||(substr($prod_id, -2) == "41"))
-            {
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_furniture']>0) 
-                {
-
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_furniture'] . ')';
-                    
-                }
-
-                
-            }
-
-            if((substr($prod_id, -3) == "302")||(substr($prod_id, -3) == "322"))
-            {                   
-
-                    echo ' (1)';    
-                
-            }
+            echo $qualification_text;
             /*
             if ($all_other_creators[$c]['qualification']['b1_floorplans']) 
             {
@@ -594,6 +599,7 @@ if (!empty($u_prod_id))
             } */
             ?></option>
             <?php
+            }
         }
     }
 }
