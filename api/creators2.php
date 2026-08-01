@@ -345,12 +345,14 @@ if (!empty($u_prod_id))
 
             if((substr($prod_id, -2) == "21")||(substr($prod_id, -2) == "41"))
             {
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_floorplans']>0) 
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_furniture']>0) 
                 {
 
-                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_floorplans'] . ')';
+                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_furniture'] . ')';
                     
                 }
+
+                
             }
             /*
             if ($all_other_creators[$c]['qualification']['b1_floorplans']) 
