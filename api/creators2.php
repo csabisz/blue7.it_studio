@@ -331,6 +331,28 @@ if (!empty($u_prod_id))
             $company_name = $prod->get_company($all_other_creators[$c]['lt_id']);
             echo " - ".$company_name['mailnick'];
 
+            $type = $prod_id['2'];
+
+            if((substr($prod_id, -2) == "01"))
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
+                {
+
+                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';               
+
+                }
+            }
+
+            if((substr($prod_id, -2) == "21")||(substr($prod_id, -2) == "41"))
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_floorplans']>0) 
+                {
+
+                    echo ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_floorplans'] . ')';
+                    
+                }
+            }
+            /*
             if ($all_other_creators[$c]['qualification']['b1_floorplans']) 
             {
 
@@ -397,7 +419,7 @@ if (!empty($u_prod_id))
 
                 * B3 Interior
 
-                */
+                
 
 
             
@@ -425,7 +447,7 @@ if (!empty($u_prod_id))
 
                 * Prod Types B5, B6, B7, B8 and so on if new appear wit same products
 
-                */
+                
 
             
 
@@ -560,7 +582,7 @@ if (!empty($u_prod_id))
 
                 
 
-            } 
+            } */
             ?></option>
             <?php
         }
