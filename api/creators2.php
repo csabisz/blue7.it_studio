@@ -354,6 +354,13 @@ if (!empty($u_prod_id))
 
                 
             }
+
+            if((substr($prod_id, -3) == "302")||(substr($prod_id, -3) == "322"))
+            {                   
+
+                    echo ' (1)';    
+                
+            }
             /*
             if ($all_other_creators[$c]['qualification']['b1_floorplans']) 
             {
