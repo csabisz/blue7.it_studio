@@ -53,6 +53,8 @@ if (!empty($u_prod_id))
         if($client_rights['u_status']=="active")
         {
             $all_creators[$c]['qualification'] = filter_useless_qualifications($prod->get_client_qualifications($all_creators[$c]['client_ID']));
+
+            print_r($all_creators[$c]['qualification']);
             ?>
             <option value="<?php echo $all_creators[$c]['client_ID'];?>"><?php  
             $creator_name = $all_creators[$c]['c_first_name'];
