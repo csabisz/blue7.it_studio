@@ -66,13 +66,28 @@ if (!empty($u_prod_id))
             $company_name = $prod->get_company($all_creators[$c]['lt_id']);
             echo " - ".$company_name['mailnick'];
 
-            if ($all_creators[$c]['qualification']['b1_floorplans']) 
-            {
+            $type = $prod_id['2'];
 
-                echo ' (' . $all_creators[$c]['qualification']['b1_floorplans'] . ')';
-                
+            if((substr($prod_id, -2) == "01"))
+            {
+                if ($all_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
+                {
+
+                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';               
+
+                }
             }
-    
+
+            if((substr($prod_id, -2) == "21")||(substr($prod_id, -2) == "41"))
+            {
+                if ($all_creators[$c]['qualification']['b' . $type . '_floorplans']>0) 
+                {
+
+                    echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_floorplans'] . ')';
+                    
+                }
+            }
+            /*
             if ($all_creators[$c]['qualification']['b1_pictures']) 
             {
 
@@ -127,12 +142,12 @@ if (!empty($u_prod_id))
 
                 echo ' (' . $all_creators[$c]['qualification']['b1_vr'] . ')';
                 
-            }
+            }*/
             /**
 
                 * B3 Interior
 
-                */
+                */ /*
 
 
             
@@ -150,7 +165,7 @@ if (!empty($u_prod_id))
 
                 echo ' (' . $all_creators[$c]['qualification']['b3_furniture'] . ')' ;                
 
-            }
+            }*/
     
     
     
@@ -164,19 +179,13 @@ if (!empty($u_prod_id))
 
             
 
-            $type = $prod_id['2'];
-
             
 
+            
+/*
 
 
-            if ($all_creators[$c]['qualification']['b' . $type . '_walls'] || $all_creators[$c]['qualification']['b' . $type . '_windows_doors']) {
-
-                echo ' (' . $all_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';
-
-                
-
-            }
+            
 
 
             if ($all_creators[$c]['qualification']['b' . $type . '_in_2d_configurator']) {
@@ -295,7 +304,7 @@ if (!empty($u_prod_id))
 
                 
 
-            } 
+            } */
 
             ?></option>
             <?php
