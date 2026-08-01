@@ -365,6 +365,31 @@ if (!empty($u_prod_id))
                     $qualification_check = 1;
             }
 
+            if((substr($prod_id, -2) == "02")||(substr($prod_id, -2) == "03")||(substr($prod_id, -2) == "04")||(substr($prod_id, -2) == "05")||
+                (substr($prod_id, -2) == "22")||(substr($prod_id, -2) == "23")||(substr($prod_id, -2) == "24")||(substr($prod_id, -2) == "25")||
+                (substr($prod_id, -2) == "42")||(substr($prod_id, -2) == "43")||(substr($prod_id, -2) == "44")||(substr($prod_id, -2) == "45")
+                )
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_render_stills']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_stills'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
+            if((substr($prod_id, -2) == "06")||(substr($prod_id, -2) == "26")||(substr($prod_id, -2) == "46"))
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_render_360']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_360'] . ')';
+                    $qualification_check = 1;
+                }
+
+                
+            }
+
             if($qualification_check == 1)
             {
                 ?>
