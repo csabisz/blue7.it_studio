@@ -36,7 +36,7 @@ if (!empty($u_prod_id))
 
         }
 
-        if (count($qualifications) > 1) return $qualifications; else return null;
+        if (!empty($qualifications)) return $qualifications; else return null;
 
     }
 
