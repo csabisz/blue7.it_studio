@@ -162,6 +162,16 @@ if (!empty($u_prod_id))
 
             $type = $prod_id['2'];
 
+            if(substr($prod_id, -2) == "00")
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
             if((substr($prod_id, -2) == "01"))
             {
                 if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
@@ -179,9 +189,7 @@ if (!empty($u_prod_id))
 
                     $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_furniture'] . ')';
                     $qualification_check = 1;
-                }
-
-                
+                }                
             }
 
             if((substr($prod_id, -3) == "302")||(substr($prod_id, -3) == "322"))
@@ -204,7 +212,7 @@ if (!empty($u_prod_id))
                 }                
             }
 
-            if((substr($prod_id, -2) == "06")||(substr($prod_id, -2) == "26")||(substr($prod_id, -2) == "46"))
+            if((substr($prod_id, -2) == "06")||(substr($prod_id, -2) == "26")||(substr($prod_id, -2) == "46")||(substr($prod_id, -2) == "66"))
             {
                 if ($all_other_creators[$c]['qualification']['b' . $type . '_render_360']>0) 
                 {
@@ -214,7 +222,7 @@ if (!empty($u_prod_id))
                 }                
             }
 
-            if((substr($prod_id, -2) == "07")||(substr($prod_id, -2) == "27")||(substr($prod_id, -2) == "47"))
+            if((substr($prod_id, -2) == "07")||(substr($prod_id, -2) == "27")||(substr($prod_id, -2) == "47")(substr($prod_id, -2) == "67"))
             {
                 if ($all_other_creators[$c]['qualification']['b' . $type . '_render_slideshow']>0) 
                 {
@@ -224,12 +232,56 @@ if (!empty($u_prod_id))
                 }                
             }
 
-            if((substr($prod_id, -2) == "08")||(substr($prod_id, -2) == "28")||(substr($prod_id, -2) == "48"))
+            if((substr($prod_id, -2) == "08")||(substr($prod_id, -2) == "28")||(substr($prod_id, -2) == "48")(substr($prod_id, -2) == "68"))
             {
                 if ($all_other_creators[$c]['qualification']['b' . $type . '_render_movie']>0) 
                 {
 
                     $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_render_movie'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
+            if(substr($prod_id, -2) == "6z")
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_2d_configurator']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_2d_configurator'] . ')';
+                    $qualification_check = 1;
+                }
+
+                
+            }
+
+            if(substr($prod_id, -2) == "6y")
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_2d_konfig_renders'] . ')';
+                    $qualification_check = 1;
+                }
+
+                
+            }
+
+            if(substr($prod_id, -2) == "6x")
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_3d_configurator']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_3d_configurator'] . ')';
+                    $qualification_check = 1;
+                }                
+            }
+
+            if(substr($prod_id, -2) == "81")
+            {
+                if ($all_other_creators[$c]['qualification']['b' . $type . '_environment']>0) 
+                {
+
+                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_environment'] . ')';
                     $qualification_check = 1;
                 }                
             }
