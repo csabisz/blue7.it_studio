@@ -58,20 +58,20 @@ if (!empty($u_prod_id))
 
             if((substr($prod_id, -2) == "01"))
             {
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
+                if ($all_creators[$c]['qualification']['b' . $type . '_walls']>0 || $all_creators[$c]['qualification']['b' . $type . '_windows_doors']>0) 
                 {
 
-                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_other_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';               
+                    $qualification_text = ' (' . $all_creators[$c]['qualification']['b' . $type . '_walls'] . ')(' . $all_creators[$c]['qualification']['b' . $type . '_windows_doors'] . ')';               
                     $qualification_check = 1;
                 }
             }
 
             if((substr($prod_id, -2) == "21")||(substr($prod_id, -2) == "41"))
             {
-                if ($all_other_creators[$c]['qualification']['b' . $type . '_furniture']>0) 
+                if ($all_creators[$c]['qualification']['b' . $type . '_furniture']>0) 
                 {
 
-                    $qualification_text = ' (' . $all_other_creators[$c]['qualification']['b' . $type . '_furniture'] . ')';
+                    $qualification_text = ' (' . $all_creators[$c]['qualification']['b' . $type . '_furniture'] . ')';
                     $qualification_check = 1;
                 }
 
