@@ -69,9 +69,10 @@ foreach ($order_products as $product) {
         $product['customer_files'] = $product['customer_files'] . $customer_file["of_name"];
     }
 
-    //$product['result_files'] = $prod->show_results($o_id, $osub_id, $prod_id);
+    $product['result_files'] = $prod->show_results($o_id, $osub_id, $prod_id);
     //$product['result_files'] = $prod->show_results_with_rooms($o_id, $osub_id, $prod_id,"");
-    $product['result_files'] = $prod->show_results_from_base_picture($o_id, $osub_id, $prod_id,0);
+    //$product['result_files'] = $prod->show_results_from_base_picture($o_id, $osub_id, $prod_id,0);
+    
     //Creator
     $selected_creator = $prod->get_client($product['uca_id']);
     $creator_qualification = $prod->get_client_qualifications($selected_creator['client_ID']);

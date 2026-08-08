@@ -5744,7 +5744,7 @@ include('../menu.php');
                             (substr($prod_id, -2) != "gt") && (substr($prod_id, -2) != "gm") && (substr($prod_id, -2) != "gs")
                     ) {
                         ?>
-                        <div class="col-md-12">
+                        <div class="col-md-12 normal-pictures">
                             <?php
                             //$result_files = $prod->show_results_with_rooms($o_id, $osub_id, $prod_id,$room_id);
                             // print_r($result_files);
