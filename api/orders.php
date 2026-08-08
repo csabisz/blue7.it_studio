@@ -72,7 +72,26 @@ foreach ($order_products as $product) {
     $product['result_files'] = $prod->show_results($o_id, $osub_id, $prod_id);
     //$product['result_files'] = $prod->show_results_with_rooms($o_id, $osub_id, $prod_id,"");
     //$product['result_files'] = $prod->show_results_from_base_picture($o_id, $osub_id, $prod_id,0);
-    
+
+    for($i = 0; $i < count($product['result_files']); $i++) 
+    {
+        $file_name1 = explode("-", $product['result_files'][$i]['orf_name']);
+        $file_name2 = explode(".", $product['result_files'][$i]['orf_name']);
+
+        $extension_name = explode('.', $file_name1[1]);
+        unset($extension_name[count($extension_name) - 1]);
+        $extension_name = implode('.', $extension_name);
+        $extension_name = str_replace(' ', '', $extension_name);
+        //extension_ids[$extension_id_counter]=$extension_name;
+        $product['result_files'][$i]['extension_id'] = $extension_name;
+
+        
+    }
+
+    usort($product['result_files'], function ($a, $b) {
+        return strcmp($a['extension_id'], $b['extension_id']); // ascending
+    });
+
     //Creator
     $selected_creator = $prod->get_client($product['uca_id']);
     $creator_qualification = $prod->get_client_qualifications($selected_creator['client_ID']);
