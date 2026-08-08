@@ -480,7 +480,7 @@ if (isset($_GET['o_id']))
 
     <?php
     $global_creator_counter = 0;
-    include('products.php');
+    include('products2.php');
 
     }
     ?>
