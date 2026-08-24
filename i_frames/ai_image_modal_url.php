@@ -183,11 +183,12 @@ if ($o_id) {
                     <div class="form-group">
                         <label for="aiModel" class="text-dark">Model</label>
                         <select class="form-control form-control-sm" id="aiModel">
-                            <option value="gemini-3-pro-image-preview">[Google] Nano Banana Pro</option>
-                            <option value="gemini-2.5-flash-image">[Google] Nano Banana</option>
-                            <option value="imagen-4.0-generate-001">[Google] Imagen 4</option>
-                            <option value="imagen-4.0-ultra-generate-001">[Google] Imagen 4 Ultra</option>
-                            <option value="imagen-4.0-fast-generate-001">[Google] Imagen 4 Fast</option>
+                            <!-- Prices: Google list price per image at our default 4K output (ai.google.dev/gemini-api/docs/pricing, Aug 2026) -->
+                            <option value="gemini-3.1-flash-image">gemini-3.1-flash-image (~$0.15/img)</option>
+                            <option value="gemini-3.1-flash-image-preview">gemini-3.1-flash-image-preview (~$0.15/img)</option>
+                            <option value="gemini-3-pro-image-preview">gemini-3-pro-image-preview (~$0.24/img)</option>
+                            <option value="gemini-2.5-flash-image">gemini-2.5-flash-image (~$0.04/img, 1K only)</option>
+                            <option value="gemini-3.1-flash-lite-image">gemini-3.1-flash-lite-image (~$0.03/img, 1K only)</option>
                         </select>
                     </div>
 

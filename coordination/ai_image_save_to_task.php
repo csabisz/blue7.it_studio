@@ -103,71 +103,6 @@ function createThumbnail($sourcePath, $destinationPath)
     return true;
 }
 
-function createCompressed($sourcePath, $destinationPath, $prodId)
-{
-    list($width, $height, $type) = getimagesize($sourcePath);
-
-    // Default scaling logic (fit to 1920x1080)
-    $firstDivider = $width / 3840;
-    $secondDivider = $height / 1920;
-    $newDivider = max($firstDivider, $secondDivider);
-
-    // $desiredWidth = floor($width / $newDivider);
-    // $desiredHeight = floor($height / $newDivider);
-
-    $desiredWidth = $width;
-    $desiredHeight = $height;
-
-    // Create image resource
-    switch ($type) {
-        case IMAGETYPE_JPEG:
-            $source = imagecreatefromjpeg($sourcePath);
-            break;
-        case IMAGETYPE_PNG:
-            $source = imagecreatefrompng($sourcePath);
-            break;
-        case IMAGETYPE_GIF:
-            $source = imagecreatefromgif($sourcePath);
-            break;
-        default:
-            throw new Exception('Unsupported image type for compression');
-    }
-
-    // Create new image
-    $compressed = imagecreatetruecolor($desiredWidth, $desiredHeight);
-
-    // Handle transparency for PNG
-    if ($type === IMAGETYPE_PNG) {
-        imagealphablending($compressed, false);
-        imagesavealpha($compressed, true);
-        $transparent = imagecolorallocatealpha($compressed, 255, 255, 255, 127);
-        imagefilledrectangle($compressed, 0, 0, $desiredWidth, $desiredHeight, $transparent);
-    }
-
-    // Resample
-    imagecopyresampled($compressed, $source, 0, 0, 0, 0, $desiredWidth, $desiredHeight, $width, $height);
-
-    // Save based on type
-    switch ($type) {
-        case IMAGETYPE_JPEG:
-            imageinterlace($compressed, 1);
-            imageresolution($compressed, 72, 72);
-            imagejpeg($compressed, $destinationPath, 90);
-            break;
-        case IMAGETYPE_PNG:
-            imagepng($compressed, $destinationPath, 8);
-            break;
-        case IMAGETYPE_GIF:
-            imagegif($compressed, $destinationPath);
-            break;
-    }
-
-    imagedestroy($source);
-    imagedestroy($compressed);
-
-    return true;
-}
-
 try {
     // Verify request method
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -341,8 +276,10 @@ try {
     // Generate thumbnail
     createThumbnail($originalPath, $thumbnailPath);
 
-    // Generate compressed version
-    createCompressed($originalPath, $compressPath, $prod_id);
+    // AI images must not be re-encoded: the "compressed" copy is what the task
+    // UI displays, and creators grade the direct model output. Byte-for-byte
+    // copy keeps orf_compress_path and all downstream consumers working.
+    copy($originalPath, $compressPath);
 
     // Construct display filename with presentation_name replacing "AI Generated"
     if ($om_id == 0) {
