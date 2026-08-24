@@ -120,7 +120,7 @@ if($cumulative_order[0]['lic_ID']!=$licenceid)
 $licence=$prod->get_licence($cumulative_order[0]['lic_ID']);
 $currency=$prod->get_currency($licence['currencies'])['cur_short'];
 
-$o_id=$prod->xss_fix($_GET['o_id']) ?? "0";
+$o_id=$prod->xss_fix($_GET['o_id']) ?? 0;
 $order=$prod->get_order($o_id);
 
 if($type=="simple_invoice")
