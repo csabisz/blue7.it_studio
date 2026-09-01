@@ -2071,7 +2071,29 @@ if(isset($_GET['option']))
                     <p class="d-inline"><b>Longitude: </b></p>
                     <input type="text" class="form-control form-control-sm d-inline" name="longitude" value="<?php echo $order['longitude']; ?>" style="width:150px;" form="order_details">                    
                 </div>
-                
+                <div class="form-group">
+                    <p class="d-inline"><b>Plot link: </b></p>
+                    <input type="text" class="form-control form-control-sm d-inline" name="plot_link" data-o_id="<?php echo $o_id; ?>" value="<?php echo $order['plot_link']; ?>" style="width:150px;" form="order_details">
+                </div>
+                <script type="text/javascript">
+                    $('#plot_link').on('change',function(){
+                        
+                        let o_id=$(this).data('o_id');
+                        let plot_link=$(this).val();                        
+
+                        $.ajax({
+                            url: "../ajax/update_order_plot_link.php",
+                            method: "post",
+                            data: {o_id:o_id,plot_link:plot_link},
+                            dataType:"html",
+                            success:function(data) {
+                                console.log(data);	
+                            }
+                        });
+                        
+                    });
+                    
+                </script>
                 <?php
                 if(($order['longitude']!=0)&&($order['latitude']!=0))
                 {

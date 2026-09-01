@@ -12206,6 +12206,21 @@ class Production
 
     }
 
+    public function update_order_plot_link($orderid, $plot_link)
+    {
+
+        $mysqli = $this->dbconnect();
+
+        $o_id = mysqli_real_escape_string($mysqli, $orderid);
+        $plot_link = mysqli_real_escape_string($mysqli, $plot_link);
+
+        $update_order_status_sql = "update `orders` set `plot_link`='$plot_link' where `order_ID`='$o_id'";
+        $update_order_status_result = mysqli_query($mysqli, $update_order_status_sql) or die(mysqli_error($mysqli));
+
+        mysqli_close($mysqli);
+
+    }
+
     public function update_order_creator_team($o_id, $team_id)
     {
         $mysqli = $this->dbconnect();
