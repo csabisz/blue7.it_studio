@@ -2073,7 +2073,7 @@ if(isset($_GET['option']))
                 </div>
                 <div class="form-group">
                     <p class="d-inline"><b>Plot link: </b></p>
-                    <input type="text" class="form-control form-control-sm d-inline" name="plot_link" data-o_id="<?php echo $o_id; ?>" value="<?php echo $order['plot_link']; ?>" style="width:150px;" form="order_details">
+                    <input type="text" class="form-control form-control-sm d-inline" name="plot_link" data-o_id="<?php echo $o_id; ?>" value="<?php echo $order['plot_link']; ?>" style="width:450px;" form="order_details">
                 </div>
                 <script type="text/javascript">
                     $('#plot_link').on('change',function(){
