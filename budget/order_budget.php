@@ -25,7 +25,7 @@ include('../menu.php');
 			}
 			?>
 			
-			<div class="row w-100 mx-0">
+			<div class="row w-100 mx-0 pt-5">
                 <a class="btn btn-warning btn-sm align-self-center ml-auto mr-3" href="../budget/credits_budget.php">Give credits budget</a> |
                 <a class="btn btn-warning btn-sm align-self-center mr-auto ml-3" href="../budget/order_budget.php">Give order budget</a>
                 <p class="w-100 text-center pt-3 display-4">Order budget <?php if($option=="create"){ echo "- Create budget"; }?></p>
