@@ -12071,8 +12071,8 @@ class Production
         $cur_id = mysqli_real_escape_string($mysqli, $data->cur_id ?? 0);
         $client_language_id = mysqli_real_escape_string($mysqli, $data->client_language_id ?? 0);
         $environment_address = mysqli_real_escape_string($mysqli,$data->environment_address ?? '');
-        $longitude = mysqli_real_escape_string($mysqli, $data->longitude ?? 0);
-        $latitude = mysqli_real_escape_string($mysqli, $data->latitude ?? 0);
+        $longitude = mysqli_real_escape_string($mysqli, $data->longitude ?? 0.0);
+        $latitude = mysqli_real_escape_string($mysqli, $data->latitude ?? 0.0);
         $suntour = mysqli_real_escape_string($mysqli, $data->suntour ?? 0);
         $geoportal_link = mysqli_real_escape_string($mysqli, $data->geoportal_link ?? '');
         
