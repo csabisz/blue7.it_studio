@@ -111,8 +111,8 @@ $update_data['op_remarks']=$prod->xss_fix($_POST['op_remarks']);
 $update_data['client_extras_ex_b5']=$prod->xss_fix($_POST['customer_remarks_ex_b5']);
 $update_data['op_remarks_ex_b5']=$prod->xss_fix($_POST['op_remarks_ex_b5']);
 $update_data['environment_address']=$_POST['environment_address'];
-$update_data['longitude']=$prod->xss_fix($_POST['longitude']) ?? 0;
-$update_data['latitude']=$prod->xss_fix($_POST['latitude']) ?? 0;
+$update_data['longitude']=$prod->xss_fix($_POST['longitude']) ?? 0.0;
+$update_data['latitude']=$prod->xss_fix($_POST['latitude']) ?? 0.0;
 $update_data['suntour']=0;
 if(($update_data['longitude']!=0)&&($update_data['latitude']!=0))
 {
