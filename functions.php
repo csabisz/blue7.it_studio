@@ -18200,14 +18200,14 @@ class Production
 
     public function convertToDMS($latitude, $longitude) 
     {
-        $latDMS = decimalToDMS($latitude, 'N', 'S');
-        $lonDMS = decimalToDMS($longitude, 'E', 'W');
+        $latDMS = $this->decimalToDMS($latitude, 'N', 'S');
+        $lonDMS = $this->decimalToDMS($longitude, 'E', 'W');
         
         //return "{$latDMS}+{$lonDMS}";
         return urlencode($latDMS) . '+' . urlencode($lonDMS);
     }
 
-    function decimalToDMS($decimal, $posDir, $negDir) 
+    public function decimalToDMS($decimal, $posDir, $negDir) 
     {
         $direction = ($decimal >= 0) ? $posDir : $negDir;
         $decimal = abs($decimal);
