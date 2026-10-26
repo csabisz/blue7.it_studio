@@ -18197,6 +18197,29 @@ class Production
         mysqli_close($mysqli);
 
     }
+
+    public function convertToDMS($latitude, $longitude) 
+    {
+        $latDMS = decimalToDMS($latitude, 'N', 'S');
+        $lonDMS = decimalToDMS($longitude, 'E', 'W');
+        
+        //return "{$latDMS}+{$lonDMS}";
+        return urlencode($latDMS) . '+' . urlencode($lonDMS);
+    }
+
+    function decimalToDMS($decimal, $posDir, $negDir) 
+    {
+        $direction = ($decimal >= 0) ? $posDir : $negDir;
+        $decimal = abs($decimal);
+        
+        $degrees = floor($decimal);
+        $minutesFloat = ($decimal - $degrees) * 60;
+        $minutes = floor($minutesFloat);
+        $seconds = round(($minutesFloat - $minutes) * 60, 1);
+        
+        // Format to match 47°49'09.8"N
+        return sprintf('%d°%02d\'%.1f"%s', $degrees, $minutes, $seconds, $direction);
+    }
 }
 
 ?>
