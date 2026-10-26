@@ -11798,7 +11798,8 @@ else
 
             if(!empty($customer_files))
             {
-            $order['no_upload_files']=0;
+                $order['no_upload_files']=0;
+                $prod->update_orders_no_upload_files($o_id,$order['no_upload_files']);
             }
 
             if($order['no_upload_files']==1)

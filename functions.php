@@ -18198,6 +18198,21 @@ class Production
 
     }
 
+    public function update_orders_no_upload_files($o_id,$no_upload_files=0)
+    {
+        $mysqli = $this->dbconnect();
+
+        $o_id = mysqli_real_escape_string($mysqli, $o_id);
+        $no_upload_files = mysqli_real_escape_string($mysqli, $no_upload_files);
+
+        $query = "update `orders` set `no_upload_files`='$no_upload_files' where `order_ID`='$o_id'";
+
+        mysqli_query($mysqli, $query) or die(mysqli_error($mysqli));
+
+        mysqli_close($mysqli);
+
+    }
+
     public function convertToDMS($latitude, $longitude) 
     {
         $latDMS = $this->decimalToDMS($latitude, 'N', 'S');
