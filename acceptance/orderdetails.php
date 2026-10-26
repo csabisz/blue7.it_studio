@@ -11794,6 +11794,12 @@ else
 			{
 				$vat_percent=0;
 			}
+            $customer_files=$prod->get_customer_files($o_id);
+
+            if(!empty($customer_files))
+            {
+            $order['no_upload_files']=0;
+            }
 
             if($order['no_upload_files']==1)
             {
